@@ -47,36 +47,80 @@ Module Utility
     Public ymax As Integer
     Public theCenterline As Integer
     Dim objectCenterline As Integer
+    Dim lastWidth As Integer = -1
+    Dim lastObjectCenterline
+
+    Public Function DetectObjects() As String
+        Dim Output As String
+
+        'kill
+        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
+
+        'take screen
+        TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+
+        'wait for spreadsheet
+        Do Until File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
+            Thread.Sleep(50)
+        Loop
+
+        'read all text
+        Dim fs As FileStream = New FileStream("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+        Dim sr As StreamReader = New StreamReader(fs)
+        Dim value As String = sr.ReadToEnd
+
+        fs.Close()
+        sr.Close()
+
+        'return it
+        Return value
+    End Function
 
     Public Function GetObjectsVerticleLinePosition() As String
 
         Dim obj As String = DetectObjects()
-            Dim theSplit = Split(obj, "processme.png")
-            Dim theSplitNext = Split(theSplit(2), ",")
+        Dim theSplit = Split(obj, vbCrLf)
 
-            Dim theProbNew As String = theSplitNext(6).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            xmin = theSplitNext(1).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            ymin = theSplitNext(2).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            xmax = theSplitNext(3).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            ymax = theSplitNext(4).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "").Replace("Time", "")
+        Debug.Print(theSplit.Count - 1 & " objects")
+        For i = 1 To theSplit.Count - 2
+            Dim theSplitNext = Split(theSplit(1), ",")
 
-            Debug.Print("xmin = " & xmin)
-            Debug.Print("ymin = " & ymin)
-            Debug.Print("xmax = " & xmax)
-            Debug.Print("ymax = " & ymax)
+            'no rec
+            If theSplitNext(0) = "" Then Exit For
+
+            Dim theProbNew As String = theSplitNext(7).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            xmin = theSplitNext(2).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            ymin = theSplitNext(3).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            xmax = theSplitNext(4).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            ymax = theSplitNext(5).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "").Replace("Time", "")
+
+            'Debug.Print("xmin = " & xmin)
+            'Debug.Print("ymin = " & ymin)
+            'Debug.Print("xmax = " & xmax)
+            'Debug.Print("ymax = " & ymax)
 
             'find his width
             Dim theWidth As Integer = xmax - xmin
 
             Debug.Print("theWidth = " & theWidth)
 
-            'lets get his centerline
-            objectCenterline = theWidth / 2
+            'widest?
+            If theWidth > lastWidth Then
+                'yes
+                lastWidth = theWidth
+
+                'lets get his centerline
+                objectCenterline = (lastWidth / 2) + xmin
+
+                'set it
+                lastObjectCenterline = objectCenterline
+            End If
 
             Debug.Print("objectCenterline = " & theWidth)
+        Next
 
-        Return objectCenterline
-
+        Return lastObjectCenterline
     End Function
 
     Public Sub KeyDownUp(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
@@ -354,27 +398,7 @@ Module Utility
 
     End Function
 
-    Public Function DetectObjects() As String
-        Dim Output As String
 
-        'kill
-        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
-        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
-
-        'take screen
-        TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
-
-        'wait for spreadsheet
-        Do Until File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
-            Thread.Sleep(10)
-        Loop
-
-        'read all text
-        Dim value As String = File.ReadAllText("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
-
-        'return it
-        Return value
-    End Function
 
     Public Function DetectWoodInventory() As Boolean
         Dim Output As String
@@ -425,7 +449,35 @@ Module Utility
         Return result
     End Function
 
-    Public Function GetCurrentPosition()
+    Public Function AreWeStuck() As Boolean
+        Dim postBefore = GetCurrentPosition()
+
+        Dim tempadd1 As Double
+        For I = 0 To postBefore.Length - 1
+            tempadd1 = tempadd1 + LTrim(RTrim(Double.Parse(postBefore.GetValue(I))))
+        Next
+
+        'bump
+        KeyDownUp(Keys.W, False, 50, False)
+
+        'after
+        Dim posAfter = GetCurrentPosition()
+
+        Dim tempadd2 As Double
+        For I = 0 To posAfter.Length - 1
+            tempadd2 = tempadd2 + LTrim(RTrim(Double.Parse(posAfter.GetValue(I))))
+        Next
+
+        If tempadd2 <> tempadd1 Then
+            Debug.Print("We have moved")
+            Return False
+        Else
+            Debug.Print("We have NOT moved")
+            Return True
+        End If
+    End Function
+
+    Public Function GetCurrentPosition() As Array
         'On Error Resume Next
         Debug.Print("Getting Position")
 
@@ -452,6 +504,9 @@ Module Utility
         KeyDownUp(Keys.Enter, False, 1, False)
         KeyDownUp(Keys.Escape, False, 1, False)
 
+        'wait for f1 to go away
+        Thread.Sleep(100)
+
         'read log
         Dim fs As FileStream = New FileStream("C:\Program Files (x86)\Steam\steamapps\common\Rust\output_log.txt", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
         Dim sr As StreamReader = New StreamReader(fs)
@@ -461,8 +516,12 @@ Module Utility
         Dim TheSplit2 = Split(TheSplit(1), ",")
 
         Dim distance As Integer = Distance3D(TheSplit2(0), TheSplit2(1), TheSplit2(2), homex1, homey1, homez1)
+
         TheSplit(1) = TheSplit(1) & "," & distance
         TheSplit2 = Split(TheSplit(1), ",")
+
+        fs.Close()
+        sr.Close()
 
         Return TheSplit2
     End Function

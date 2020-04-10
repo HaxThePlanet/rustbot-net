@@ -1,7 +1,6 @@
 ﻿Imports System.Runtime.InteropServices
 Imports System.Threading
 Imports System.Diagnostics
-Imports IronOcr
 Imports System.Net
 Imports System.Text
 Imports RestSharp
@@ -27,6 +26,7 @@ Public Class Form1
         End
     End Sub
 
+
     Private Sub MainBrain()
         CheckForIllegalCrossThreadCalls = False
 
@@ -35,36 +35,80 @@ Public Class Form1
         ResponsiveSleep(5000)
 
         Do
-            ResponsiveSleep(10)
-
             Dim objectCenterIs
-            Try
-                'good rec
-                objectCenterIs = GetObjectsVerticleLinePosition()
+            Dim myCenterIs As Integer = 1920
 
-                objectCenterIs = objectCenterIs + xmin
+            'get rec
+            objectCenterIs = GetObjectsVerticleLinePosition()
 
-                Debug.Print("objectCenterIs = " & objectCenterIs)
-
-                Dim iAmAt As Integer = 3840
-                Dim myCenterIs As Integer = 1920
-
+            If objectCenterIs <> 0 Then
+                'get diff
                 Dim ourDifference = objectCenterIs - myCenterIs
 
                 Debug.Print("ourdiff = " & ourDifference)
 
+                'corect position
                 mouse_event(MOUSEEVENTF_MOVE, ourDifference, 0, 0, 0)
 
-                If HaveIMovedFromLastCall() = False Then
-                    'try to hit tree
-                    LeftMouseClick()
-                    ResponsiveSleep(1000)
-                    LeftMouseClick()
-                    ResponsiveSleep(1000)
-                    LeftMouseClick()
-                    ResponsiveSleep(1000)
-                    LeftMouseClick()
-                    ResponsiveSleep(1000)
+                'run
+                'KeyDownUp(Keys.W, False, 1000, False)
+            End If
+
+            'have rec            
+            If objectCenterIs = 0 Then
+                'no rec
+                Debug.Print("Got no rec")
+
+                'are we stuck?
+                If AreWeStuck() Then
+                    'we are stuck
+                    Debug.Print("")
+
+                    'pull out rock                    
+                    'KeyDownUp(Keys.M, False, 1, True)
+
+                    ''try to hit tree
+                    'LeftMouseClick()
+                    'ResponsiveSleep(1000)
+                    'LeftMouseClick()
+                    'ResponsiveSleep(1000)
+                    'LeftMouseClick()
+                    'ResponsiveSleep(1000)
+                    'LeftMouseClick()
+                    'ResponsiveSleep(1000)
+                Else
+                    'no
+
+                    'bumping
+                    'mouse_event(MOUSEEVENTF_MOVE, 25, 0, 0, 0)
+
+                    'run litle
+                    KeyDownUp(Keys.W, False, 250, False)
+                End If
+            Else
+                objectCenterIs = objectCenterIs + xmin
+                Dim iAmAt As Integer = 3840
+                Dim ourDifference = objectCenterIs - myCenterIs
+
+                Debug.Print("Running, " & "objectCenterIs = " & objectCenterIs & " ourdiff = " & ourDifference)
+
+                'have moved?
+                If AreWeStuck() Then
+                    'no 
+                    Debug.Print("Didn't move, hitting tree")
+
+                    'pull out rock                    
+                    'KeyDownUp(Keys.M, False, 1, True)
+
+                    ''try to hit tree
+                    'LeftMouseClick()
+                    'ResponsiveSleep(1000)
+                    'LeftMouseClick()
+                    'ResponsiveSleep(1000)
+                    'LeftMouseClick()
+                    'ResponsiveSleep(1000)
+                    'LeftMouseClick()
+                    'ResponsiveSleep(1000)
 
                     'try to open door
                     'KeyDownUp(Keys.E, False, 10, False)
@@ -73,19 +117,15 @@ Public Class Form1
                     'KeyDownUp(Keys.W, True, 250, False)
                     'KeyDownUp(Keys.E, False, 10, False)
                 Else
-                    KeyDownUp(Keys.W, True, 500, False)
+                    Debug.Print("Moved, correcting vector")
+
+                    'corect position
+                    mouse_event(MOUSEEVENTF_MOVE, ourDifference, 0, 0, 0)
+
+                    'run
+                    'KeyDownUp(Keys.W, False, 1000, False)
                 End If
-
-
-
-            Catch
-                'fail                
-                'bump mouse
-                mouse_event(MOUSEEVENTF_MOVE, 50, 0, 0, 0)
-                KeyDownUp(Keys.W, True, 25, False)
-            End Try
-
-
+            End If
         Loop
 
         logLabel.SelectionStart = logLabel.Text.Length
@@ -93,17 +133,7 @@ Public Class Form1
 
     End Sub
 
-    Public lastPosition = 0
 
-    Public Function HaveIMovedFromLastCall() As Boolean
-        Dim currentPosition = GetCurrentPosition()
-
-        If currentPosition <> lastPosition Then
-            Return True
-        Else
-            Return False
-        End If
-    End Function
 
     Public Sub GoHome()
         Do
