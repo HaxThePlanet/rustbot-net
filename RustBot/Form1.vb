@@ -28,47 +28,37 @@ Public Class Form1
 
 
     Private Sub MainBrain()
-
         CheckForIllegalCrossThreadCalls = False
 
-        lastAction.Text = "Warming up"
+        Dim objectCenterIs
+        Dim myCenterIs As Integer = 1920
 
+        'startup
+        lastAction.Text = "Warming up"
         ResponsiveSleep(5000)
 
+        'main loop
         Do
-            Dim objectCenterIs
-            Dim myCenterIs As Integer = 1920
+            Application.DoEvents()
 
             'get rec
             objectCenterIs = GetObjectsVerticleLinePosition()
 
             'have rec            
             If objectCenterIs = 0 Then
-                'no rec
-                Debug.Print("Got no rec")
+                'no rec                
 
                 'are we stuck?
                 If AreWeStuck() Then
                     'we are stuck
-                    Debug.Print("")
-
-                    'pull out rock                    
-                    'KeyDownUp(Keys.M, False, 1, True)
-
-                    ''try to hit tree
-                    'LeftMouseClick()
-                    'ResponsiveSleep(1000)
-                    'LeftMouseClick()
-                    'ResponsiveSleep(1000)
-                    'LeftMouseClick()
-                    'ResponsiveSleep(1000)
-                    'LeftMouseClick()
-                    'ResponsiveSleep(1000)
+                    Debug.Print("No rec, we are stuck")
                 Else
                     'no
+                    Debug.Print("No rec, we are not stuck, bumping")
 
                     'bumping
                     mouse_event(MOUSEEVENTF_MOVE, 25, 0, 0, 0)
+
 
                     Application.DoEvents()
 
@@ -78,57 +68,29 @@ Public Class Form1
                     Application.DoEvents()
                 End If
             Else
+                'good rec
                 objectCenterIs = objectCenterIs
                 Dim ourDifference = objectCenterIs - myCenterIs
 
-                Debug.Print("Running, " & "objectCenterIs = " & objectCenterIs & " ourdiff = " & ourDifference)
+                Debug.Print("Good rec," & " objectCenterIs = " & objectCenterIs & " ourdiff = " & ourDifference)
 
                 'have moved?
                 If AreWeStuck() Then
                     'no 
-                    Debug.Print("Didn't move, opening door")
-
-                    KeyDownUp(Keys.E, True, 100, False)
-                    KeyDownOnly(Keys.E, True, 100, False)
-                    KeyUpOnly(Keys.E, True, 100, False)
-
-                    KeyDownOnly(Keys.E, False, 100, False)
-                    KeyUpOnly(Keys.E, False, 100, False)
-
-                    KeyDownOnly(Keys.E, False, 100, True)
-                    KeyUpOnly(Keys.E, False, 100, True)
-
-                    Thread.Sleep(500)
-
-                    Application.DoEvents()
-
-                    ''try to hit tree
-                    'LeftMouseClick()
-                    'ResponsiveSleep(1000)
-                    'LeftMouseClick()
-                    'ResponsiveSleep(1000)
-                    'LeftMouseClick()
-                    'ResponsiveSleep(1000)
-                    'LeftMouseClick()
-                    'ResponsiveSleep(1000)
-
-                    'try to open door
-                    'KeyDownUp(Keys.E, False, 10, False)s
-                    'KeyDownUp(Keys.W, True, 250, False)
-                    'KeyDownUp(Keys.E, False, 10, False)
-                    'KeyDownUp(Keys.W, True, 250, False)
-                    'KeyDownUp(Keys.E, False, 10, False)
+                    Debug.Print("We are stuck, perform action")
                 Else
-                    Debug.Print("Moved, correcting vector")
+                    Debug.Print("We not stuck, correcting position and running")
 
-                    'corect position
+                    'corect positionp
                     mouse_event(MOUSEEVENTF_MOVE, ourDifference, 0, 0, 0)
+                    ResponsiveSleep(500)
 
                     'run
                     KeyDownUp(Keys.W, False, 500, False)
                 End If
             End If
 
+            Application.DoEvents()
             ResponsiveSleep(10)
         Loop
 

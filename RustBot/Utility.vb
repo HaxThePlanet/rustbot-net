@@ -77,12 +77,26 @@ Module Utility
         Return value
     End Function
 
+    Public Function LabelToObjectName(label As Integer)
+        If label = 1 Then
+            'wooddoorfront
+            Return "wooddoorfront"
+        End If
+
+        If label = 2 Then
+            'metaldoor
+            Return "metaldoor"
+        End If
+
+    End Function
+
+
     Public Function GetObjectsVerticleLinePosition() As String
 
         Dim obj As String = DetectObjects()
         Dim theSplit = Split(obj, vbCrLf)
 
-        Debug.Print(theSplit.Count - 1 & " objects")
+        Debug.Print("Found " & theSplit.Count - 1 & " objects")
         For i = 1 To theSplit.Count - 2
             Dim theSplitNext = Split(theSplit(1), ",")
 
@@ -94,6 +108,9 @@ Module Utility
             ymin = theSplitNext(3).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
             xmax = theSplitNext(4).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
             ymax = theSplitNext(5).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "").Replace("Time", "")
+            Dim Label = LabelToObjectName(theSplitNext(6))
+
+            Debug.Print("Processing object = " & Label)
 
             'Debug.Print("xmin = " & xmin)
             'Debug.Print("ymin = " & ymin)
@@ -145,6 +162,8 @@ Module Utility
                     Jump()
                 End If
             End If
+
+            Application.DoEvents()
         End While
 
         keybd_event(key, MapVirtualKey(key, 0), 2, 0) ' key released
@@ -459,8 +478,7 @@ Module Utility
         Next
 
         'bump
-        KeyDownUp(Keys.W, True, 100, False)
-        KeyDownUp(Keys.A, True, 100, False)
+        KeyDownUp(Keys.W, True, 50, False)
 
         'after
         Dim posAfter = GetCurrentPosition()
