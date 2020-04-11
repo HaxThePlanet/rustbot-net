@@ -120,6 +120,7 @@ Module Utility
             Debug.Print("objectCenterline = " & theWidth)
         Next
 
+        If lastObjectCenterline = Nothing Then lastObjectCenterline = 0
         Return lastObjectCenterline
     End Function
 
@@ -458,7 +459,8 @@ Module Utility
         Next
 
         'bump
-        KeyDownUp(Keys.W, False, 50, False)
+        KeyDownUp(Keys.W, True, 100, False)
+        KeyDownUp(Keys.A, True, 100, False)
 
         'after
         Dim posAfter = GetCurrentPosition()
@@ -504,8 +506,7 @@ Module Utility
         KeyDownUp(Keys.Enter, False, 1, False)
         KeyDownUp(Keys.Escape, False, 1, False)
 
-        'wait for f1 to go away
-        Thread.Sleep(100)
+
 
         'read log
         Dim fs As FileStream = New FileStream("C:\Program Files (x86)\Steam\steamapps\common\Rust\output_log.txt", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)

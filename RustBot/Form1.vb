@@ -28,6 +28,7 @@ Public Class Form1
 
 
     Private Sub MainBrain()
+
         CheckForIllegalCrossThreadCalls = False
 
         lastAction.Text = "Warming up"
@@ -40,19 +41,6 @@ Public Class Form1
 
             'get rec
             objectCenterIs = GetObjectsVerticleLinePosition()
-
-            If objectCenterIs <> 0 Then
-                'get diff
-                Dim ourDifference = objectCenterIs - myCenterIs
-
-                Debug.Print("ourdiff = " & ourDifference)
-
-                'corect position
-                mouse_event(MOUSEEVENTF_MOVE, ourDifference, 0, 0, 0)
-
-                'run
-                'KeyDownUp(Keys.W, False, 1000, False)
-            End If
 
             'have rec            
             If objectCenterIs = 0 Then
@@ -80,14 +68,17 @@ Public Class Form1
                     'no
 
                     'bumping
-                    'mouse_event(MOUSEEVENTF_MOVE, 25, 0, 0, 0)
+                    mouse_event(MOUSEEVENTF_MOVE, 25, 0, 0, 0)
+
+                    Application.DoEvents()
 
                     'run litle
-                    KeyDownUp(Keys.W, False, 250, False)
+                    KeyDownUp(Keys.W, False, 100, False)
+
+                    Application.DoEvents()
                 End If
             Else
-                objectCenterIs = objectCenterIs + xmin
-                Dim iAmAt As Integer = 3840
+                objectCenterIs = objectCenterIs
                 Dim ourDifference = objectCenterIs - myCenterIs
 
                 Debug.Print("Running, " & "objectCenterIs = " & objectCenterIs & " ourdiff = " & ourDifference)
@@ -95,10 +86,21 @@ Public Class Form1
                 'have moved?
                 If AreWeStuck() Then
                     'no 
-                    Debug.Print("Didn't move, hitting tree")
+                    Debug.Print("Didn't move, opening door")
 
-                    'pull out rock                    
-                    'KeyDownUp(Keys.M, False, 1, True)
+                    KeyDownUp(Keys.E, True, 100, False)
+                    KeyDownOnly(Keys.E, True, 100, False)
+                    KeyUpOnly(Keys.E, True, 100, False)
+
+                    KeyDownOnly(Keys.E, False, 100, False)
+                    KeyUpOnly(Keys.E, False, 100, False)
+
+                    KeyDownOnly(Keys.E, False, 100, True)
+                    KeyUpOnly(Keys.E, False, 100, True)
+
+                    Thread.Sleep(500)
+
+                    Application.DoEvents()
 
                     ''try to hit tree
                     'LeftMouseClick()
@@ -111,7 +113,7 @@ Public Class Form1
                     'ResponsiveSleep(1000)
 
                     'try to open door
-                    'KeyDownUp(Keys.E, False, 10, False)
+                    'KeyDownUp(Keys.E, False, 10, False)s
                     'KeyDownUp(Keys.W, True, 250, False)
                     'KeyDownUp(Keys.E, False, 10, False)
                     'KeyDownUp(Keys.W, True, 250, False)
@@ -123,9 +125,11 @@ Public Class Form1
                     mouse_event(MOUSEEVENTF_MOVE, ourDifference, 0, 0, 0)
 
                     'run
-                    'KeyDownUp(Keys.W, False, 1000, False)
+                    KeyDownUp(Keys.W, False, 500, False)
                 End If
             End If
+
+            ResponsiveSleep(10)
         Loop
 
         logLabel.SelectionStart = logLabel.Text.Length
