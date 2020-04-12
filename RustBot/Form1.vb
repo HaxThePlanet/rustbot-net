@@ -30,6 +30,9 @@ Public Class Form1
 
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.Show()
+        Application.DoEvents()
+
         ShiftUP()
 
         Dim MainLoopThread As New Thread(AddressOf MainBrain)
@@ -102,6 +105,8 @@ Public Class Form1
 
 
     Private Sub MainBrain()
+
+
         CheckForIllegalCrossThreadCalls = False
 
         Dim objectCenterIs
@@ -130,7 +135,7 @@ Public Class Form1
                 'run to object
                 RunMainThread(Keys.W, True, 2000, False)
 
-                ''are we stuck?
+                ''are we stuck?n
                 If AreWeStuck() Then
                     'we are stuck
                     Debug.Print("good rec, stuck, trying to hit tree")
@@ -175,10 +180,10 @@ Public Class Form1
                     Debug.Print("No rec, we are not stuck, bumping")
 
                     'bumping
-                    MoveMouseMainThread(25)
+                    MoveMouseMainThread(250)
 
                     'run litle
-                    RunMainThread(Keys.W, False, 100, False)
+                    RunMainThread(Keys.W, False, 250, False)
                 End If
             End If
 

@@ -147,6 +147,14 @@ Module Utilitys
         Next
 
         If lastObjectCenterline = Nothing Then lastObjectCenterline = 0
+
+
+
+        If lastObjectCenterline = 0 Then
+            Debug.Print("")
+        End If
+
+
         Return lastObjectCenterline
     End Function
 
@@ -508,7 +516,7 @@ Module Utilitys
         Debug.Print("Starting stuck run")
 
         'bump
-        KeyDownUp(Keys.W, False, 100, False)
+        KeyDownUp(Keys.W, True, 250, False)
         ResponsiveSleep(100)
 
         Debug.Print("Done stuck run")
