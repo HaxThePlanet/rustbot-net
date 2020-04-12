@@ -5,10 +5,10 @@ Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 Imports System.Threading
 
-Module Utility
-    Dim homex1 As Integer = 1581.9
-    Dim homey1 As Integer = 2.0
-    Dim homez1 As Integer = 165.1
+Module Utilitys
+    Dim homex1 As Integer = -161.4
+    Dim homey1 As Integer = 15.7
+    Dim homez1 As Integer = 43.2
 
     <DllImport("user32.dll")>
     Private Sub mouse_event(ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal dwData As Integer, ByVal dwExtraInfo As Integer)
@@ -79,24 +79,33 @@ Module Utility
 
     Public Function LabelToObjectName(label As Integer)
         If label = 1 Then
-            'wooddoorfront
             Return "wooddoorfront"
         End If
 
         If label = 2 Then
-            'metaldoor
             Return "metaldoor"
+        End If
+
+        If label = 3 Then
+            Return "treeforest"
+        End If
+
+
+        If label = 4 Then
+            Return "treedesert"
         End If
 
     End Function
 
-
     Public Function GetObjectsVerticleLinePosition() As String
+        lastObjectCenterline = 0
 
         Dim obj As String = DetectObjects()
         Dim theSplit = Split(obj, vbCrLf)
 
         Debug.Print("Found " & theSplit.Count - 1 & " objects")
+        Application.DoEvents()
+
         For i = 1 To theSplit.Count - 2
             Dim theSplitNext = Split(theSplit(1), ",")
 
@@ -120,7 +129,7 @@ Module Utility
             'find his width
             Dim theWidth As Integer = xmax - xmin
 
-            Debug.Print("theWidth = " & theWidth)
+            'Debug.Print("theWidth = " & theWidth)
 
             'widest?
             If theWidth > lastWidth Then
@@ -134,12 +143,41 @@ Module Utility
                 lastObjectCenterline = objectCenterline
             End If
 
-            Debug.Print("objectCenterline = " & theWidth)
+            'Debug.Print("objectCenterline = " & theWidth)
         Next
 
         If lastObjectCenterline = Nothing Then lastObjectCenterline = 0
         Return lastObjectCenterline
     End Function
+
+    Public Sub Run(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
+        Dim targetTime As DateTime = DateTime.Now().AddMilliseconds(durationInMilli)
+        Dim kb_delay As Integer
+        Dim kb_speed As Integer
+
+        SystemParametersInfo(SPI_GETKEYBOARDDELAY, 0, kb_delay, 0)
+        SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, kb_speed, 0)
+
+        keybd_event(key, MapVirtualKey(key, 0), 0, 0) ' key pressed      
+
+        'shift?
+        If shift Then
+            'yes
+            ShiftDwn()
+        End If
+
+        While targetTime.Subtract(DateTime.Now()).TotalMilliseconds > 0
+            System.Threading.Thread.Sleep(kb_delay + kb_speed)
+        End While
+
+        keybd_event(key, MapVirtualKey(key, 0), 2, 0) ' key released                
+
+        'was shift down?
+        If shift Then
+            'yes, pull up
+            ShiftUP()
+        End If
+    End Sub
 
     Public Sub KeyDownUp(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
         Dim targetTime As DateTime = DateTime.Now().AddMilliseconds(durationInMilli)
@@ -149,28 +187,13 @@ Module Utility
         SystemParametersInfo(SPI_GETKEYBOARDDELAY, 0, kb_delay, 0)
         SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, kb_speed, 0)
 
-        If shift Then
-            ShiftDwn()
-        End If
-
-        keybd_event(key, MapVirtualKey(key, 0), 0, 0) ' key pressed
+        keybd_event(key, MapVirtualKey(key, 0), 0, 0) ' key pressed      
 
         While targetTime.Subtract(DateTime.Now()).TotalMilliseconds > 0
             System.Threading.Thread.Sleep(kb_delay + kb_speed)
-            If jumping Then
-                If (targetTime.Subtract(DateTime.Now()).TotalMilliseconds).ToString.Contains("00") Then
-                    Jump()
-                End If
-            End If
-
-            Application.DoEvents()
         End While
 
-        keybd_event(key, MapVirtualKey(key, 0), 2, 0) ' key released
-
-        If shift Then
-            ShiftUP()
-        End If
+        keybd_event(key, MapVirtualKey(key, 0), 2, 0) ' key released                
     End Sub
 
     Public Sub KeyDownOnly(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
@@ -186,6 +209,8 @@ Module Utility
         End If
 
         keybd_event(key, MapVirtualKey(key, 0), 0, 0) ' key pressed    
+
+        ResponsiveSleep(durationInMilli)
     End Sub
 
     Public Sub KeyUpOnly(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
@@ -205,7 +230,9 @@ Module Utility
 
     Public Sub LeftMouseClick()
         mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+        Application.DoEvents()
         mouse_event(MOUSEEVENTF_LEFTUP, 6, 0, 0, 0)
+        Application.DoEvents()
     End Sub
 
     Private Sub ShiftDwn()
@@ -217,7 +244,7 @@ Module Utility
         keybd_event(Keys.Space, MapVirtualKey(Keys.Space, 0), KEYEVENTF_KEYUP, 0)
     End Sub
 
-    Private Sub ShiftUP()
+    Public Sub ShiftUP()
         keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KEYEVENTF_KEYUP, 0)
     End Sub
 
@@ -251,7 +278,8 @@ Module Utility
     Public Sub ResponsiveSleep(ByRef iMilliSeconds As Integer)
         Dim i As Integer, iHalfSeconds As Integer = iMilliSeconds / 500
         For i = 1 To iHalfSeconds
-            Threading.Thread.Sleep(500) : Application.DoEvents()
+            Threading.Thread.Sleep(500)
+            Application.DoEvents()
         Next i
     End Sub
 
@@ -477,9 +505,13 @@ Module Utility
             tempadd1 = tempadd1 + LTrim(RTrim(Double.Parse(postBefore.GetValue(I))))
         Next
 
-        'bump
-        KeyDownUp(Keys.W, True, 50, False)
+        Debug.Print("Starting stuck run")
 
+        'bump
+        KeyDownUp(Keys.W, False, 100, False)
+        ResponsiveSleep(100)
+
+        Debug.Print("Done stuck run")
         'after
         Dim posAfter = GetCurrentPosition()
 
@@ -523,8 +555,7 @@ Module Utility
         KeyDownUp(Keys.S, False, 1, False)
         KeyDownUp(Keys.Enter, False, 1, False)
         KeyDownUp(Keys.Escape, False, 1, False)
-
-
+        ResponsiveSleep(500)
 
         'read log
         Dim fs As FileStream = New FileStream("C:\Program Files (x86)\Steam\steamapps\common\Rust\output_log.txt", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)

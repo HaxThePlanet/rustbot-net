@@ -18,6 +18,8 @@ Public Class ScreenCapturer
     End Structure
 
     Public Function Capture(Optional activeWindowOnly As Boolean = True) As Bitmap
+        On Error Resume Next
+
         Dim bounds As Rectangle
 
         If Not activeWindowOnly Then
