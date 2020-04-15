@@ -633,22 +633,11 @@ waitagain:
         Next
 
         If tempadd2 <> tempadd1 Then
+            'bump me                        
             Debug.Print("We have moved")
             Return False
         Else
-            Debug.Print("We have NOT moved, AGAIN")
-
-            KeyDownOnly(Keys.W, False, 500, False)
-            ResponsiveSleep(500)
-
-            Debug.Print("Done stuck run, AGAIN")
-            'after
-            posAfter = GetCurrentPosition()
-
-            For I = 0 To posAfter.Length - 1
-                tempadd2 = tempadd2 + LTrim(RTrim(Double.Parse(posAfter.GetValue(I))))
-            Next
-
+            Debug.Print("We have NOT moved")
             Return True
         End If
     End Function

@@ -134,7 +134,9 @@ Public Class Form1
     Private Sub HitTree()
         KeyDownUp(Keys.M, False, 1, False)
         ResponsiveSleep(2000)
-        LeftMouseClick(60000)
+        'should be 60sec
+        mouse_event(MOUSEEVENTF_MOVE, 0, 50, 0, 0)
+        LeftMouseClick(5000)
         KeyDownUp(Keys.N, False, 1, False)
         ResponsiveSleep(500)
     End Sub
@@ -180,35 +182,39 @@ Public Class Form1
             '    MoveMouseMainThread(1500)
             '    ResponsiveSleep(500)
             'Else
+
             'have rec?
             If objectCenterIs <> 0 Then
-                    'good rec                
-                    Dim ourDifference = objectCenterIs - myCenterIs
-                    Debug.Print("Good rec," & " objntectCenterIs = " & objectCenterIs & " ourdiff = " & ourDifference)
+                'good rec                
+                Dim ourDifference = objectCenterIs - myCenterIs
+                Debug.Print("Good rec," & " objntectCenterIs = " & objectCenterIs & " ourdiff = " & ourDifference)
 
-                    'point to object
-                    MoveMouseMainThread(ourDifference)
+                'point to object
+                MoveMouseMainThread(ourDifference)
+                ResponsiveSleep(500)
+
+                'run to a better area
+                RunMainThread(Keys.W, False, 500, False)
+
+                'are we stuck?
+                If AreWeStuck() Then
+                    'we are stuck
+                    Debug.Print("GOOD rec, stuck,  PERFORMING ACTION")
+                    HitTree()
+                Else
+                    'no
+                    Debug.Print("good rec, we are not stuck, bumping")
+
+                    'bumping
+                    MoveMouseMainThread(50)
                     ResponsiveSleep(500)
 
-                    'are we stuck?
-                    If AreWeStuck() Then
-                        'we are stuck
-                        Debug.Print("GOOD rec, stuck,  PERFORMING ACTION")
-                        HitTree()
-                    Else
-                        'no
-                        Debug.Print("good rec, we are not stuck, bumping")
-
-                        'bumping
-                        MoveMouseMainThread(50)
-                        ResponsiveSleep(500)
-
-                        'run litle
-                        RunMainThread(Keys.W, False, 100, False)
-                    End If
-                Else
-                    'no rec                .
-                    Debug.Print("bad rec")
+                    'run litle
+                    RunMainThread(Keys.W, False, 100, False)
+                End If
+            Else
+                'no rec                .
+                Debug.Print("bad rec")
 
                     'are we stuck?
                     If AreWeStuck() Then
