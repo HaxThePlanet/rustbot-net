@@ -4,6 +4,7 @@ Imports System.Runtime.InteropServices
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 Imports System.Threading
+Imports System.Security.Cryptography
 
 Module Utilitys
     Dim homex1 As Integer = -161.4
@@ -47,22 +48,91 @@ Module Utilitys
     Public ymax As Integer
     Public theCenterline As Integer
     Dim objectCenterline As Integer
-    Dim lastWidth As Integer = -1
+    Dim lastGlobalWidth As Integer = -1
+    Dim highestProb As Integer = -1
     Dim lastObjectCenterline
+
+    Public Function GetObjectsVerticleLinePosition(objects As String) As String
+        lastObjectCenterline = 0
+        lastGlobalWidth = 0
+        highestProb = 0
+
+        Dim theSplit = Split(objects, vbCrLf)
+        Dim Label As String
+        Dim LastObject As String
+
+        Debug.Print("Found " & theSplit.Count - 1 & " objects")
+        Application.DoEvents()
+
+        For i = 1 To theSplit.Count - 2
+            Dim theSplitNext = Split(theSplit(i), ",")
+
+            'no rec
+            If theSplitNext(0) = "" Then Exit For
+
+            Dim theProbNew As String = theSplitNext(7).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            xmin = theSplitNext(2).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            ymin = theSplitNext(3).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            xmax = theSplitNext(4).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            ymax = theSplitNext(5).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "").Replace("Time", "")
+            Label = LabelToObjectName(theSplitNext(6))
+
+            Debug.Print("Processing object = " & theSplitNext(6) & " " & Label)
+
+            Debug.Print("xmin = " & xmin)
+            'Debug.Print("ymin = " & ymin)
+            'Debug.Print("xmax = " & xmax)
+            'Debug.Print("ymax = " & ymax)
+
+            'find his width
+            Dim hisWidth As Integer = xmax - xmin
+
+            'right type?
+            If Label.Contains("tree") Then
+                'right criteria?
+                If hisWidth > lastGlobalWidth Then
+                    'yes
+                    highestProb = theProbNew
+
+                    'set his width                     
+                    lastGlobalWidth = hisWidth
+
+                    'lets get his centerline
+                    objectCenterline = (hisWidth / 2) + xmin
+
+                    'set it
+                    lastObjectCenterline = objectCenterline
+
+                    'last obj
+                    LastObject = theSplitNext(6)
+                End If
+            End If
+        Next
+
+        If lastObjectCenterline = Nothing Then lastObjectCenterline = 0
+
+        If lastObjectCenterline = 0 Then
+            Debug.Print("")
+        Else
+            Debug.Print("Pointing at widest object = " & LastObject & " " & LabelToObjectName(LastObject) & " " & Label)
+        End If
+
+        Return lastObjectCenterline
+    End Function
 
     Public Function DetectObjects() As String
         Dim Output As String
 
         'kill
-        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
         If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
 
         'take screen
-        TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+        TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
 
         'wait for spreadsheet
         Do Until File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
-            Thread.Sleep(50)
+            Thread.Sleep(100)
         Loop
 
         'read all text
@@ -72,6 +142,8 @@ Module Utilitys
 
         fs.Close()
         sr.Close()
+
+        Form1.previewImageEvent = True
 
         'return it
         Return value
@@ -90,72 +162,27 @@ Module Utilitys
             Return "treeforest"
         End If
 
+        If label = 5 Then
+            Return "treeforest"
+        End If
 
         If label = 4 Then
             Return "treedesert"
         End If
 
-    End Function
-
-    Public Function GetObjectsVerticleLinePosition() As String
-        lastObjectCenterline = 0
-
-        Dim obj As String = DetectObjects()
-        Dim theSplit = Split(obj, vbCrLf)
-
-        Debug.Print("Found " & theSplit.Count - 1 & " objects")
-        Application.DoEvents()
-
-        For i = 1 To theSplit.Count - 2
-            Dim theSplitNext = Split(theSplit(1), ",")
-
-            'no rec
-            If theSplitNext(0) = "" Then Exit For
-
-            Dim theProbNew As String = theSplitNext(7).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            xmin = theSplitNext(2).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            ymin = theSplitNext(3).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            xmax = theSplitNext(4).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            ymax = theSplitNext(5).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "").Replace("Time", "")
-            Dim Label = LabelToObjectName(theSplitNext(6))
-
-            Debug.Print("Processing object = " & Label)
-
-            'Debug.Print("xmin = " & xmin)
-            'Debug.Print("ymin = " & ymin)
-            'Debug.Print("xmax = " & xmax)
-            'Debug.Print("ymax = " & ymax)
-
-            'find his width
-            Dim theWidth As Integer = xmax - xmin
-
-            'Debug.Print("theWidth = " & theWidth)
-
-            'widest?
-            If theWidth > lastWidth Then
-                'yes
-                lastWidth = theWidth
-
-                'lets get his centerline
-                objectCenterline = (lastWidth / 2) + xmin
-
-                'set it
-                lastObjectCenterline = objectCenterline
-            End If
-
-            'Debug.Print("objectCenterline = " & theWidth)
-        Next
-
-        If lastObjectCenterline = Nothing Then lastObjectCenterline = 0
-
-
-
-        If lastObjectCenterline = 0 Then
-            Debug.Print("")
+        If label = 29 Then
+            Return "rock"
         End If
 
+        If label = 14 Then
+            Return "barrel"
+        End If
 
-        Return lastObjectCenterline
+        If label = 9 Then
+            Return "rock"
+        End If
+
+        Return ""
     End Function
 
     Public Sub Run(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
@@ -243,6 +270,14 @@ Module Utilitys
         Application.DoEvents()
     End Sub
 
+    Public Sub LeftMouseClick(timeInMilli As Integer)
+        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+        Application.DoEvents()
+        ResponsiveSleep(timeInMilli)
+        mouse_event(MOUSEEVENTF_LEFTUP, 6, 0, 0, 0)
+        Application.DoEvents()
+    End Sub
+
     Private Sub ShiftDwn()
         keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), 0, 0)
     End Sub
@@ -257,14 +292,51 @@ Module Utilitys
     End Sub
 
     Public Sub TakeScreenShotWhole(file As String)
+
         Dim sc = New ScreenCapturer()
         Using bitmap = sc.Capture()
             bitmap.Save(file, ImageFormat.Png)
             bitmap.Dispose()
         End Using
-
         sc = Nothing
+
+        'wait for available file lock
+waitagain:
+        If IsFileUnavailable(file) Then
+            ResponsiveSleep(100)
+            GoTo waitagain
+        End If
+
+        'now move him
+        System.IO.File.Move(file, "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
     End Sub
+
+    Public Function IsFileUnavailable(ByVal path As String) As Boolean
+        ' if file doesn't exist, return true
+        If Not System.IO.File.Exists(path) Then
+            Return True
+        End If
+
+        Dim file As FileInfo = New FileInfo(path)
+        Dim stream As FileStream = Nothing
+        Try
+            stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None)
+        Catch ex As IOException
+            'the file is unavailable because it is:
+            'still being written to
+            'or being processed by another thread
+            'or does not exist (has already been processed)
+            Return True
+        Finally
+            If (Not (stream) Is Nothing) Then
+                stream.Close()
+            End If
+
+        End Try
+
+        'file is not locked
+        Return False
+    End Function
 
     ''Take handle window screenshot
     Public Sub TakeScreenshotWindow(file As String)
@@ -303,6 +375,36 @@ Module Utilitys
             End If
         Next
 
+    End Function
+
+    Public Sub ResizeImageOnDisk(path As String)
+        Dim strFileName = System.IO.Path.GetFileName(path)
+        Try
+            Dim original As Image = Image.FromFile(path)
+            Dim resized As Image = ResizeImage(original, New Size(800, 800))
+            Dim memStream As MemoryStream = New MemoryStream()
+            resized.Save(memStream, ImageFormat.Jpeg)
+
+            Dim file As New FileStream(path, FileMode.Create, FileAccess.Write)
+
+            memStream.WriteTo(file)
+            file.Close()
+            memStream.Close()
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
+    Public Function ResizeImage(img As Image, size As Size) As Image
+        Return ResizeImage(img, size.Width, size.Height)
+    End Function
+
+    Public Function ResizeImage(bmp As Bitmap, width As Integer, height As Integer) As Image
+        Return ResizeImage(DirectCast(bmp, Image), width, height)
+    End Function
+
+    Public Function ResizeImage(bmp As Bitmap, size As Size) As Image
+        Return ResizeImage(DirectCast(bmp, Image), size.Width, size.Height)
     End Function
 
     Public Function fastCompareImages(path1 As String, path2 As String) As Double
@@ -396,63 +498,63 @@ Module Utilitys
         Return Math.Round(thePercent * 100, 2)
     End Function
 
-    Public Function GetGenericTagging()
-        Dim Output As String
+    'Public Function GetGenericTagging()
+    '    Dim Output As String
 
-        Using info As Process = New Process()
-            info.StartInfo.FileName = "python.exe"
-            info.StartInfo.Arguments = "generictagging.py"
-            info.StartInfo.UseShellExecute = False
-            info.StartInfo.RedirectStandardOutput = True
-            info.StartInfo.CreateNoWindow = True
-            info.Start()
-            Output = info.StandardOutput.ReadToEnd()
-            info.WaitForExit()
-        End Using
+    '    Using info As Process = New Process()
+    '        info.StartInfo.FileName = "python.exe"
+    '        info.StartInfo.Arguments = "generictagging.py"
+    '        info.StartInfo.UseShellExecute = False
+    '        info.StartInfo.RedirectStandardOutput = True
+    '        info.StartInfo.CreateNoWindow = True
+    '        info.Start()
+    '        Output = info.StandardOutput.ReadToEnd()
+    '        info.WaitForExit()
+    '    End Using
 
-        Dim json As JObject = JObject.Parse(Output)
-        Dim converted As String = json.ToString.Replace(" ", "").Replace(vbCrLf, "").Replace(Chr(34), "").Replace("{", "").Replace("[", "").Replace("}", "").Replace("]", "")
+    '    Dim json As JObject = JObject.Parse(Output)
+    '    Dim converted As String = json.ToString.Replace(" ", "").Replace(vbCrLf, "").Replace(Chr(34), "").Replace("{", "").Replace("[", "").Replace("}", "").Replace("]", "")
 
-        Dim TheSplit = Split(converted, "tags:")
-        Dim TheSplit2 = Split(TheSplit(1), "task_id")
-        Dim TheSplit3 = Split(TheSplit2(0), ",")
+    '    Dim TheSplit = Split(converted, "tags:")
+    '    Dim TheSplit2 = Split(TheSplit(1), "task_id")
+    '    Dim TheSplit3 = Split(TheSplit2(0), ",")
 
-        'drop blank
-        Array.Resize(TheSplit3, TheSplit3.Length - 1)
+    '    'drop blank
+    '    Array.Resize(TheSplit3, TheSplit3.Length - 1)
 
-        'return array
-        Return TheSplit3
-    End Function
+    '    'return array
+    '    Return TheSplit3
+    'End Function
 
-    Public Function DetectWater() As Boolean
-        TakeScreenShotWhole("processme.bmp")
+    'Public Function DetectWater() As Boolean
+    '    TakeScreenShotWhole("processme.png")
 
-        Dim tags As Array = GetGenericTagging()
+    '    Dim tags As Array = GetGenericTagging()
 
-        For I = 0 To tags.Length - 1
-            If tags(I).ToString.Contains("sea") Or tags(I).ToString.Contains("ocean") Or tags(I).ToString.Contains("water") Or tags(I).ToString.Contains("lake") Or tags(I).ToString.Contains("stream") Then
-                Return True
-            End If
-        Next
+    '    For I = 0 To tags.Length - 1
+    '        If tags(I).ToString.Contains("sea") Or tags(I).ToString.Contains("ocean") Or tags(I).ToString.Contains("water") Or tags(I).ToString.Contains("lake") Or tags(I).ToString.Contains("stream") Then
+    '            Return True
+    '        End If
+    '    Next
 
-        Return False
-    End Function
+    '    Return False
+    'End Function
 
-    Public Function DoGenericTagging() As Collection
-        TakeScreenShotWhole("processme.bmp")
-        Dim collection As New Collection
+    'Public Function DoGenericTagging() As Collection
+    '    TakeScreenShotWhole("processmedone.bmp")
+    '    Dim collection As New Collection
 
-        Dim tags As Array = GetGenericTagging()
+    '    Dim tags As Array = GetGenericTagging()
 
-        'do we have wood?
-        For I = 0 To tags.Length - 1
-            If tags(I).ToString.Contains("wood") Or tags(I).ToString.Contains("tree") Or tags(I).ToString.Contains("forest") Then
-                'yes, return highest probability
-                collection.Add(tags(I), tags(I - 1))
-            End If
-        Next
+    '    'do we have wood?
+    '    For I = 0 To tags.Length - 1
+    '        If tags(I).ToString.Contains("wood") Or tags(I).ToString.Contains("tree") Or tags(I).ToString.Contains("forest") Then
+    '            'yes, return highest probability
+    '            collection.Add(tags(I), tags(I - 1))
+    '        End If
+    '    Next
 
-    End Function
+    'End Function
 
 
 
@@ -515,15 +617,17 @@ Module Utilitys
 
         Debug.Print("Starting stuck run")
 
-        'bump
-        KeyDownUp(Keys.W, True, 250, False)
-        ResponsiveSleep(100)
+        'bumpiem
+        KeyDownOnly(Keys.W, False, 500, False)
+        ResponsiveSleep(500)
+
+        Dim tempadd2 As Double
 
         Debug.Print("Done stuck run")
         'after
         Dim posAfter = GetCurrentPosition()
 
-        Dim tempadd2 As Double
+
         For I = 0 To posAfter.Length - 1
             tempadd2 = tempadd2 + LTrim(RTrim(Double.Parse(posAfter.GetValue(I))))
         Next
@@ -532,7 +636,19 @@ Module Utilitys
             Debug.Print("We have moved")
             Return False
         Else
-            Debug.Print("We have NOT moved")
+            Debug.Print("We have NOT moved, AGAIN")
+
+            KeyDownOnly(Keys.W, False, 500, False)
+            ResponsiveSleep(500)
+
+            Debug.Print("Done stuck run, AGAIN")
+            'after
+            posAfter = GetCurrentPosition()
+
+            For I = 0 To posAfter.Length - 1
+                tempadd2 = tempadd2 + LTrim(RTrim(Double.Parse(posAfter.GetValue(I))))
+            Next
+
             Return True
         End If
     End Function
@@ -543,7 +659,10 @@ Module Utilitys
 
         'bring up console
         KeyDownUp(Keys.F1, False, 1, False)
+        'min
         ResponsiveSleep(500)
+
+        ShiftUP()
 
         'get position
         KeyDownUp(Keys.C, False, 1, False)
@@ -562,8 +681,11 @@ Module Utilitys
         KeyDownUp(Keys.O, False, 1, False)
         KeyDownUp(Keys.S, False, 1, False)
         KeyDownUp(Keys.Enter, False, 1, False)
+        ResponsiveSleep(250)
         KeyDownUp(Keys.Escape, False, 1, False)
-        ResponsiveSleep(500)
+        ResponsiveSleep(250)
+        'min    
+
 
         'read log
         Dim fs As FileStream = New FileStream("C:\Program Files (x86)\Steam\steamapps\common\Rust\output_log.txt", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
@@ -584,5 +706,76 @@ Module Utilitys
         Return TheSplit2
     End Function
 
+    ' Function to obtain the desired hash of a file
+    Function hash_generator(ByVal hash_type As String, ByVal file_name As String)
 
+        ' We declare the variable : hash
+        Dim hash
+        If hash_type.ToLower = "md5" Then
+            ' Initializes a md5 hash object
+            hash = MD5.Create
+        ElseIf hash_type.ToLower = "sha1" Then
+            ' Initializes a SHA-1 hash object
+            hash = SHA1.Create()
+        ElseIf hash_type.ToLower = "sha256" Then
+            ' Initializes a SHA-256 hash object
+            hash = SHA256.Create()
+        Else
+            MsgBox("Unknown type of hash : " & hash_type, MsgBoxStyle.Critical)
+            Return False
+        End If
+
+        ' We declare a variable to be an array of bytes
+        Dim hashValue() As Byte
+
+        ' We create a FileStream for the file passed as a parameter
+        'Dim fileStream As FileStream = File.OpenRead(file_name)
+
+        Dim fileStream As FileStream = New FileStream(file_name, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+
+        ' We position the cursor at the beginning of stream
+        fileStream.Position = 0
+        ' We calculate the hash of the file
+        hashValue = hash.ComputeHash(fileStream)
+        ' The array of bytes is converted into hexadecimal before it can be read easily
+        Dim hash_hex = PrintByteArray(hashValue)
+
+        ' We close the open file
+        fileStream.Close()
+
+        ' The hash is returned
+        Return hash_hex
+
+    End Function
+
+    ' We traverse the array of bytes and converting each byte in hexadecimal
+    Public Function PrintByteArray(ByVal array() As Byte)
+        Dim hex_value As String = ""
+
+        ' We traverse the array of bytes
+        Dim i As Integer
+        For i = 0 To array.Length - 1
+
+            ' We convert each byte in hexadecimal
+            hex_value += array(i).ToString("X2")
+
+        Next i
+
+        ' We return the string in lowercase
+        Return hex_value.ToLower
+
+    End Function
+
+    ' md5 is a reserved name, so we named the function : md5_hash
+    Function md5_hash(ByVal file_name As String)
+        Return hash_generator("md5", file_name)
+    End Function
+
+    Function sha_1(ByVal file_name As String)
+        Return hash_generator("sha1", file_name)
+    End Function
+
+    Function sha_256(ByVal file_name As String)
+        Return hash_generator("sha256", file_name)
+    End Function
 End Module

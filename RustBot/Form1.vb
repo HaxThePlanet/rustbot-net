@@ -28,9 +28,13 @@ Public Class Form1
 
     Public runEvent As Boolean
 
+    Public Shared previewImageEvent As Boolean
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Show()
+        Me.Refresh()
+        Me.BringToFront()
+
         Application.DoEvents()
 
         ShiftUP()
@@ -64,13 +68,38 @@ Public Class Form1
                 Run(keyLocal, shiftLocal, durationInMilliLocal, jumpingLocal)
             End If
 
-            ResponsiveSleep(100)
+            'load img
+            If previewImageEvent Then
+                previewImageEvent = False
+
+                PreviewImg(pic, "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
+            End If
+
+            ResponsiveSleep(50)
             Application.DoEvents()
         Loop
+    End Sub
+
+    Public Sub PreviewImg(pic As PictureBox, path As String)
+        On Error Resume Next
+
+        'ResizeImageOnDisk(path)
+
+        File.Copy("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust_preview.png", True)
 
 
+        Dim strImageFileName As String
+        Dim fs As System.IO.FileStream
+        fs = New System.IO.FileStream("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust_preview.png", System.IO.FileMode.Open, System.IO.FileAccess.Read)
+
+        Using ms As MemoryStream = New MemoryStream(File.ReadAllBytes(path))
+            pic.Image = Image.FromStream(ms)
+        End Using
 
 
+        fs.Close()
+
+        Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust_preview.png")
     End Sub
 
     Public Sub MoveMouseMainThread(howFar As Integer)
@@ -78,23 +107,22 @@ Public Class Form1
         moveMouseEvent = True
     End Sub
 
-    Private Sub KeyDownMainThread(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
-        keyDownEvent = True
-
+    Public Sub KeyDownMainThread(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
         keyLocal = key
         shiftLocal = shift
         durationInMilliLocal = durationInMilli
         jumpingLocal = jumping
 
+        keyDownEvent = True
     End Sub
 
-    public Sub RunMainThread(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
-        runEvent = True
-
+    Public Sub RunMainThread(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
         keyLocal = key
         shiftLocal = shift
         durationInMilliLocal = durationInMilli
         jumpingLocal = jumping
+
+        runEvent = True
     End Sub
 
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -103,89 +131,103 @@ Public Class Form1
         End
     End Sub
 
+    Private Sub HitTree()
+        KeyDownUp(Keys.M, False, 1, False)
+        ResponsiveSleep(2000)
+        LeftMouseClick(60000)
+        KeyDownUp(Keys.N, False, 1, False)
+        ResponsiveSleep(500)
+    End Sub
+
 
     Private Sub MainBrain()
-
-
         CheckForIllegalCrossThreadCalls = False
 
         Dim objectCenterIs
+        Dim objects As String
         Dim myCenterIs As Integer = 1920
 
         'startup
         lastAction.Text = "Warming up"
         ResponsiveSleep(5000)
 
-        'GoHome()        
+        'Object detection only!
+        '
+        'Do
+        '    Debug.Print("==================================== " & DateTime.Now)
+        '    Debug.Print("Starting object detection " & DateTime.Now)
+        '    objects = DetectObjects()
+        '    Debug.Print("Done object detection " & DateTime.Now)
+
+        '    Debug.Print("Start centerline " & DateTime.Now)
+        '    'get rec
+        '    objectCenterIs = GetObjectsVerticleLinePosition(objects)
+        '    Debug.Print("Done centerline " & DateTime.Now)
+        '    Debug.Print("=================================e=== " & DateTime.Now)
+        'Loop
+
+        'Exit Sub
 
         'main loop
         Do
+            objects = DetectObjects()
             'get rec
-            objectCenterIs = GetObjectsVerticleLinePosition()
+            objectCenterIs = GetObjectsVerticleLinePosition(objects)
 
+            ''move until water isn't in view
+            'If DetectWater() Then
+            '    logLabel.Text = logLabel.Text & "Detected water, moving" & vbCrLf
+            '    MoveMouseMainThread(1500)
+            '    ResponsiveSleep(500)
+            'Else
             'have rec?
             If objectCenterIs <> 0 Then
-                'good rec                
-                Dim ourDifference = objectCenterIs - myCenterIs
-                Debug.Print("Good rec," & " objectCenterIs = " & objectCenterIs & " ourdiff = " & ourDifference)
+                    'good rec                
+                    Dim ourDifference = objectCenterIs - myCenterIs
+                    Debug.Print("Good rec," & " objntectCenterIs = " & objectCenterIs & " ourdiff = " & ourDifference)
 
-                'poient to object
-                MoveMouseMainThread(ourDifference)
+                    'point to object
+                    MoveMouseMainThread(ourDifference)
+                    ResponsiveSleep(500)
 
-                'run to object
-                RunMainThread(Keys.W, True, 2000, False)
+                    'are we stuck?
+                    If AreWeStuck() Then
+                        'we are stuck
+                        Debug.Print("GOOD rec, stuck,  PERFORMING ACTION")
+                        HitTree()
+                    Else
+                        'no
+                        Debug.Print("good rec, we are not stuck, bumping")
 
-                ''are we stuck?n
-                If AreWeStuck() Then
-                    'we are stuck
-                    Debug.Print("good rec, stuck, trying to hit tree")
-                    ResponsiveSleep(1000)
-                    KeyDownOnly(Keys.M, False, 100, False)
-                    ResponsiveSleep(2000)
-                    LeftMouseClick()
-                    ResponsiveSleep(1000)
-                    LeftMouseClick()
-                    ResponsiveSleep(1000)
-                    LeftMouseClick()
-                    ResponsiveSleep(1000)
+                        'bumping
+                        MoveMouseMainThread(50)
+                        ResponsiveSleep(500)
+
+                        'run litle
+                        RunMainThread(Keys.W, False, 100, False)
+                    End If
                 Else
-                    'no
-                    Debug.Print("good rec, we are not stuck, bumping")
+                    'no rec                .
+                    Debug.Print("bad rec")
 
-                    'bumping
-                    MoveMouseMainThread(25)
+                    'are we stuck?
+                    If AreWeStuck() Then
+                        'we are stuck
+                        Debug.Print("BAD rec, we are STUCK, PERFORMING ACTION")
+                        HitTree()
+                    Else
+                        'no
+                        Debug.Print("No rec, we are not stuck, searching elsewhere!")
 
-                    'run litle
-                    RunMainThread(Keys.W, False, 100, False)
+                        'bumping
+                        MoveMouseMainThread(1000)
+                        ResponsiveSleep(500)
+
+                        'run to a better area
+                        RunMainThread(Keys.W, True, 2500, False)
+                    End If
                 End If
-            Else
-                'no rec                .
-                Debug.Print("bad rec")
-
-                ''are we stuck?
-                If AreWeStuck() Then
-                    'we are stuck
-                    Debug.Print("No rec, we are stuck, opening door!")
-                    ResponsiveSleep(1000)
-                    KeyDownOnly(Keys.M, False, 100, False)
-                    ResponsiveSleep(2000)
-                    LeftMouseClick()
-                    ResponsiveSleep(1000)
-                    LeftMouseClick()
-                    ResponsiveSleep(1000)
-                    LeftMouseClick()
-                    ResponsiveSleep(1000)
-                Else
-                    'no
-                    Debug.Print("No rec, we are not stuck, bumping")
-
-                    'bumping
-                    MoveMouseMainThread(250)
-
-                    'run litle
-                    RunMainThread(Keys.W, False, 250, False)
-                End If
-            End If
+            'End If
 
             Application.DoEvents()
         Loop
@@ -214,6 +256,12 @@ Public Class Form1
 
             logLabel.Text = logLabel.Text & "Change in distance: " & changeInDistance & vbCrLf
 
+            'move until water isn't in view
+            'If DetectWater() Then
+            '    logLabel.Text = logLabel.Text & "Detected water, moving" & vbCrLf
+            '    MoveMouseMainThread(1500)
+            'End If
+
             'bad rec?
             If changeInDistance = 0 Then
                 logLabel.Text = logLabel.Text & "Stuck, bumping" & vbCrLf
@@ -225,16 +273,6 @@ Public Class Form1
 
                 Run(Keys.W, True, 1000, False)
             Else
-                ''move until water isn't in view
-                'If DetectWater() Then
-                '    Application.DoEvents()
-                '    ResponsiveSleep(100)
-                '    logLabel.Text = logLabel.Text & "Detected water, moving" & vbCrLf
-                '    mouse_event(MOUSEEVENTF_MOVE, 1500, 0, 0, 0)
-                '    Application.DoEvents()
-                '    ResponsiveSleep(100)
-                'End If
-
                 If distanceFromHomeMoved > 40 Or distanceFromHomeMoved.ToString.Contains("-") Then
                     'closer or farther?
                     If changeInDistance.ToString.Contains("-") Then
@@ -286,5 +324,21 @@ STopNOw:
     Private Sub logLabel_TextChanged(sender As Object, e As EventArgs) Handles logLabel.TextChanged
         logLabel.SelectionStart = logLabel.Text.Length
         logLabel.ScrollToCaret()
+    End Sub
+
+    Public lastHash As String
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        'Dim hashIs As String = hash_generator("md5", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
+
+        '        If lastHash <> hashIs Then
+        'lastHash = hashIs
+
+
+        'pic.Load("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
+
+
+        'End If
+
+        'pic.Refresh()
     End Sub
 End Class
