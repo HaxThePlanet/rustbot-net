@@ -7,9 +7,9 @@ Imports System.Threading
 Imports System.Security.Cryptography
 
 Module Utilitys
-    Dim homex1 As Integer = -161.4
-    Dim homey1 As Integer = 15.7
-    Dim homez1 As Integer = 43.2
+    Dim homex1 As Integer = 379.5
+    Dim homey1 As Integer = 17.2
+    Dim homez1 As Integer = 595.5
 
     <DllImport("user32.dll")>
     Private Sub mouse_event(ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal dwData As Integer, ByVal dwExtraInfo As Integer)
@@ -128,7 +128,7 @@ Module Utilitys
         If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
 
         'take screen
-        TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
+        TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
 
         'wait for spreadsheet
         Do Until File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
@@ -143,47 +143,137 @@ Module Utilitys
         fs.Close()
         sr.Close()
 
-        Form1.previewImageEvent = True
-
         'return it
         Return value
     End Function
 
     Public Function LabelToObjectName(label As Integer)
-        If label = 1 Then
+        If label = 0 Then
             Return "wooddoorfront"
         End If
-
+        If label = 1 Then
+            Return "wooddoorback"
+        End If
         If label = 2 Then
             Return "metaldoor"
         End If
-
         If label = 3 Then
             Return "treeforest"
         End If
-
-        If label = 5 Then
-            Return "treeforest"
-        End If
-
         If label = 4 Then
             Return "treedesert"
         End If
-
-        If label = 29 Then
+        If label = 5 Then
+            Return "cactus"
+        End If
+        If label = 6 Then
+            Return "sulfur"
+        End If
+        If label = 7 Then
+            Return "buildrock"
+        End If
+        If label = 8 Then
             Return "rock"
         End If
-
+        If label = 9 Then
+            Return "woodinventory"
+        End If
+        If label = 11 Then
+            Return "player"
+        End If
+        If label = 10 Then
+            Return "woodinventory"
+        End If
+        If label = 12 Then
+            Return "mushrooms"
+        End If
+        If label = 13 Then
+            Return "dead"
+        End If
         If label = 14 Then
+            Return "respawn"
+        End If
+        If label = 15 Then
+            Return "water"
+        End If
+        If label = 16 Then
+            Return "refinery"
+        End If
+        If label = 17 Then
+            Return "largeoven"
+        End If
+        If label = 18 Then
+            Return "crate"
+        End If
+        If label = 19 Then
+            Return "truck"
+        End If
+        If label = 20 Then
             Return "barrel"
         End If
-
-        If label = 9 Then
-            Return "rock"
+        If label = 21 Then
+            Return "worthlessbarrel"
+        End If
+        If label = 22 Then
+            Return "scientist"
+        End If
+        If label = 23 Then
+            Return "stump"
+        End If
+        If label = 24 Then
+            Return "stump"
+        End If
+        If label = 25 Then
+            Return "helicopter"
+        End If
+        If label = 26 Then
+            Return "sleeping"
+        End If
+        If label = 27 Then
+            Return "train"
+        End If
+        If label = 28 Then
+            Return "wounded"
+        End If
+        If label = 29 Then
+            Return "weed"
+        End If
+        If label = 30 Then
+            Return "buildingpriv"
+        End If
+        If label = 31 Then
+            Return "woodwallfront"
+        End If
+        If label = 32 Then
+            Return "starving"
+        End If
+        If label = 33 Then
+            Return "dehydrated"
+        End If
+        If label = 34 Then
+            Return "hemp"
+        End If
+        If label = 35 Then
+            Return "boat"
+        End If
+        If label = 36 Then
+            Return "noinventory"
         End If
 
         Return ""
     End Function
+
+    Public Sub downSampleImage(path As String)
+        'resize and move
+        Dim psi As New ProcessStartInfo("C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\utils\downsample.exe", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png -resize 3000x30500 C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
+        Dim p As New Process
+        p.StartInfo = psi
+        psi.WindowStyle = ProcessWindowStyle.Hidden
+        p.Start()
+        p.WaitForExit()
+
+        Form1.previewImageEvent = True
+    End Sub
 
     Public Sub Run(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
         Dim targetTime As DateTime = DateTime.Now().AddMilliseconds(durationInMilli)
@@ -203,6 +293,11 @@ Module Utilitys
 
         While targetTime.Subtract(DateTime.Now()).TotalMilliseconds > 0
             System.Threading.Thread.Sleep(kb_delay + kb_speed)
+            If jumping Then
+                If targetTime.Subtract(DateTime.Now()).TotalMilliseconds.ToString.Contains("00") Then
+                    Jump()
+                End If
+            End If
         End While
 
         keybd_event(key, MapVirtualKey(key, 0), 2, 0) ' key released                
@@ -292,6 +387,7 @@ Module Utilitys
     End Sub
 
     Public Sub TakeScreenShotWhole(file As String)
+        On Error Resume Next
 
         Dim sc = New ScreenCapturer()
         Using bitmap = sc.Capture()
@@ -307,8 +403,8 @@ waitagain:
             GoTo waitagain
         End If
 
-        'now move him
-        System.IO.File.Move(file, "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
+        'downsample and move        
+        downSampleImage("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
     End Sub
 
     Public Function IsFileUnavailable(ByVal path As String) As Boolean
@@ -556,8 +652,6 @@ waitagain:
 
     'End Function
 
-
-
     Public Function DetectWoodInventory() As Boolean
         Dim Output As String
 
@@ -617,9 +711,9 @@ waitagain:
 
         Debug.Print("Starting stuck run")
 
-        'bumpiem
-        KeyDownOnly(Keys.W, False, 500, False)
-        ResponsiveSleep(500)
+        'run see if we moved
+        Run(Keys.W, False, 750, True)
+        ResponsiveSleep(750)
 
         Dim tempadd2 As Double
 
@@ -672,9 +766,8 @@ waitagain:
         KeyDownUp(Keys.Enter, False, 1, False)
         ResponsiveSleep(250)
         KeyDownUp(Keys.Escape, False, 1, False)
-        ResponsiveSleep(250)
+        ResponsiveSleep(500)
         'min    
-
 
         'read log
         Dim fs As FileStream = New FileStream("C:\Program Files (x86)\Steam\steamapps\common\Rust\output_log.txt", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
