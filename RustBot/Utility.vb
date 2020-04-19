@@ -7,9 +7,9 @@ Imports System.Threading
 Imports System.Security.Cryptography
 
 Module Utilitys
-    Dim homex1 As Integer = 379.5
-    Dim homey1 As Integer = 17.2
-    Dim homez1 As Integer = 595.5
+    Dim homex1 As Integer = 248.6
+    Dim homey1 As Integer = 13.4
+    Dim homez1 As Integer = 682.5
 
     <DllImport("user32.dll")>
     Private Sub mouse_event(ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal dwData As Integer, ByVal dwExtraInfo As Integer)
@@ -135,6 +135,9 @@ Module Utilitys
             Thread.Sleep(100)
         Loop
 
+        'show preview
+        Form1.previewImageEvent = True
+
         'read all text
         Dim fs As FileStream = New FileStream("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
         Dim sr As StreamReader = New StreamReader(fs)
@@ -147,7 +150,30 @@ Module Utilitys
         Return value
     End Function
 
-    Public Function LabelToObjectName(label As Integer)
+    Public Function LabelToObjectName(label As Integer) As String
+        'Dim labels As New Collection
+        'Dim readIn As String
+        'Dim ints As Integer = 3
+
+        'Using Reader As New StreamReader("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Model_Weights\data_classes.txt")
+        '    While Reader.EndOfStream = False
+        '        readIn = Reader.ReadLine()
+        '        labels.Add(readIn, ints)
+
+        '        ints += 1
+        '    End While
+
+        '    Reader.Close()
+        '    Reader.Dispose()
+        'End Using
+
+
+        'If labels.Contains(label) Then
+        '    Return labels.Item(label - 3)
+        'Else
+        '    Return "UNKNOWN LABEL"
+        'End If
+
         If label = 0 Then
             Return "wooddoorfront"
         End If
@@ -175,14 +201,11 @@ Module Utilitys
         If label = 8 Then
             Return "rock"
         End If
-        If label = 9 Then
+        If label = 13 Then
             Return "woodinventory"
-        End If
-        If label = 11 Then
-            Return "player"
         End If
         If label = 10 Then
-            Return "woodinventory"
+            Return "player"
         End If
         If label = 12 Then
             Return "mushrooms"
@@ -191,7 +214,7 @@ Module Utilitys
             Return "dead"
         End If
         If label = 14 Then
-            Return "respawn"
+            Return "someinventory"
         End If
         If label = 15 Then
             Return "water"
@@ -215,7 +238,7 @@ Module Utilitys
             Return "worthlessbarrel"
         End If
         If label = 22 Then
-            Return "scientist"
+            Return "sleepingbag"
         End If
         If label = 23 Then
             Return "stump"
@@ -265,14 +288,12 @@ Module Utilitys
 
     Public Sub downSampleImage(path As String)
         'resize and move
-        Dim psi As New ProcessStartInfo("C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\utils\downsample.exe", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png -resize 3000x30500 C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
+        Dim psi As New ProcessStartInfo("C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\utils\downsample.exe", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png -resize 1000x1000 C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
         Dim p As New Process
         p.StartInfo = psi
         psi.WindowStyle = ProcessWindowStyle.Hidden
         p.Start()
         p.WaitForExit()
-
-        Form1.previewImageEvent = True
     End Sub
 
     Public Sub Run(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
@@ -712,7 +733,7 @@ waitagain:
         Debug.Print("Starting stuck run")
 
         'run see if we moved
-        Run(Keys.W, False, 750, True)
+        Run(Keys.W, False, 750, False)
         ResponsiveSleep(750)
 
         Dim tempadd2 As Double
