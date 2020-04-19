@@ -7,9 +7,9 @@ Imports System.Threading
 Imports System.Security.Cryptography
 
 Module Utilitys
-    Dim homex1 As Integer = 248.6
-    Dim homey1 As Integer = 13.4
-    Dim homez1 As Integer = 682.5
+    Dim homex1 As Integer = -2100
+    Dim homey1 As Integer = 34
+    Dim homez1 As Integer = -486
 
     <DllImport("user32.dll")>
     Private Sub mouse_event(ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal dwData As Integer, ByVal dwExtraInfo As Integer)

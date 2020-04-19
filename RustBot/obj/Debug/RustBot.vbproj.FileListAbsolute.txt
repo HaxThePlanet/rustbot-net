@@ -28,3 +28,5 @@ C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\Newtonsoft.Json.xml
 C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\RestSharp.xml
 C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\System.Net.Http.Extensions.xml
 C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\System.Net.Http.Primitives.xml
+C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\SimWinMouse.dll
+C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\SimWinKeyboard.dll
