@@ -787,6 +787,7 @@ waitagain:
         KeyDownUp(Keys.Enter, False, 1, False)
         ResponsiveSleep(250)
         KeyDownUp(Keys.Escape, False, 1, False)
+
         ResponsiveSleep(500)
         'min    
 

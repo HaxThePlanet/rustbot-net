@@ -601,7 +601,7 @@ trydeadagain:
                 '    MoveMouseMainThread(1500)
                 'End If
 
-                'bad rec?
+                'bad distance?
                 If changeInDistance = 0 Then
                     logLabel.Text = logLabel.Text & "Stuck, bumping" & vbCrLf
 
@@ -638,6 +638,32 @@ trydeadagain:
                             HowFarToRun = 1500
                         End If
                     Else
+                        'closer or farther?
+                        If changeInDistance.ToString.Contains("-") Then
+                            'closer
+                            Debug.Print("")
+
+                            logLabel.Text = logLabel.Text & "We are closer, running long" & vbCrLf
+
+                            'headed almost straight?
+                            If changeInDistance < -10 Then
+                                HowFarToRun = 15000
+                            Else
+                                HowFarToRun = 10000
+                            End If
+                        Else
+                            logLabel.Text = logLabel.Text & "We are farther, changing direction" & vbCrLf
+
+                            'farther
+                            Application.DoEvents()
+                            ResponsiveSleep(250)
+                            'move right a few deg                  
+                            MoveMouseMainThread(1500)
+                            Application.DoEvents()
+                            ResponsiveSleep(250)
+
+                            HowFarToRun = 1500
+                        End If
                         'at harass
 
                         'stop running                                    
@@ -649,8 +675,6 @@ trydeadagain:
 
                         'enable audio blaster!
                         KeyDownMainThread(Keys.V, False, 10, False)
-
-                        HowFarToRun = 500
                     End If
                 End If
             Else
