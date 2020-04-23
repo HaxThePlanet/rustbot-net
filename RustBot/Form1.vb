@@ -9,16 +9,24 @@ Imports Newtonsoft.Json
 Imports System.Text.RegularExpressions
 Imports System.IO
 Imports SimWinInput
+Imports IronOcr
 
 Public Class Form1
     <DllImport("user32.dll")>
     Private Shared Sub mouse_event(ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal dwData As Integer, ByVal dwExtraInfo As Integer)
     End Sub
 
+    Public homex1 As Integer = 380
+    Public homey1 As Integer = 18
+    Public homez1 As Integer = 601
+
     Private Const MOUSEEVENTF_MOVE As Integer = &H1
 
-    Public moveMouseEvent As Boolean
-    Public moveMouseHowFar As Integer
+    Public moveMouseEventX As Boolean
+    Public moveMouseHowFarX As Integer
+
+    Public moveMouseEventY As Boolean
+    Public moveMouseHowFarY As Integer
 
     Public leftClickEvent As Boolean
 
@@ -33,6 +41,8 @@ Public Class Form1
     Public Shared previewImageEvent As Boolean
 
     Public goingHome As Boolean
+
+    Public keyDownUpEvent As Boolean
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Show()
@@ -49,13 +59,16 @@ Public Class Form1
         MainLoopThread.Start()
 
         Do
-            'bump mouse
-            If moveMouseEvent Then
-                moveMouseEvent = False
-                Application.DoEvents()
-                mouse_event(MOUSEEVENTF_MOVE, moveMouseHowFar, 0, 0, 0)
-                ResponsiveSleep(50)
-                Application.DoEvents()
+            'bump mouse x
+            If moveMouseEventX Then
+                moveMouseEventX = False
+                mouse_event(MOUSEEVENTF_MOVE, moveMouseHowFarX, 0, 0, 0)
+            End If
+
+            'bump mouse y
+            If moveMouseEventY Then
+                moveMouseEventY = False
+                mouse_event(MOUSEEVENTF_MOVE, 0, moveMouseHowFarY, 0, 0)
             End If
 
             'left mouse click
@@ -68,6 +81,12 @@ Public Class Form1
             If keyDownEvent Then
                 keyDownEvent = False
                 KeyDownOnly(keyLocal, shiftLocal, durationInMilliLocal, jumpingLocal)
+            End If
+
+            'key down up
+            If keyDownUpEvent Then
+                keyDownUpEvent = False
+                KeyDownUp(keyLocal, shiftLocal, durationInMilliLocal, jumpingLocal)
             End If
 
             'run
@@ -83,10 +102,19 @@ Public Class Form1
                 PreviewImg(pic, "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
             End If
 
-            ResponsiveSleep(50)
+            ResponsiveSleep(10)
             Application.DoEvents()
         Loop
     End Sub
+
+    'Public Sub OcrTakeScreenshot()
+    '    'take screen
+    '    'TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\ocr.png")
+
+    '    Dim Ocr = New AutoOcr()
+    '    Dim Result = Ocr.Read("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\ocr.png")
+    '    Debug.Print(Result.Text)
+    'End Sub
 
     Public Sub PreviewImg(pic As PictureBox, path As String)
         On Error Resume Next
@@ -102,9 +130,14 @@ Public Class Form1
         fs.Close()
     End Sub
 
-    Public Sub MoveMouseMainThread(howFar As Integer)
-        moveMouseHowFar = howFar
-        moveMouseEvent = True
+    Public Sub MoveMouseMainThreadX(howFarX As Integer)
+        moveMouseHowFarX = howFarX
+        moveMouseEventX = True
+    End Sub
+
+    Public Sub MoveMouseMainThreadY(howFarY As Integer)
+        moveMouseHowFarY = howFarY
+        moveMouseEventY = True
     End Sub
 
     Public Sub KeyDownMainThread(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
@@ -114,6 +147,15 @@ Public Class Form1
         jumpingLocal = jumping
 
         keyDownEvent = True
+    End Sub
+
+    Public Sub KeyDownUpMainThread(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
+        keyLocal = key
+        shiftLocal = shift
+        durationInMilliLocal = durationInMilli
+        jumpingLocal = jumping
+
+        keyDownUpEvent = True
     End Sub
 
     Public Sub RunMainThread(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
@@ -132,33 +174,60 @@ Public Class Form1
     End Sub
 
     Private Sub HitTree()
+        Dim objects As String
+        Dim obje
+        'what to look for
+        Dim gathering As New Collection
+        gathering.Add("gatheringwood", "gatheringwood")
+
+        'bring up rock
         KeyDownUp(Keys.M, False, 1, False)
-        ResponsiveSleep(2000)
-        'should be 60sec
-        mouse_event(MOUSEEVENTF_MOVE, 0, 50, 0, 0)
-        LeftMouseClick(5000)
-        KeyDownUp(Keys.N, False, 1, False)
+
+        'wait for it to come up
         ResponsiveSleep(500)
 
-        Dim objectsToFind As New Collection
-        objectsToFind.Add("someinventory", "someinventory")
-        objectsToFind.Add("woodinventory", "woodinventory")
+        '~60 seconds to collect a tree
 
-        'wood?
-        If DetectSpecificObjectsScreenshot(objectsToFind) Then
-            Debug.Print("We got wood, going home")
-            'yea go home
-            GoHome()
-        Else
-            'no, we're not getting wood
-            Debug.Print("NOT wood, moving away!")
+        Dim firstHit As Boolean = True
 
-            'bumping
-            MoveMouseMainThread(1500)
-            ResponsiveSleep(500)
-            MoveMouseMainThread(1500)
-            ResponsiveSleep(500)
-        End If
+        'main loop
+        Do
+            'test hitting the object to see if we are gathering
+            If firstHit Then
+                'must be long enough for gathering images to come up
+                LeftMouseClick(5000)
+                firstHit = False
+            Else
+                'longer
+                LeftMouseClick(15000)
+            End If
+
+
+            'are we collecting?
+            objects = DetectObjects()
+
+            'are we gathering?
+            If DetectSpecificObjects(gathering, objects) Then
+                'bump down                
+                MoveMouseMainThreadY(120)
+
+                'bump left                
+                MoveMouseMainThreadX(-80)
+
+                'yes
+                Debug.Print("gathering, continuing to gather")
+            Else
+                Debug.Print("not gathering, finishing")
+                'bump down                
+                MoveMouseMainThreadY(150)
+                'no
+                Exit Do
+            End If
+        Loop
+
+        'put away rock
+        KeyDownUp(Keys.N, False, 1, False)
+        ResponsiveSleep(500)
     End Sub
 
     Private Function DetectSpecificObjectsScreenshot(searchObjects As Collection) As Boolean
@@ -171,7 +240,7 @@ Public Class Form1
         Dim Label As String
         Dim LastObject As String
 
-        Debug.Print("DetectSpecificObjectsScreenshot found " & theSplit.Count - 1 & " objects")
+        Debug.Print("DetectSpecificObjectsScreenshot found " & theSplit.Count - 2 & " objects")
         Application.DoEvents()
 
         For i = 1 To theSplit.Count - 2
@@ -203,12 +272,13 @@ Public Class Form1
     End Function
 
     Private Function DetectSpecificObjects(searchObjects As Collection, imageObjects As String) As Boolean
+        Debug.Print("begin detect specific objects")
 
         Dim theSplit = Split(imageObjects, vbCrLf)
         Dim Label As String
         Dim LastObject As String
 
-        Debug.Print("Found " & theSplit.Count - 1 & " objects")
+        Debug.Print("Found " & theSplit.Count - 2 & " objects")
         Application.DoEvents()
 
         For i = 1 To theSplit.Count - 2
@@ -228,22 +298,148 @@ Public Class Form1
 
             'right type?
             If searchObjects.Contains(Label) Then
-                KeyDownUp(Keys.Tab, False, 10, False)
+                'KeyDownUp(Keys.Tab, False, 10, False)
                 Return True
             End If
         Next
 
-        KeyDownUp(Keys.Tab, False, 10, False)
         Return False
-
-        Debug.Print("")
     End Function
+
+    'this is for stuck detect
+    Private compareWidth As Integer = 50
+    Private compareHeight As Integer = 500
+    Private compareSourceX As Integer = 1850
+    Private compareSourcey As Integer = 400
+    Private compareDestinationX As Integer = 0
+    Private compareDestinationy As Integer = 0
+
+    Private Sub GoWood()
+        Dim objectCenterIs
+        Dim objects As String
+        Dim myCenterIs As Integer = 1920
+        Dim dead As New Collection
+
+        dead.Add("respawn", "respawn")
+        dead.Add("sleepingbag", "sleepingbag")
+        dead.Add("dead", "dead")
+
+        'main loop
+        Do
+            objects = DetectObjects()
+            'get rec
+            objectCenterIs = GetObjectsVerticleLinePosition(objects)
+
+            'hit inventory tab
+            'ShowInventory()
+
+            'are we dead?
+            If DetectSpecificObjects(dead, objects) = False Then
+                'turn off inventory tab
+                'HideInventory()
+
+                ''move until water isn't in view
+                'If DetectWater() Then
+                '    logLabel.Text = logLabel.Text & "Detected water, moving" & vbCrLf
+                '    MoveMouseMainThread(1500)
+                '    ResponsiveSleep(500)
+                'Else
+
+                'have rec?
+                If objectCenterIs <> 0 Then
+                    'good rec                
+                    Dim ourDifference = objectCenterIs - myCenterIs
+                    Debug.Print("Good rec," & " objntectCenterIs = " & objectCenterIs & " ourdiff = " & ourDifference)
+
+                    'point to objectos
+                    MoveMouseMainThreadX(ourDifference)
+                    'wait for mouse move
+                    ResponsiveSleep(1000)
+
+                    'take screen right before run                    
+                    TakeScreenShotArea("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", compareWidth, compareHeight, compareSourceX, compareSourcey, compareDestinationX, compareDestinationy)
+
+                    'run
+                    Run(Keys.W, True, 1500, False)
+                    'wait for run to complete
+                    ResponsiveSleep(1800)
+
+                    'take screenshot after run
+                    TakeScreenShotArea("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", compareWidth, compareHeight, compareSourceX, compareSourcey, compareDestinationX, compareDestinationy)
+
+                    'compare images, did we move?
+                    Dim theDiff As Double = compareImages("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
+
+                    'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png")
+                    'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
+
+                    'are we stuck?
+                    If theDiff < 40 Then
+                        'we are stuck
+                        Debug.Print("good rec, stuck = " & theDiff & ", performing action")
+                        HitTree()
+                    Else
+                        'no
+                        Debug.Print("good rec, we are not stuck = " & theDiff)
+
+                        'bumping
+                        'MoveMouseMainThread(50)                            
+
+                        'run litle
+                        'RunMainThread(Keys.W, False, 100, False)
+                    End If
+                Else
+                    'no rec                
+                    Debug.Print("bad rec")
+
+                    'take screen right before run
+                    TakeScreenShotArea("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", compareWidth, compareHeight, compareSourceX, compareSourcey, compareDestinationX, compareDestinationy)
+
+                    'run
+                    Run(Keys.W, False, 750, False)
+                    'wait for run to complete
+                    ResponsiveSleep(1000)
+
+                    'take screenshot after run
+                    TakeScreenShotArea("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", compareWidth, compareHeight, compareSourceX, compareSourcey, compareDestinationX, compareDestinationy)
+
+                    'compare images, did we move?
+                    Dim theDiff As Double = compareImages("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
+
+                    'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png")
+                    'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
+
+                    'are we stuck?
+                    If theDiff < 40 Then
+                        'we are stuck
+                        Debug.Print("BAD rec, we are STUCK = " & theDiff & ", PERFORMING ACTION")
+                        HitTree()
+                    Else
+                        'no
+                        Debug.Print("No rec, we are not stuck = " & theDiff & ", searching elsewhere!")
+
+                        'bumping                                                
+                        MoveMouseMainThreadX(GetRandom(-1500, 1500))
+
+                        'run to a better area
+                        RunMainThread(Keys.W, True, 2000, False)
+                    End If
+                End If
+                'End If
+            Else
+                'turn off inventory tab
+                'HideInventory()
+
+                'we are dead, respawn
+                KillandRespawn(False)
+            End If
+        Loop
+    End Sub
 
     Private Sub MainBrain()
         CheckForIllegalCrossThreadCalls = False
-
-        Dim objectCenterIs
         Dim objects As String
+        Dim objectCenterIs As String
         Dim myCenterIs As Integer = 1920
 
         'kill old
@@ -259,112 +455,31 @@ Public Class Form1
         objectsToFind.Add("woodinventory", "woodinventory")
 
         'Object detection only!
-
         'Do
         '    Debug.Print("==================================== " & DateTime.Now)
         '    Debug.Print("Starting object detection " & DateTime.Now)
         '    objects = DetectObjects()
         '    Debug.Print("Done object detection " & DateTime.Now)
 
-        '    Debug.Print("Start centerline " & DateTime.Now)
         '    'get rec
+        '    Debug.Print("Start centerline " & DateTime.Now)
         '    objectCenterIs = GetObjectsVerticleLinePosition(objects)
-        '    Debug.Print("Done centerline " & DateTime.Now)
-        '    Debug.Print("=================================e=== " & DateTime.Now)
+        '    Debug.Print("Done centerline = " & objectCenterIs & " " & DateTime.Now)
+        '    Debug.Print("==================================== " & DateTime.Now)
+
+        '    If objectCenterIs <> 0 Then
+        '        'good rec                
+        '        Dim ourDifference = objectCenterIs - myCenterIs
+
+        '        Debug.Print("Moving, Our diff is" & ourDifference & " " & DateTime.Now)
+
+        '        'point to object
+        '        MoveMouseMainThreadX(ourDifference)
+        '    End If
         'Loop
 
-        'Exit Sub
-
-        GoHarass()
-
-        Exit Sub
-
-
-        Dim dead As New Collection
-        dead.Add("someinventory", "someinventory")
-        dead.Add("woodinventory", "woodinventory")
-        dead.Add("respawn", "respawn")
-        dead.Add("sleepingbag", "sleepingbag")
-        dead.Add("dead", "dead")
-        dead.Add("map", "map")
-
-        'main loop
-        Do
-            'are we going home? no, get trees
-            If goingHome = False Then
-                objects = DetectObjects()
-                'get rec
-                objectCenterIs = GetObjectsVerticleLinePosition(objects)
-
-                'are we dead?
-                If DetectSpecificObjects(dead, objects) = False Then
-
-                    ''move until water isn't in view
-                    'If DetectWater() Then
-                    '    logLabel.Text = logLabel.Text & "Detected water, moving" & vbCrLf
-                    '    MoveMouseMainThread(1500)
-                    '    ResponsiveSleep(500)
-                    'Else
-
-                    'have rec?
-                    If objectCenterIs <> 0 Then
-                        'good rec                
-                        Dim ourDifference = objectCenterIs - myCenterIs
-                        Debug.Print("Good rec," & " objntectCenterIs = " & objectCenterIs & " ourdiff = " & ourDifference)
-
-                        'point to object
-                        MoveMouseMainThread(ourDifference)
-                        ResponsiveSleep(250)
-                        Application.DoEvents()
-                        ResponsiveSleep(250)
-                        Application.DoEvents()
-
-                        'are we stuck?
-                        If AreWeStuck() Then
-                            'we are stuck
-                            Debug.Print("GOOD rec, stuck,  PERFORMING ACTION")
-                            HitTree()
-                        Else
-                            'no
-                            Debug.Print("good rec, we are not stuck, bumping")
-
-                            'bumping
-                            'MoveMouseMainThread(50)
-                            'ResponsiveSleep(500)
-
-                            'run litle
-                            'RunMainThread(Keys.W, False, 100, False)
-                        End If
-                    Else
-                        'no rec                
-                        Debug.Print("bad rec")
-
-                        'are we stuck?
-                        If AreWeStuck() Then
-                            'we are stuck
-                            Debug.Print("BAD rec, we are STUCK, PERFORMING ACTION")
-                            HitTree()
-                        Else
-                            'no
-                            Debug.Print("No rec, we are not stuck, searching elsewhere!")
-
-                            'bumping
-                            MoveMouseMainThread(1000)
-                            ResponsiveSleep(500)
-
-                            'run to a better area
-                            RunMainThread(Keys.W, True, 3500, False)
-                        End If
-                    End If
-                    'End If
-                Else
-                    'we are dead, respawn
-                    KillandRespawn(False)
-                End If
-            End If
-            Application.DoEvents()
-        Loop
-
+        'GoHarass()
+        GoWood()
 
     End Sub
 
@@ -469,9 +584,10 @@ trydeadagain:
                 logLabel.Text = logLabel.Text & "Stuck, bumping" & vbCrLf
 
                 'move right a few deg
-                MoveMouseMainThread(GetRandom(-1500, 1500))
+                MoveMouseMainThreadX(GetRandom(-1500, 1500))
 
                 RunMainThread(Keys.W, True, 1000, True)
+
             Else
                 If distanceFromHomeMoved > 30 Or distanceFromHomeMoved.ToString.Contains("-") Then
                     'closer or farther?
@@ -489,7 +605,7 @@ trydeadagain:
                         Application.DoEvents()
                         ResponsiveSleep(250)
                         'move right a few deg                  
-                        MoveMouseMainThread(1500)
+                        MoveMouseMainThreadX(1500)
                         Application.DoEvents()
                         ResponsiveSleep(250)
 
@@ -561,6 +677,10 @@ trydeadagain:
 
     End Sub
 
+    Private Shared Function IsNullOrEmpty(ByVal myStringArray() As String) As Boolean
+        Return ((myStringArray Is Nothing) OrElse (myStringArray.Length < 1))
+    End Function
+
     Public Sub GoHarass()
         Dim objects As String
         Dim dead As New Collection
@@ -586,202 +706,119 @@ trydeadagain:
                 RunMainThread(Keys.W, True, HowFarToRun, True)
                 ResponsiveSleep(HowFarToRun)
 
-                Dim currentPositionMoved = GetCurrentPosition()
-                Dim distanceFromHomeMoved = currentPositionMoved(3)
+                Dim currentPositionMoved As Array = GetCurrentPosition()
 
-                logLabel.Text = logLabel.Text & "New distance from home: " & distanceFromHome & vbCrLf
+                'make sure we have an array
+                If IsNullOrEmpty(currentPositionMoved) = False Then
+                    Dim distanceFromHomeMoved = currentPositionMoved(3)
 
-                Dim changeInDistance = distanceFromHomeMoved - distanceFromHome
+                    logLabel.Text = logLabel.Text & "New distance from home: " & distanceFromHome & vbCrLf
 
-                logLabel.Text = logLabel.Text & "Change in distance: " & changeInDistance & vbCrLf
+                    Dim changeInDistance = distanceFromHomeMoved - distanceFromHome
 
-                'move until water isn't in view
-                'If DetectWater() Then
-                '    logLabel.Text = logLabel.Text & "Detected water, moving" & vbCrLf
-                '    MoveMouseMainThread(1500)
-                'End If
+                    logLabel.Text = logLabel.Text & "Change in distance: " & changeInDistance & vbCrLf
 
-                'bad distance?
-                If changeInDistance = 0 Then
-                    logLabel.Text = logLabel.Text & "Stuck, bumping" & vbCrLf
+                    'move until water isn't in view
+                    'If DetectWater() Then
+                    '    logLabel.Text = logLabel.Text & "Detected water, moving" & vbCrLf
+                    '    MoveMouseMainThread(1500)
+                    'End If
 
-                    'move right a few deg
-                    MoveMouseMainThread(GetRandom(-1500, 1500))
-
-                    RunMainThread(Keys.W, True, 1000, True)
-                Else
-                    If distanceFromHomeMoved > 70 Or distanceFromHomeMoved.ToString.Contains("-") Then
-                        'closer or farther?
-                        If changeInDistance.ToString.Contains("-") Then
-                            'closer
-                            Debug.Print("")
-
-                            logLabel.Text = logLabel.Text & "We are closer, running long" & vbCrLf
-
-                            'headed almost straight?
-                            If changeInDistance < -10 Then
-                                HowFarToRun = 15000
-                            Else
-                                HowFarToRun = 10000
-                            End If
-                        Else
-                            logLabel.Text = logLabel.Text & "We are farther, changing direction" & vbCrLf
-
-                            'farther
-                            Application.DoEvents()
-                            ResponsiveSleep(250)
-                            'move right a few deg                  
-                            MoveMouseMainThread(1500)
-                            Application.DoEvents()
-                            ResponsiveSleep(250)
-
-                            HowFarToRun = 1500
-                        End If
-                    Else
-                        'closer or farther?
-                        If changeInDistance.ToString.Contains("-") Then
-                            'closer
-                            Debug.Print("")
-
-                            logLabel.Text = logLabel.Text & "We are closer, running long" & vbCrLf
-
-                            'headed almost straight?
-                            If changeInDistance < -10 Then
-                                HowFarToRun = 15000
-                            Else
-                                HowFarToRun = 10000
-                            End If
-                        Else
-                            logLabel.Text = logLabel.Text & "We are farther, changing direction" & vbCrLf
-
-                            'farther
-                            Application.DoEvents()
-                            ResponsiveSleep(250)
-                            'move right a few deg                  
-                            MoveMouseMainThread(1500)
-                            Application.DoEvents()
-                            ResponsiveSleep(250)
-
-                            HowFarToRun = 1500
-                        End If
-                        'at harass
-
-                        'stop running                                    
-                        KeyUpOnly(Keys.W, True, 100, False)
-
+                    If distanceFromHome < 70 Then
                         'at harass location
                         logLabel.Text = logLabel.Text & "We are at harass location, play sound!" & vbCrLf
-                        KeyUpOnly(Keys.W, False, 100, False)
 
                         'enable audio blaster!
                         KeyDownMainThread(Keys.V, False, 10, False)
+                    End If
+
+                    'bad distance?
+                    If changeInDistance = 0 Then
+                        logLabel.Text = logLabel.Text & "Stuck, bumping" & vbCrLf
+
+                        'move right a few deg
+                        MoveMouseMainThreadX(GetRandom(-1500, 1500))
+
+                        RunMainThread(Keys.W, True, 1000, True)
+                    Else
+                        If distanceFromHomeMoved > 70 Or distanceFromHomeMoved.ToString.Contains("-") Then
+                            'closer or farther?
+                            If changeInDistance.ToString.Contains("-") Then
+                                'closer
+                                Debug.Print("")
+
+                                logLabel.Text = logLabel.Text & "We are closer, running long" & vbCrLf
+
+                                'headed almost straight?
+                                If changeInDistance < -10 Then
+                                    HowFarToRun = 5000
+                                Else
+                                    HowFarToRun = 5000
+                                End If
+                            Else
+                                logLabel.Text = logLabel.Text & "We are farther, changing direction" & vbCrLf
+
+                                'farther
+                                Application.DoEvents()
+                                ResponsiveSleep(250)
+                                'move right a few deg                  
+                                MoveMouseMainThreadX(1500)
+                                Application.DoEvents()
+                                ResponsiveSleep(250)
+
+                                HowFarToRun = 1500
+                            End If
+                        Else
+                            'closer or farther?
+                            If changeInDistance.ToString.Contains("-") Then
+                                'closer
+                                Debug.Print("")
+
+                                logLabel.Text = logLabel.Text & "We are closer, running long" & vbCrLf
+
+                                'headed almost straight?
+                                If changeInDistance < -10 Then
+                                    HowFarToRun = 5000
+                                Else
+                                    HowFarToRun = 5000
+                                End If
+                            Else
+                                logLabel.Text = logLabel.Text & "We are farther, changing direction" & vbCrLf
+
+                                'farther
+                                Application.DoEvents()
+                                ResponsiveSleep(250)
+                                'move right a few deg                  
+                                MoveMouseMainThreadX(1500)
+                                Application.DoEvents()
+                                ResponsiveSleep(250)
+
+                                HowFarToRun = 1500
+                            End If
+                            'at harass
+
+                            'stop running                                    
+                            KeyUpOnly(Keys.W, False, 100, False)
+
+                            'at harass location
+                            logLabel.Text = logLabel.Text & "We are at harass location, play sound!" & vbCrLf
+                            KeyUpOnly(Keys.W, False, 100, False)
+
+                            'enable audio blaster!
+                            KeyDownMainThread(Keys.V, False, 10, False)
+                        End If
                     End If
                 End If
             Else
                 logLabel.Text = logLabel.Text & "We are dead, respawning" & vbCrLf
 
-                'dead
+                'deadt
                 KillandRespawn(False)
             End If
         Loop
 
 
     End Sub
-
-    'Public Sub GoHarass()
-    '    Dim dead As New Collection
-    '    dead.Add("someinventory", "someinventory")
-    '    dead.Add("woodinventory", "woodinventory")
-    '    dead.Add("respawn", "respawn")
-    '    dead.Add("sleepingbag", "sleepingbag")
-    '    dead.Add("dead", "dead")
-    '    dead.Add("map", "map")
-    '    Dim objects As String
-
-    '    Do
-    '        Application.DoEvents()
-    '        ResponsiveSleep(500)
-
-    '        'get our current position
-    '        Dim currentPosition = GetCurrentPosition()
-    '        Dim distanceFromHome = currentPosition(3)
-
-    '        logLabel.Text = logLabel.Text & "Distance from harass location: " & distanceFromHome & " Running " & HowFarToRun & vbCrLf
-    '        RunMainThread(Keys.W, False, HowFarToRun, False)
-    '        ResponsiveSleep(HowFarToRun)
-
-    '        Dim currentPositionMoved = GetCurrentPosition()
-    '        Dim distanceFromHomeMoved = currentPositionMoved(3)
-
-    '        logLabel.Text = logLabel.Text & "New distance from harass location: " & distanceFromHome & vbCrLf
-
-    '        Dim changeInDistance = distanceFromHomeMoved - distanceFromHome
-
-    '        logLabel.Text = logLabel.Text & "Change in distance: " & changeInDistance & vbCrLf
-
-    '        'move until water isn't in view
-    '        'If DetectWater() Then
-    '        '    logLabel.Text = logLabel.Text & "Detected water, moving" & vbCrLf
-    '        '    MoveMouseMainThread(1500)
-    '        'End If
-
-    '        'detect objects
-    '        objects = DetectObjects()
-
-    '        'are we dead bro?
-    '        If DetectSpecificObjects(dead, objects) = False Then
-    '            'bad rec?
-    '            If changeInDistance = 0 Then
-    '                logLabel.Text = logLabel.Text & "Stuck, bumping" & vbCrLf
-
-    '                'move right a few deg
-    '                MoveMouseMainThread(GetRandom(-1500, 1500))
-
-    '                RunMainThread(Keys.W, False, 1000, False)
-    '            Else
-    '                If distanceFromHomeMoved > 60 Or distanceFromHomeMoved.ToString.Contains("-") Then
-    '                    'closer or farther?
-    '                    If changeInDistance.ToString.Contains("-") Then
-    '                        'closer
-    '                        Debug.Print("we are closer")
-
-    '                        logLabel.Text = logLabel.Text & "We are closer, running long" & vbCrLf
-
-    '                        HowFarToRun = 10000
-    '                    Else
-    '                        Debug.Print("we are farther")
-
-    '                        logLabel.Text = logLabel.Text & "We are farther, changing direction" & vbCrLf
-    '                        'farther
-
-    '                        'bumpingtp
-    '                        MoveMouseMainThread(1000)
-    '                        ResponsiveSleep(500)
-
-    '                        'run to a better area
-    '                        RunMainThread(Keys.W, True, 3500, False)
-
-    '                        HowFarToRun = 2000
-    '                    End If
-    '                Else
-    '                    'at harass location
-    '                    logLabel.Text = logLabel.Text & "We are at harass location, play sound!" & vbCrLf
-    '                    KeyUpOnly(Keys.W, False, 100, False)
-
-    '                    'enable audio blaster!
-    '                    KeyDownMainThread(Keys.V, False, 100, False)
-
-    '                End If
-    '            End If
-    '        Else
-    '            'we are dead, respawn
-    '            KillandRespawn(False)
-    '        End If
-
-    '        Application.DoEvents()
-    '        ResponsiveSleep(500)
-    '    Loop
-    'End Sub
 
     Public Function GetRandom(ByVal Min As Integer, ByVal Max As Integer) As Integer
         Dim Generator As System.Random = New System.Random()
@@ -798,4 +835,8 @@ trydeadagain:
     End Sub
 
     Public lastHash As String
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+
+    End Sub
 End Class

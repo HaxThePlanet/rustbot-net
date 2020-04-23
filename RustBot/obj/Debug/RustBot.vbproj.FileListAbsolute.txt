@@ -30,3 +30,5 @@ C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\System.Net.Http.Extensions.x
 C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\System.Net.Http.Primitives.xml
 C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\SimWinMouse.dll
 C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\SimWinKeyboard.dll
+C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\IronOcr.dll
+C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\IronOcr.xml

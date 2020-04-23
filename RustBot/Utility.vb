@@ -5,16 +5,15 @@ Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 Imports System.Threading
 Imports System.Security.Cryptography
+Imports XnaFan.ImageComparison
 
 Module Utilitys
-    Dim homex1 As Integer = -2100
-    Dim homey1 As Integer = 34
-    Dim homez1 As Integer = -486
-
     <DllImport("user32.dll")>
     Private Sub mouse_event(ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal dwData As Integer, ByVal dwExtraInfo As Integer)
     End Sub
     Private Const MOUSEEVENTF_MOVE As Integer = &H1
+
+    Private Declare Function GetCursorPos Lib "user32.dll" (ByRef lpPoint As Point) As Boolean
 
     Private Declare Sub keybd_event Lib "user32.dll" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Integer, ByVal dwExtraInfo As Integer)
 
@@ -61,7 +60,7 @@ Module Utilitys
         Dim Label As String
         Dim LastObject As String
 
-        Debug.Print("Found " & theSplit.Count - 1 & " objects")
+        Debug.Print("Found " & theSplit.Count - 2 & " objects")
         Application.DoEvents()
 
         For i = 1 To theSplit.Count - 2
@@ -120,20 +119,34 @@ Module Utilitys
         Return lastObjectCenterline
     End Function
 
+    Public Function GetGlobalMousePosition() As Point
+        Dim pt As New Point
+        GetCursorPos(pt)
+
+        Return pt
+    End Function
+
     Public Function DetectObjects() As String
         Dim Output As String
+        Debug.Print("begin detecting objects")
 
         'kill
         If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
         If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
 
+        Debug.Print("taking screenshot")
+
         'take screen
         TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+
+        Debug.Print("done taking screenshot, waiting for spreadsheet")
 
         'wait for spreadsheet
         Do Until File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
             Thread.Sleep(100)
         Loop
+
+        Debug.Print("done spreadsheet")
 
         'show preview
         Form1.previewImageEvent = True
@@ -145,6 +158,15 @@ Module Utilitys
 
         fs.Close()
         sr.Close()
+
+        Try
+            If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
+            If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
+        Catch
+            Debug.Print("Couldnt del csv")
+        End Try
+
+        Debug.Print("done detect objects")
 
         'return it
         Return value
@@ -198,14 +220,14 @@ Module Utilitys
         If label = 7 Then
             Return "buildrock"
         End If
-        If label = 8 Then
-            Return "rock"
+        If label = 9 Then
+            Return "player"
         End If
         If label = 13 Then
             Return "woodinventory"
         End If
         If label = 10 Then
-            Return "player"
+            Return "woodinventory"
         End If
         If label = 12 Then
             Return "mushrooms"
@@ -226,7 +248,7 @@ Module Utilitys
             Return "largeoven"
         End If
         If label = 18 Then
-            Return "crate"
+            Return "wood1000"
         End If
         If label = 19 Then
             Return "truck"
@@ -282,13 +304,16 @@ Module Utilitys
         If label = 36 Then
             Return "noinventory"
         End If
+        If label = 41 Then
+            Return "gatheringwood"
+        End If
 
         Return ""
     End Function
 
     Public Sub downSampleImage(path As String)
-        'resize and move
-        Dim psi As New ProcessStartInfo("C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\utils\downsample.exe", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png -resize 1000x1000 C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
+        'resize
+        Dim psi As New ProcessStartInfo("C:\Users\bob\source\repos\RustBot\RustBot\bin\Debug\utils\downsample.exe", path & " -resize 4000x4000 " & path)
         Dim p As New Process
         p.StartInfo = psi
         psi.WindowStyle = ProcessWindowStyle.Hidden
@@ -387,9 +412,12 @@ Module Utilitys
     End Sub
 
     Public Sub LeftMouseClick(timeInMilli As Integer)
+        'down
         mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
         Application.DoEvents()
+        'wait
         ResponsiveSleep(timeInMilli)
+        'up
         mouse_event(MOUSEEVENTF_LEFTUP, 6, 0, 0, 0)
         Application.DoEvents()
     End Sub
@@ -407,6 +435,23 @@ Module Utilitys
         keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KEYEVENTF_KEYUP, 0)
     End Sub
 
+    Public Sub TakeScreenShotArea(file As String, width As Integer, height As Integer, sourceX As Integer, sourceY As Integer, destinationX As Integer, destinationY As Integer)
+        Debug.Print("taking screenshot area")
+
+        Dim printscreen As Bitmap = New Bitmap(width, height)
+        Dim graphics As Graphics = Graphics.FromImage(CType(printscreen, Image))
+        graphics.CopyFromScreen(sourceX, sourceY, destinationX, destinationY, printscreen.Size)
+        printscreen.Save(file, ImageFormat.Png)
+
+waitagain:
+        If IsFileUnavailable(file) Then
+            ResponsiveSleep(10)
+            GoTo waitagain
+        End If
+
+        Debug.Print("done taking screenshot area")
+    End Sub
+
     Public Sub TakeScreenShotWhole(file As String)
         On Error Resume Next
 
@@ -420,12 +465,15 @@ Module Utilitys
         'wait for available file lock
 waitagain:
         If IsFileUnavailable(file) Then
-            ResponsiveSleep(100)
+            ResponsiveSleep(10)
             GoTo waitagain
         End If
 
-        'downsample and move        
-        downSampleImage("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+        'downsample, this fux xy coords in rec dont use
+        'downSampleImage("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+
+        'move it
+        System.IO.File.Move("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
     End Sub
 
     Public Function IsFileUnavailable(ByVal path As String) As Boolean
@@ -525,6 +573,9 @@ waitagain:
     End Function
 
     Public Function fastCompareImages(path1 As String, path2 As String) As Double
+        downSampleImage(path1)
+        downSampleImage(path2)
+
         Dim img1 As Bitmap = New Bitmap(path1)
         Dim img2 As Bitmap = New Bitmap(path2)
         If (img1.Size <> img2.Size) Then
@@ -545,75 +596,67 @@ waitagain:
                     diff = (diff + Math.Abs((pixel1.B - pixel2.B)))
                 Catch
                 End Try
-
                 x = (x + 1)
             Loop
-
             y = (y + 1)
         Loop
 
         Console.WriteLine("diff: {0} %", (100 * ((diff / 255) / (img1.Width * (img1.Height * 3)))))
     End Function
 
-    Public Function compareImages(path1 As String, path2 As String) As Double
-        Application.DoEvents()
+    Public Function compareImages(ByVal bmp1 As String, ByVal bmp2 As String, Optional ByVal threshold As Byte = 3) As Single
+        'get the full path of the images
+        Dim image1Path As String = Path.Combine("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Ocr", bmp1)
+        Dim image2Path As String = Path.Combine("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Ocr", bmp2)
 
-        ' Load the images.
-        Dim bm1 As Bitmap = Image.FromFile(path1)
-        Dim bm2 As Bitmap = Image.FromFile(path2)
+        Dim firstBmp As Bitmap = CType(Image.FromFile(image1Path), Bitmap)
+        Dim secondBmp As Bitmap = CType(Image.FromFile(image2Path), Bitmap)
 
-        ' Make a difference image.
-        Dim wid As Integer = Math.Min(bm1.Width, bm2.Width)
-        Dim hgt As Integer = Math.Min(bm1.Height, bm2.Height)
-        Dim bm3 As New Bitmap(wid, hgt)
+        'get the difference as a bitmap
+        firstBmp.GetDifferenceImage(secondBmp, True).Save((image1Path + "_diff.png"))
 
-        ' Create the difference image.
-        Dim are_identical As Boolean = True
-        Dim r1, g1, b1, r2, g2, b2, r3, g3, b3 As Integer
-        Dim eq_color As Color = Color.White
-        Dim ne_color As Color = Color.Red
+        Dim theDiff As Single = firstBmp.PercentageDifference(secondBmp, threshold) * 100
 
-        Dim eachRed As Long
+        Debug.Print(String.Format("Difference: {0:0.0} %", (theDiff)))
 
-        For x As Integer = 0 To wid - 1
-            Application.DoEvents()
+        firstBmp.Dispose()
+        secondBmp.Dispose()
 
-            For y As Integer = 0 To hgt - 1
-                Application.DoEvents()
-
-                If bm1.GetPixel(x, y).Equals(bm2.GetPixel(x, y)) Then
-                    bm3.SetPixel(x, y, eq_color)
-                    eachRed += 1
-                Else
-                    bm3.SetPixel(x, y, ne_color)
-                    are_identical = False
-                End If
-            Next y
-        Next x
-
-
-        Dim totalPixels As Integer = 0
-        totalPixels = wid * hgt
-
-        Dim thePercent As Double
-        thePercent = eachRed / totalPixels
-
-        ' Display the result.
-        'picResult.Image = bm3
-
-        If (bm1.Width <> bm2.Width) OrElse (bm1.Height <>
-            bm2.Height) Then are_identical = False
-        If are_identical Then
-            '    MessageBox.Show("The images are identical")
-        Else
-            '   MessageBox.Show("The images are different")
-        End If
-
-        bm1.Dispose()
-        bm2.Dispose()
-
-        Return Math.Round(thePercent * 100, 2)
+        Return theDiff
     End Function
+
+    'Public Function compareImages(path1 As String, path2 As String) As Double
+    '    Debug.Print("compareImages, starting downsample")
+    '    'downSampleImage(path1)
+    '    'downSampleImage(path2)
+
+    '    Debug.Print("compareImages, starting comparison")
+
+    '    'compare the two
+    '    Console.WriteLine(("Comparing: " + (bmp1 + (" and " _
+    '                    + (bmp2 + (", with a threshold of " + threshold))))))
+    '    Dim firstBmp As Bitmap = CType(Image.FromFile(path1), Bitmap)
+    '    Dim secondBmp As Bitmap = CType(Image.FromFile(path2), Bitmap)
+    '    'get the difference as a bitmap
+    '    firstBmp.GetDifferenceImage(secondBmp, True).Save((path1 + "_diff.png"))
+    '    Console.WriteLine(String.Format("Difference: {0:0.0} %", (firstBmp.PercentageDifference(secondBmp, threshold) * 100)))
+    '    Console.WriteLine(String.Format("BhattacharyyaDifference: {0:0.0} %", (firstBmp.BhattacharyyaDifference(secondBmp) * 100)))
+
+
+    '    Debug.Print("compareImages, done")
+
+    '    Return Math.Round((100 * ((diff / 255) / (img1.Width * (img1.Height * 3)))))
+    'End Function
+
+    Public Sub ShowInventory()
+        KeyDownUp(Keys.Tab, False, 500, False)
+        ResponsiveSleep(500)
+    End Sub
+
+    Public Sub HideInventory()
+        KeyDownUp(Keys.Tab, False, 500, False)
+        ResponsiveSleep(500)
+    End Sub
 
     'Public Function GetGenericTagging()
     '    Dim Output As String
@@ -733,15 +776,14 @@ waitagain:
         Debug.Print("Starting stuck run")
 
         'run see if we moved
-        Run(Keys.W, False, 750, False)
-        ResponsiveSleep(750)
+        Run(Keys.W, False, 500, False)
+        ResponsiveSleep(500)
 
         Dim tempadd2 As Double
 
         Debug.Print("Done stuck run")
         'after
         Dim posAfter = GetCurrentPosition()
-
 
         For I = 0 To posAfter.Length - 1
             tempadd2 = tempadd2 + LTrim(RTrim(Double.Parse(posAfter.GetValue(I))))
@@ -758,7 +800,8 @@ waitagain:
     End Function
 
     Public Function GetCurrentPosition() As Array
-        'On Error Resume Next
+        On Error Resume Next
+
         Debug.Print("Getting Position")
 
         'bring up console
@@ -799,7 +842,7 @@ waitagain:
         Dim TheSplit = Split(output, "(")
         Dim TheSplit2 = Split(TheSplit(1), ",")
 
-        Dim distance As Integer = Distance3D(TheSplit2(0), TheSplit2(1), TheSplit2(2), homex1, homey1, homez1)
+        Dim distance As Integer = Distance3D(TheSplit2(0), TheSplit2(1), TheSplit2(2), Form1.homex1, Form1.homey1, Form1.homez1)
 
         TheSplit(1) = TheSplit(1) & "," & distance
         TheSplit2 = Split(TheSplit(1), ",")
