@@ -6,36 +6,24 @@ Imports Newtonsoft.Json.Linq
 Imports System.Threading
 Imports System.Security.Cryptography
 Imports XnaFan.ImageComparison
+Imports Constants
 
 Module Utilitys
     <DllImport("user32.dll")>
     Private Sub mouse_event(ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal dwData As Integer, ByVal dwExtraInfo As Integer)
     End Sub
+
+    <DllImport("User32.dll", SetLastError:=False, CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Auto)>
+    Public Function MapVirtualKey(ByVal uCode As UInt32, ByVal uMapType As UInt32) As UInt32
+    End Function
+
     Private Const MOUSEEVENTF_MOVE As Integer = &H1
 
     Private Declare Function GetCursorPos Lib "user32.dll" (ByRef lpPoint As Point) As Boolean
 
     Private Declare Sub keybd_event Lib "user32.dll" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Integer, ByVal dwExtraInfo As Integer)
 
-    <DllImport("User32.dll", SetLastError:=False, CallingConvention:=CallingConvention.StdCall, CharSet:=CharSet.Auto)>
-    Public Function MapVirtualKey(ByVal uCode As UInt32, ByVal uMapType As UInt32) As UInt32
-    End Function
-
-    Public Const KEYEVENTF_EXTENDEDKEY = &H1    'Key DOWN
-    Public Const KEYEVENTF_KEYUP = &H2          'Key UP
-
-    Private Const VK_LBUTTON = &H1
-    Private Const VK_RBUTTON = &H2
-
-    Private Const MOUSEEVENTF_LEFTDOWN = &H2
-    Private Const MOUSEEVENTF_LEFTUP = &H4
-    Private Const MOUSEEVENTF_RIGHTDOWN = &H8
-    Private Const MOUSEEVENTF_RIGHTUP = &H10
-
     Public Declare Sub mouse_event Lib "user32" Alias "mouse_event" (ByVal dwFlags As Long, ByVal dx As Long, ByVal dy As Long, ByVal cButtons As Long, ByVal dwExtraInfo As Long)
-
-    Const SPI_GETKEYBOARDDELAY = 22
-    Const SPI_GETKEYBOARDSPEED = 10
 
     Private Declare Function SystemParametersInfo Lib "user32" Alias "SystemParametersInfoA" (ByVal uAction As Integer, ByVal uParam As Integer,
     ByRef lpvParam As Integer, ByVal fuWinIni As Integer) As Integer
@@ -116,6 +104,8 @@ Module Utilitys
             Debug.Print("Pointing at widest object = " & LastObject & " " & LabelToObjectName(LastObject) & " " & Label)
         End If
 
+        lastObjectCenterline = lastObjectCenterline - Constants.myCenterIs
+
         Return lastObjectCenterline
     End Function
 
@@ -126,7 +116,7 @@ Module Utilitys
         Return pt
     End Function
 
-    Public Function DetectObjects() As String
+    Public Function DetectObjects(narrowView As Boolean) As String
         Dim Output As String
         Debug.Print("begin detecting objects")
 
@@ -136,14 +126,22 @@ Module Utilitys
 
         Debug.Print("taking screenshot")
 
-        'take screen
-        TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+        'narrow view to hone in on specific object
+        If narrowView Then
+            'take screen right before run                    
+            'TakeScreenShotAreaRec("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, Constants.compareDestinationXNarrow, Constants.compareDestinationyNarrow)
+            TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+        Else
+            'take screen
+            TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+        End If
+
 
         Debug.Print("done taking screenshot, waiting for spreadsheet")
 
         'wait for spreadsheet
         Do Until File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
-            Thread.Sleep(100)
+            Thread.Sleep(10)
         Loop
 
         Debug.Print("done spreadsheet")
@@ -326,8 +324,8 @@ Module Utilitys
         Dim kb_delay As Integer
         Dim kb_speed As Integer
 
-        SystemParametersInfo(SPI_GETKEYBOARDDELAY, 0, kb_delay, 0)
-        SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, kb_speed, 0)
+        SystemParametersInfo(Constants.SPI_GETKEYBOARDDELAY, 0, kb_delay, 0)
+        SystemParametersInfo(Constants.SPI_GETKEYBOARDSPEED, 0, kb_speed, 0)
 
         keybd_event(key, MapVirtualKey(key, 0), 0, 0) ' key pressed      
 
@@ -360,8 +358,8 @@ Module Utilitys
         Dim kb_delay As Integer
         Dim kb_speed As Integer
 
-        SystemParametersInfo(SPI_GETKEYBOARDDELAY, 0, kb_delay, 0)
-        SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, kb_speed, 0)
+        SystemParametersInfo(Constants.SPI_GETKEYBOARDDELAY, 0, kb_delay, 0)
+        SystemParametersInfo(Constants.SPI_GETKEYBOARDSPEED, 0, kb_speed, 0)
 
         keybd_event(key, MapVirtualKey(key, 0), 0, 0) ' key pressed      
 
@@ -377,8 +375,8 @@ Module Utilitys
         Dim kb_delay As Integer
         Dim kb_speed As Integer
 
-        SystemParametersInfo(SPI_GETKEYBOARDDELAY, 0, kb_delay, 0)
-        SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, kb_speed, 0)
+        SystemParametersInfo(Constants.SPI_GETKEYBOARDDELAY, 0, kb_delay, 0)
+        SystemParametersInfo(Constants.SPI_GETKEYBOARDSPEED, 0, kb_speed, 0)
 
         If shift Then
             ShiftDwn()
@@ -394,8 +392,8 @@ Module Utilitys
         Dim kb_delay As Integer
         Dim kb_speed As Integer
 
-        SystemParametersInfo(SPI_GETKEYBOARDDELAY, 0, kb_delay, 0)
-        SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, kb_speed, 0)
+        SystemParametersInfo(Constants.SPI_GETKEYBOARDDELAY, 0, kb_delay, 0)
+        SystemParametersInfo(Constants.SPI_GETKEYBOARDSPEED, 0, kb_speed, 0)
 
         keybd_event(key, MapVirtualKey(key, 0), 2, 0) ' key released        
 
@@ -405,20 +403,20 @@ Module Utilitys
     End Sub
 
     Public Sub LeftMouseClick()
-        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+        mouse_event(Constants.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
         Application.DoEvents()
-        mouse_event(MOUSEEVENTF_LEFTUP, 6, 0, 0, 0)
+        mouse_event(Constants.MOUSEEVENTF_LEFTUP, 6, 0, 0, 0)
         Application.DoEvents()
     End Sub
 
     Public Sub LeftMouseClick(timeInMilli As Integer)
         'down
-        mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+        mouse_event(Constants.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
         Application.DoEvents()
         'wait
         ResponsiveSleep(timeInMilli)
         'up
-        mouse_event(MOUSEEVENTF_LEFTUP, 6, 0, 0, 0)
+        mouse_event(Constants.MOUSEEVENTF_LEFTUP, 6, 0, 0, 0)
         Application.DoEvents()
     End Sub
 
@@ -428,14 +426,14 @@ Module Utilitys
 
     Public Sub Jump()
         keybd_event(Keys.Space, MapVirtualKey(Keys.Space, 0), 0, 0)
-        keybd_event(Keys.Space, MapVirtualKey(Keys.Space, 0), KEYEVENTF_KEYUP, 0)
+        keybd_event(Keys.Space, MapVirtualKey(Keys.Space, 0), Constants.KEYEVENTF_KEYUP, 0)
     End Sub
 
     Public Sub ShiftUP()
-        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KEYEVENTF_KEYUP, 0)
+        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), Constants.KEYEVENTF_KEYUP, 0)
     End Sub
 
-    Public Sub TakeScreenShotArea(file As String, width As Integer, height As Integer, sourceX As Integer, sourceY As Integer, destinationX As Integer, destinationY As Integer)
+    Public Sub TakeScreenShotAreaStuck(file As String, width As Integer, height As Integer, sourceX As Integer, sourceY As Integer, destinationX As Integer, destinationY As Integer)
         Debug.Print("taking screenshot area")
 
         Dim printscreen As Bitmap = New Bitmap(width, height)
@@ -448,6 +446,26 @@ waitagain:
             ResponsiveSleep(10)
             GoTo waitagain
         End If
+
+        Debug.Print("done taking screenshot area")
+    End Sub
+
+    Public Sub TakeScreenShotAreaRec(file As String, width As Integer, height As Integer, sourceX As Integer, sourceY As Integer, destinationX As Integer, destinationY As Integer)
+        Debug.Print("taking screenshot area")
+
+        Dim printscreen As Bitmap = New Bitmap(width, height)
+        Dim graphics As Graphics = Graphics.FromImage(CType(printscreen, Image))
+        graphics.CopyFromScreen(sourceX, sourceY, destinationX, destinationY, printscreen.Size)
+        printscreen.Save(file, ImageFormat.Png)
+
+waitagain:
+        If IsFileUnavailable(file) Then
+            ResponsiveSleep(10)
+            GoTo waitagain
+        End If
+
+        'move it
+        System.IO.File.Move("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
 
         Debug.Print("done taking screenshot area")
     End Sub
@@ -842,7 +860,62 @@ waitagain:
         Dim TheSplit = Split(output, "(")
         Dim TheSplit2 = Split(TheSplit(1), ",")
 
-        Dim distance As Integer = Distance3D(TheSplit2(0), TheSplit2(1), TheSplit2(2), Form1.homex1, Form1.homey1, Form1.homez1)
+        Dim distance As Integer = Distance3D(TheSplit2(0), TheSplit2(1), TheSplit2(2), Constants.homex1, Constants.homey1, Constants.homez1)
+
+        TheSplit(1) = TheSplit(1) & "," & distance
+        TheSplit2 = Split(TheSplit(1), ",")
+
+        fs.Close()
+        sr.Close()
+
+        Return TheSplit2
+    End Function
+
+    Public Function GetCurrentEyePos() As Array
+        On Error Resume Next
+
+        Debug.Print("Getting Position")
+
+        'bring up console
+        KeyDownUp(Keys.F1, False, 1, False)
+        'min
+        ResponsiveSleep(500)
+
+        ShiftUP()
+
+        'get position
+        KeyDownUp(Keys.C, False, 1, False)
+        KeyDownUp(Keys.L, False, 1, False)
+        KeyDownUp(Keys.I, False, 1, False)
+        KeyDownUp(Keys.E, False, 1, False)
+        KeyDownUp(Keys.N, False, 1, False)
+        KeyDownUp(Keys.T, False, 1, False)
+        KeyDownUp(Keys.OemPeriod, False, 1, False)
+        KeyDownUp(Keys.P, False, 1, False)
+        KeyDownUp(Keys.R, False, 1, False)
+        KeyDownUp(Keys.I, False, 1, False)
+        KeyDownUp(Keys.N, False, 1, False)
+        KeyDownUp(Keys.T, False, 1, False)
+        KeyDownUp(Keys.E, False, 1, False)
+        KeyDownUp(Keys.Y, False, 1, False)
+        KeyDownUp(Keys.E, False, 1, False)
+        KeyDownUp(Keys.S, False, 1, False)
+        KeyDownUp(Keys.Enter, False, 1, False)
+        ResponsiveSleep(250)
+        KeyDownUp(Keys.Escape, False, 1, False)
+
+        ResponsiveSleep(500)
+        'min    
+
+        'read log
+        Dim fs As FileStream = New FileStream("C:\Program Files (x86)\Steam\steamapps\common\Rust\output_log.txt", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+        Dim sr As StreamReader = New StreamReader(fs)
+        Dim lines = Split(sr.ReadToEnd, vbCr)
+        Dim output As String = lines(lines.Count - 2).Replace(")", "")
+        Dim TheSplit = Split(output, "(")
+        Dim TheSplit2 = Split(TheSplit(1), ",")
+
+        Dim distance As Integer = Distance3D(TheSplit2(0), TheSplit2(1), TheSplit2(2), Constants.homex1, Constants.homey1, Constants.homez1)
 
         TheSplit(1) = TheSplit(1) & "," & distance
         TheSplit2 = Split(TheSplit(1), ",")

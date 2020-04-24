@@ -16,12 +16,6 @@ Public Class Form1
     Private Shared Sub mouse_event(ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal dwData As Integer, ByVal dwExtraInfo As Integer)
     End Sub
 
-    Public homex1 As Integer = 380
-    Public homey1 As Integer = 18
-    Public homez1 As Integer = 601
-
-    Private Const MOUSEEVENTF_MOVE As Integer = &H1
-
     Public moveMouseEventX As Boolean
     Public moveMouseHowFarX As Integer
 
@@ -62,13 +56,13 @@ Public Class Form1
             'bump mouse x
             If moveMouseEventX Then
                 moveMouseEventX = False
-                mouse_event(MOUSEEVENTF_MOVE, moveMouseHowFarX, 0, 0, 0)
+                mouse_event(Constants.MOUSEEVENTF_MOVE, moveMouseHowFarX, 0, 0, 0)
             End If
 
             'bump mouse y
             If moveMouseEventY Then
                 moveMouseEventY = False
-                mouse_event(MOUSEEVENTF_MOVE, 0, moveMouseHowFarY, 0, 0)
+                mouse_event(Constants.MOUSEEVENTF_MOVE, 0, moveMouseHowFarY, 0, 0)
             End If
 
             'left mouse click
@@ -175,7 +169,7 @@ Public Class Form1
 
     Private Sub HitTree()
         Dim objects As String
-        Dim obje
+
         'what to look for
         Dim gathering As New Collection
         gathering.Add("gatheringwood", "gatheringwood")
@@ -204,25 +198,26 @@ Public Class Form1
 
 
             'are we collecting?
-            objects = DetectObjects()
+            objects = DetectObjects(False)
 
             'are we gathering?
             If DetectSpecificObjects(gathering, objects) Then
-                'bump down                
-                MoveMouseMainThreadY(120)
-
-                'bump left                
-                MoveMouseMainThreadX(-80)
+                'center horizon
+                MovePlayerEyesToHorizon()
 
                 'yes
                 Debug.Print("gathering, continuing to gather")
             Else
-                Debug.Print("not gathering, finishing")
-                'bump down                
-                MoveMouseMainThreadY(150)
                 'no
+                Debug.Print("not gathering, finishing")
+
+                'center horizon
+                MovePlayerEyesToHorizon()
+
                 Exit Do
             End If
+
+            Application.DoEvents()
         Loop
 
         'put away rock
@@ -234,7 +229,7 @@ Public Class Form1
         KeyDownUp(Keys.Tab, False, 10, False)
         ResponsiveSleep(500)
 
-        Dim objects As String = DetectObjects()
+        Dim objects As String = DetectObjects(False)
 
         Dim theSplit = Split(objects, vbCrLf)
         Dim Label As String
@@ -306,29 +301,42 @@ Public Class Form1
         Return False
     End Function
 
-    'this is for stuck detect
-    Private compareWidth As Integer = 50
-    Private compareHeight As Integer = 500
-    Private compareSourceX As Integer = 1850
-    Private compareSourcey As Integer = 400
-    Private compareDestinationX As Integer = 0
-    Private compareDestinationy As Integer = 0
+    Public Sub MovePlayerEyesToHorizon()
+        'xmax = 271 (sky)
+        'xmin = 89 (ground)
+        'xlevel = 360
+
+        'move player eyes to fully down, ground
+        MoveMouseMainThreadY(5000)
+        'wait for mouse move
+        ResponsiveSleep(500)
+
+        'move players eyes back up
+        MoveMouseMainThreadY(-2200)
+        'wait for mouse move
+        ResponsiveSleep(500)
+
+    End Sub
 
     Private Sub GoWood()
-        Dim objectCenterIs
+        Dim moveToCenter
         Dim objects As String
         Dim myCenterIs As Integer = 1920
         Dim dead As New Collection
+        Dim narrowRec As Boolean = False
 
         dead.Add("respawn", "respawn")
         dead.Add("sleepingbag", "sleepingbag")
         dead.Add("dead", "dead")
 
+        'center to horizon
+        MovePlayerEyesToHorizon()
+
         'main loop
         Do
-            objects = DetectObjects()
+            objects = DetectObjects(narrowRec)
             'get rec
-            objectCenterIs = GetObjectsVerticleLinePosition(objects)
+            moveToCenter = GetObjectsVerticleLinePosition(objects)
 
             'hit inventory tab
             'ShowInventory()
@@ -346,26 +354,27 @@ Public Class Form1
                 'Else
 
                 'have rec?
-                If objectCenterIs <> 0 Then
-                    'good rec                
-                    Dim ourDifference = objectCenterIs - myCenterIs
-                    Debug.Print("Good rec," & " objntectCenterIs = " & objectCenterIs & " ourdiff = " & ourDifference)
+                If moveToCenter <> 0 Then
+                    narrowRec = True
+
+                    'good rec                                    
+                    Debug.Print("Good rec," & " objntectCenterIs = " & moveToCenter & " ourdiff = " & moveToCenter)
 
                     'point to objectos
-                    MoveMouseMainThreadX(ourDifference)
+                    MoveMouseMainThreadX(moveToCenter)
                     'wait for mouse move
                     ResponsiveSleep(1000)
 
                     'take screen right before run                    
-                    TakeScreenShotArea("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", compareWidth, compareHeight, compareSourceX, compareSourcey, compareDestinationX, compareDestinationy)
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", Constants.compareWidth, Constants.compareHeight, Constants.compareSourceX, Constants.compareSourcey, Constants.compareDestinationX, Constants.compareDestinationy)
 
                     'run
-                    Run(Keys.W, True, 1500, False)
+                    Run(Keys.W, False, 1000, False)
                     'wait for run to complete
                     ResponsiveSleep(1800)
 
                     'take screenshot after run
-                    TakeScreenShotArea("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", compareWidth, compareHeight, compareSourceX, compareSourcey, compareDestinationX, compareDestinationy)
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", Constants.compareWidth, Constants.compareHeight, Constants.compareSourceX, Constants.compareSourcey, Constants.compareDestinationX, Constants.compareDestinationy)
 
                     'compare images, did we move?
                     Dim theDiff As Double = compareImages("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
@@ -389,11 +398,13 @@ Public Class Form1
                         'RunMainThread(Keys.W, False, 100, False)
                     End If
                 Else
+                    narrowRec = False
+
                     'no rec                
                     Debug.Print("bad rec")
 
                     'take screen right before run
-                    TakeScreenShotArea("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", compareWidth, compareHeight, compareSourceX, compareSourcey, compareDestinationX, compareDestinationy)
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", Constants.compareWidth, Constants.compareHeight, Constants.compareSourceX, Constants.compareSourcey, Constants.compareDestinationX, Constants.compareDestinationy)
 
                     'run
                     Run(Keys.W, False, 750, False)
@@ -401,7 +412,7 @@ Public Class Form1
                     ResponsiveSleep(1000)
 
                     'take screenshot after run
-                    TakeScreenShotArea("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", compareWidth, compareHeight, compareSourceX, compareSourcey, compareDestinationX, compareDestinationy)
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", Constants.compareWidth, Constants.compareHeight, Constants.compareSourceX, Constants.compareSourcey, Constants.compareDestinationX, Constants.compareDestinationy)
 
                     'compare images, did we move?
                     Dim theDiff As Double = compareImages("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
@@ -440,7 +451,7 @@ Public Class Form1
         CheckForIllegalCrossThreadCalls = False
         Dim objects As String
         Dim objectCenterIs As String
-        Dim myCenterIs As Integer = 1920
+
 
         'kill old
         If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
@@ -480,7 +491,6 @@ Public Class Form1
 
         'GoHarass()
         GoWood()
-
     End Sub
 
     Public Function KillandRespawn(kill As Boolean)
@@ -539,7 +549,7 @@ trydeadagain:
         LeftMouseClick()
 
         'get rec
-        Dim objects As String = DetectObjects()
+        Dim objects As String = DetectObjects(False)
 
         'are we dead?
         If DetectSpecificObjects(dead, objects) Then
@@ -692,7 +702,7 @@ trydeadagain:
         dead.Add("map", "map")
 
         Do
-            objects = DetectObjects()
+            objects = DetectObjects(False)
 
             'are we dead?
             If DetectSpecificObjects(dead, objects) = False Then
