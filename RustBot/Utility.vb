@@ -99,12 +99,10 @@ Module Utilitys
         If lastObjectCenterline = Nothing Then lastObjectCenterline = 0
 
         If lastObjectCenterline = 0 Then
-            Debug.Print("")
         Else
+            lastObjectCenterline = lastObjectCenterline - Constants.myCenterIs
             Debug.Print("Pointing at widest object = " & LastObject & " " & LabelToObjectName(LastObject) & " " & Label)
         End If
-
-        lastObjectCenterline = lastObjectCenterline - Constants.myCenterIs
 
         Return lastObjectCenterline
     End Function
@@ -351,6 +349,8 @@ Module Utilitys
             'yes, pull up
             ShiftUP()
         End If
+
+        ResponsiveSleep(500)
     End Sub
 
     Public Sub KeyDownUp(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
@@ -367,7 +367,9 @@ Module Utilitys
             System.Threading.Thread.Sleep(kb_delay + kb_speed)
         End While
 
-        keybd_event(key, MapVirtualKey(key, 0), 2, 0) ' key released                
+        keybd_event(key, MapVirtualKey(key, 0), 2, 0) ' key released         
+
+        ResponsiveSleep(500)
     End Sub
 
     Public Sub KeyDownOnly(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
@@ -470,7 +472,7 @@ waitagain:
         Debug.Print("done taking screenshot area")
     End Sub
 
-    Public Sub TakeScreenShotWhole(file As String)
+    Public Sub TakeScreenShotWhole(file As String, Optional moveFile As Boolean = True)
         On Error Resume Next
 
         Dim sc = New ScreenCapturer()
@@ -490,8 +492,10 @@ waitagain:
         'downsample, this fux xy coords in rec dont use
         'downSampleImage("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
 
-        'move it
-        System.IO.File.Move("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
+        If moveFile Then
+            'move it
+            System.IO.File.Move("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
+        End If
     End Sub
 
     Public Function IsFileUnavailable(ByVal path As String) As Boolean
@@ -666,6 +670,16 @@ waitagain:
     '    Return Math.Round((100 * ((diff / 255) / (img1.Width * (img1.Height * 3)))))
     'End Function
 
+    Public Sub ShowMap()
+        KeyDownOnly(Keys.G, False, 500, False)
+        ResponsiveSleep(500)
+    End Sub
+
+    Public Sub HideMap()
+        KeyUpOnly(Keys.G, False, 500, False)
+        ResponsiveSleep(500)
+    End Sub
+
     Public Sub ShowInventory()
         KeyDownUp(Keys.Tab, False, 500, False)
         ResponsiveSleep(500)
@@ -795,7 +809,6 @@ waitagain:
 
         'run see if we moved
         Run(Keys.W, False, 500, False)
-        ResponsiveSleep(500)
 
         Dim tempadd2 As Double
 

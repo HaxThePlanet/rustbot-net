@@ -26,10 +26,10 @@
     Public Const compareDestinationy As Integer = 0
 
     'this is for honing in on an object after we've detected it to prevent hunting around
-    Public Const compareWidthNarrow As Integer = 1850
-    Public Shared compareHeightNarrow As Integer = Screen.PrimaryScreen.Bounds.Height
-    Public Shared compareSourceXNarrow As Integer = (Screen.PrimaryScreen.Bounds.Width / 2) - 1000
-    Public Const compareSourceyNarrow As Integer = 400
+    Public Const compareWidthNarrow As Integer = 1000
+    Public Shared compareHeightNarrow As Integer = 1000
+    Public Shared compareSourceXNarrow As Integer = (Screen.PrimaryScreen.Bounds.Width / 2) - 500
+    Public Shared compareSourceyNarrow As Integer = (Screen.PrimaryScreen.Bounds.Height / 2) - 500
     Public Const compareDestinationXNarrow As Integer = 0
     Public Const compareDestinationyNarrow As Integer = 0
 

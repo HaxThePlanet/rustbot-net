@@ -202,6 +202,8 @@ Public Class Form1
 
             'are we gathering?
             If DetectSpecificObjects(gathering, objects) Then
+                'only bump if we were gathering
+                MoveMouseMainThreadX(-120)
                 'center horizon
                 MovePlayerEyesToHorizon()
 
@@ -222,12 +224,10 @@ Public Class Form1
 
         'put away rock
         KeyDownUp(Keys.N, False, 1, False)
-        ResponsiveSleep(500)
     End Sub
 
     Private Function DetectSpecificObjectsScreenshot(searchObjects As Collection) As Boolean
         KeyDownUp(Keys.Tab, False, 10, False)
-        ResponsiveSleep(500)
 
         Dim objects As String = DetectObjects(False)
 
@@ -315,7 +315,6 @@ Public Class Form1
         MoveMouseMainThreadY(-2200)
         'wait for mouse move
         ResponsiveSleep(500)
-
     End Sub
 
     Private Sub GoWood()
@@ -363,18 +362,30 @@ Public Class Form1
                     'point to objectos
                     MoveMouseMainThreadX(moveToCenter)
                     'wait for mouse move
-                    ResponsiveSleep(1000)
+                    ResponsiveSleep(500)
 
-                    'take screen right before run                    
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", Constants.compareWidth, Constants.compareHeight, Constants.compareSourceX, Constants.compareSourcey, Constants.compareDestinationX, Constants.compareDestinationy)
+                    'bring up map
+                    ShowMap()
+
+                    'take screen right before run                                       
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+
+                    'hide map
+                    HideMap()
 
                     'run
-                    Run(Keys.W, False, 1000, False)
+                    Run(Keys.W, False, 1500, False)
                     'wait for run to complete
                     ResponsiveSleep(1800)
 
-                    'take screenshot after run
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", Constants.compareWidth, Constants.compareHeight, Constants.compareSourceX, Constants.compareSourcey, Constants.compareDestinationX, Constants.compareDestinationy)
+                    'show map
+                    ShowMap()
+
+                    'take screenshot after run                    
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+
+                    'hide map
+                    HideMap()
 
                     'compare images, did we move?
                     Dim theDiff As Double = compareImages("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
@@ -382,8 +393,8 @@ Public Class Form1
                     'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png")
                     'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
 
-                    'are we stuck?
-                    If theDiff < 40 Then
+                    'are we stuck? 
+                    If theDiff < 0 Then
                         'we are stuck
                         Debug.Print("good rec, stuck = " & theDiff & ", performing action")
                         HitTree()
@@ -403,16 +414,28 @@ Public Class Form1
                     'no rec                
                     Debug.Print("bad rec")
 
-                    'take screen right before run
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", Constants.compareWidth, Constants.compareHeight, Constants.compareSourceX, Constants.compareSourcey, Constants.compareDestinationX, Constants.compareDestinationy)
+                    'show map
+                    ShowMap()
+
+                    'take screenshot after run                    
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+
+                    'hide map
+                    HideMap()
 
                     'run
                     Run(Keys.W, False, 750, False)
                     'wait for run to complete
                     ResponsiveSleep(1000)
 
+                    'show map
+                    ShowMap()
+
                     'take screenshot after run
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", Constants.compareWidth, Constants.compareHeight, Constants.compareSourceX, Constants.compareSourcey, Constants.compareDestinationX, Constants.compareDestinationy)
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+
+                    'hide map
+                    HideMap()
 
                     'compare images, did we move?
                     Dim theDiff As Double = compareImages("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
