@@ -119,36 +119,36 @@ Module Utilitys
         Debug.Print("begin detecting objects")
 
         'kill
-        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
-        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
+        If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processmedone.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processmedone.png")
+        If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
 
         Debug.Print("taking screenshot")
 
         'narrow view to hone in on specific object
         If narrowView Then
             'take screen right before run                    
-            'TakeScreenShotAreaRec("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, Constants.compareDestinationXNarrow, Constants.compareDestinationyNarrow)
-            TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+            'TakeScreenShotAreaRec("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processme.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, Constants.compareDestinationXNarrow, Constants.compareDestinationyNarrow)
+            TakeScreenShotWhole("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processme.png")
         Else
             'take screen
-            TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+            TakeScreenShotWhole("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processme.png")
         End If
 
 
-        Debug.Print("done taking screenshot, waiting for spreadsheet")
+        Debug.Print("done taking screenshot, waiting for rec results...")
 
         'wait for spreadsheet
-        Do Until File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
+        Do Until File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
             Thread.Sleep(10)
         Loop
 
-        Debug.Print("done spreadsheet")
+        Debug.Print("done rec results")
 
         'show preview
         Form1.previewImageEvent = True
 
         'read all text
-        Dim fs As FileStream = New FileStream("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+        Dim fs As FileStream = New FileStream("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
         Dim sr As StreamReader = New StreamReader(fs)
         Dim value As String = sr.ReadToEnd
 
@@ -156,8 +156,8 @@ Module Utilitys
         sr.Close()
 
         Try
-            If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
-            If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
+            If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processmedone.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processmedone.png")
+            If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
         Catch
             Debug.Print("Couldnt del csv")
         End Try
@@ -173,7 +173,7 @@ Module Utilitys
         'Dim readIn As String
         'Dim ints As Integer = 3
 
-        'Using Reader As New StreamReader("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Model_Weights\data_classes.txt")
+        'Using Reader As New StreamReader("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Model_Weights\data_classes.txt")
         '    While Reader.EndOfStream = False
         '        readIn = Reader.ReadLine()
         '        labels.Add(readIn, ints)
@@ -467,7 +467,7 @@ waitagain:
         End If
 
         'move it
-        System.IO.File.Move("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
+        System.IO.File.Move("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processme.png", "C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processmedone.png")
 
         Debug.Print("done taking screenshot area")
     End Sub
@@ -490,11 +490,11 @@ waitagain:
         End If
 
         'downsample, this fux xy coords in rec dont use
-        'downSampleImage("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+        'downSampleImage("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processme.png")
 
         If moveFile Then
             'move it
-            System.IO.File.Move("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
+            System.IO.File.Move("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processme.png", "C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processmedone.png")
         End If
     End Sub
 
@@ -628,8 +628,8 @@ waitagain:
 
     Public Function compareImages(ByVal bmp1 As String, ByVal bmp2 As String, Optional ByVal threshold As Byte = 3) As Single
         'get the full path of the images
-        Dim image1Path As String = Path.Combine("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Ocr", bmp1)
-        Dim image2Path As String = Path.Combine("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Ocr", bmp2)
+        Dim image1Path As String = Path.Combine("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Ocr", bmp1)
+        Dim image2Path As String = Path.Combine("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Ocr", bmp2)
 
         Dim firstBmp As Bitmap = CType(Image.FromFile(image1Path), Bitmap)
         Dim secondBmp As Bitmap = CType(Image.FromFile(image2Path), Bitmap)
@@ -639,7 +639,7 @@ waitagain:
 
         Dim theDiff As Single = firstBmp.PercentageDifference(secondBmp, threshold) * 100
 
-        Debug.Print(String.Format("Difference: {0:0.0} %", (theDiff)))
+        Debug.Print(String.Format("image difference {0:0.0} %", (theDiff)))
 
         firstBmp.Dispose()
         secondBmp.Dispose()
@@ -805,7 +805,7 @@ waitagain:
             tempadd1 = tempadd1 + LTrim(RTrim(Double.Parse(postBefore.GetValue(I))))
         Next
 
-        Debug.Print("Starting stuck run")
+        Debug.Print("Starting `run")
 
         'run see if we moved
         Run(Keys.W, False, 500, False)

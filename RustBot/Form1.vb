@@ -93,7 +93,7 @@ Public Class Form1
             If previewImageEvent Then
                 previewImageEvent = False
 
-                PreviewImg(pic, "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
+                PreviewImg(pic, "C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
             End If
 
             ResponsiveSleep(10)
@@ -103,10 +103,10 @@ Public Class Form1
 
     'Public Sub OcrTakeScreenshot()
     '    'take screen
-    '    'TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\ocr.png")
+    '    'TakeScreenShotWhole("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\ocr.png")
 
     '    Dim Ocr = New AutoOcr()
-    '    Dim Result = Ocr.Read("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\ocr.png")
+    '    Dim Result = Ocr.Read("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\ocr.png")
     '    Debug.Print(Result.Text)
     'End Sub
 
@@ -215,6 +215,9 @@ Public Class Form1
 
                 'center horizon
                 MovePlayerEyesToHorizon()
+
+                'go elsewhere in case hitting rock or whatever
+                MoveMouseMainThreadX(GetRandom(-1500, 1500))
 
                 Exit Do
             End If
@@ -357,7 +360,7 @@ Public Class Form1
                     narrowRec = True
 
                     'good rec                                    
-                    Debug.Print("Good rec," & " objntectCenterIs = " & moveToCenter & " ourdiff = " & moveToCenter)
+                    Debug.Print("good rec, moving to object centerline @" & moveToCenter)
 
                     'point to objectos
                     MoveMouseMainThreadX(moveToCenter)
@@ -368,7 +371,7 @@ Public Class Form1
                     ShowMap()
 
                     'take screen right before run                                       
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
 
                     'hide map
                     HideMap()
@@ -382,25 +385,25 @@ Public Class Form1
                     ShowMap()
 
                     'take screenshot after run                    
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
 
                     'hide map
                     HideMap()
 
                     'compare images, did we move?
-                    Dim theDiff As Double = compareImages("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
+                    Dim theDiff As Double = compareImages("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
 
-                    'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png")
-                    'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
+                    'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png")
+                    'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
 
                     'are we stuck? 
-                    If theDiff < 0 Then
+                    If theDiff = 0 Then
                         'we are stuck
-                        Debug.Print("good rec, stuck = " & theDiff & ", performing action")
+                        Debug.Print("good rec, stuck, performing action")
                         HitTree()
                     Else
                         'no
-                        Debug.Print("good rec, we are not stuck = " & theDiff)
+                        Debug.Print("good rec, we are not stuck")
 
                         'bumping
                         'MoveMouseMainThread(50)                            
@@ -418,7 +421,7 @@ Public Class Form1
                     ShowMap()
 
                     'take screenshot after run                    
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
 
                     'hide map
                     HideMap()
@@ -432,25 +435,25 @@ Public Class Form1
                     ShowMap()
 
                     'take screenshot after run
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
 
                     'hide map
                     HideMap()
 
                     'compare images, did we move?
-                    Dim theDiff As Double = compareImages("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
+                    Dim theDiff As Double = compareImages("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
 
-                    'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png")
-                    'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
+                    'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png")
+                    'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
 
                     'are we stuck?
-                    If theDiff < 40 Then
+                    If theDiff = 0 Then
                         'we are stuck
-                        Debug.Print("BAD rec, we are STUCK = " & theDiff & ", PERFORMING ACTION")
+                        Debug.Print("bad rec, we are stuck, performing action")
                         HitTree()
                     Else
                         'no
-                        Debug.Print("No rec, we are not stuck = " & theDiff & ", searching elsewhere!")
+                        Debug.Print("bad rec, we are not stuck, searching elsewhere!")
 
                         'bumping                                                
                         MoveMouseMainThreadX(GetRandom(-1500, 1500))
@@ -477,8 +480,8 @@ Public Class Form1
 
 
         'kill old
-        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
-        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
+        If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processme.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processme.png")
+        If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
 
         'startup
         lastAction.Text = "Warming up"
@@ -600,11 +603,11 @@ trydeadagain:
             Dim currentPositionMoved = GetCurrentPosition()
             Dim distanceFromHomeMoved = currentPositionMoved(3)
 
-            logLabel.Text = logLabel.Text & "New distance from home: " & distanceFromHome & vbCrLf
+            logLabel.Text = logLabel.Text & "new distance from home: " & distanceFromHome & vbCrLf
 
             Dim changeInDistance = distanceFromHomeMoved - distanceFromHome
 
-            logLabel.Text = logLabel.Text & "Change in distance: " & changeInDistance & vbCrLf
+            logLabel.Text = logLabel.Text & "change in distance: " & changeInDistance & vbCrLf
 
             'move until water isn't in view
             'If DetectWater() Then
@@ -614,7 +617,7 @@ trydeadagain:
 
             'bad rec?
             If changeInDistance = 0 Then
-                logLabel.Text = logLabel.Text & "Stuck, bumping" & vbCrLf
+                logLabel.Text = logLabel.Text & "stuck, bumping" & vbCrLf
 
                 'move right a few deg
                 MoveMouseMainThreadX(GetRandom(-1500, 1500))
