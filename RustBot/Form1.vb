@@ -38,6 +38,8 @@ Public Class Form1
 
     Public keyDownUpEvent As Boolean
 
+    Public HaveGatheredWood As Boolean = False
+
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Show()
         Me.Refresh()
@@ -201,6 +203,10 @@ Public Class Form1
 
             'are we gathering?
             If DetectSpecificObjects(gathering, objects) Then
+                'yes 
+
+                HaveGatheredWood = True
+
                 'only bump if we were gathering
                 MoveMouseMainThreadX(-120)
                 'center horizon
@@ -409,6 +415,13 @@ Public Class Form1
                         'we are stuck
                         Debug.Print("good rec, stuck, performing action")
                         HitTree()
+
+                        'go drop
+                        If HaveGatheredWood = True Then
+                            Debug.Print("we've got wood, dropping off")
+                            HaveGatheredWood = False
+                            GoHome()
+                        End If
                     Else
                         'no
                         Debug.Print("good rec, we are not stuck")
@@ -429,6 +442,13 @@ Public Class Form1
                         'we are stuck
                         Debug.Print("bad rec, we are stuck, performing action")
                         HitTree()
+
+                        'go drop
+                        If HaveGatheredWood = True Then
+                            Debug.Print("we've got wood, dropping off")
+                            HaveGatheredWood = False
+                            GoHome()
+                        End If
                     Else
                         'no
                         Debug.Print("bad rec, we are not stuck, searching elsewhere!")
@@ -494,8 +514,7 @@ Public Class Form1
         'Loop
 
         'GoHarass()
-        'GoWood()
-        GoHome()
+        GoWood()
 
     End Sub
 
