@@ -13,9 +13,9 @@
     Public Const MOUSEEVENTF_MOVE As Integer = &H1
 
     'home location
-    Public Const homex1 As Integer = 380
-    Public Const homey1 As Integer = 18
-    Public Const homez1 As Integer = 601
+    Public Const homex1 As Integer = 631
+    Public Const homey1 As Integer = 17
+    Public Const homez1 As Integer = 737
 
     'this is for stuck detect, narrow view
     Public Const compareWidth As Integer = 50
@@ -35,4 +35,7 @@
 
     'center of screen
     Public Const myCenterIs As Integer = 1920
+
+    'each turn distance required to make 25% of the way around, good for four corner turn rec
+    Public Const eachMoveInFullTurn As Integer = 2220
 End Class

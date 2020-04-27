@@ -39,7 +39,7 @@ Module Utilitys
     Dim highestProb As Integer = -1
     Dim lastObjectCenterline
 
-    Public Function GetObjectsVerticleLinePosition(objects As String) As String
+    Public Function GetObjectsVerticleLinePosition(objects As String, whatObject As String) As String
         lastObjectCenterline = 0
         lastGlobalWidth = 0
         highestProb = 0
@@ -75,7 +75,7 @@ Module Utilitys
             Dim hisWidth As Integer = xmax - xmin
 
             'right type?
-            If Label.Contains("tree") Then
+            If Label.Contains(whatObject) Then
                 'right criteria?
                 If hisWidth > lastGlobalWidth Then
                     'yes
@@ -367,9 +367,7 @@ Module Utilitys
             System.Threading.Thread.Sleep(kb_delay + kb_speed)
         End While
 
-        keybd_event(key, MapVirtualKey(key, 0), 2, 0) ' key released         
-
-        ResponsiveSleep(500)
+        keybd_event(key, MapVirtualKey(key, 0), 2, 0) ' key released              
     End Sub
 
     Public Sub KeyDownOnly(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
@@ -408,6 +406,24 @@ Module Utilitys
         mouse_event(Constants.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
         Application.DoEvents()
         mouse_event(Constants.MOUSEEVENTF_LEFTUP, 6, 0, 0, 0)
+        Application.DoEvents()
+    End Sub
+
+    Public Sub LeftMouseHold()
+        mouse_event(Constants.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+        Application.DoEvents()
+    End Sub
+
+    Public Sub LeftMouseRelease()
+        mouse_event(Constants.MOUSEEVENTF_LEFTUP, 6, 0, 0, 0)
+        Application.DoEvents()
+    End Sub
+
+
+    Public Sub RightMouseClick()
+        mouse_event(Constants.MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0)
+        Application.DoEvents()
+        mouse_event(Constants.MOUSEEVENTF_RIGHTUP, 6, 0, 0, 0)
         Application.DoEvents()
     End Sub
 

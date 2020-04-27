@@ -29,7 +29,7 @@ Public Class Form1
     Dim shiftLocal As Boolean
     Dim durationInMilliLocal As Integer
     Dim jumpingLocal As Boolean
-
+    Public HowFarToRun As Integer = 5000
     Public runEvent As Boolean
 
     Public Shared previewImageEvent As Boolean
@@ -92,7 +92,6 @@ Public Class Form1
             'load img
             If previewImageEvent Then
                 previewImageEvent = False
-
                 PreviewImg(pic, "C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
             End If
 
@@ -217,7 +216,7 @@ Public Class Form1
                 MovePlayerEyesToHorizon()
 
                 'go elsewhere in case hitting rock or whatever
-                MoveMouseMainThreadX(GetRandom(-1500, 1500))
+                MoveMouseMainThreadX(GetRandom(-3500, 3500))
 
                 Exit Do
             End If
@@ -227,10 +226,12 @@ Public Class Form1
 
         'put away rock
         KeyDownUp(Keys.N, False, 1, False)
+        ResponsiveSleep(500)
     End Sub
 
     Private Function DetectSpecificObjectsScreenshot(searchObjects As Collection) As Boolean
         KeyDownUp(Keys.Tab, False, 10, False)
+        ResponsiveSleep(500)
 
         Dim objects As String = DetectObjects(False)
 
@@ -259,11 +260,13 @@ Public Class Form1
             'right type?
             If searchObjects.Contains(Label) Then
                 KeyDownUp(Keys.Tab, False, 10, False)
+                ResponsiveSleep(500)
                 Return True
             End If
         Next
 
         KeyDownUp(Keys.Tab, False, 10, False)
+        ResponsiveSleep(500)
         Return False
 
         Debug.Print("")
@@ -320,6 +323,40 @@ Public Class Form1
         ResponsiveSleep(500)
     End Sub
 
+    Private Function AreWeStuck() As Boolean
+        'bring up map
+        ShowMap()
+
+        'take screen right before run                                       
+        TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+
+        'hide map
+        HideMap()
+
+        'run
+        Run(Keys.W, False, 1500, False)
+        'wait for run to complete
+        ResponsiveSleep(1800)
+
+        'show map
+        ShowMap()
+
+        'take screenshot after run                    
+        TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+
+        'hide map
+        HideMap()
+
+        'compare images, did we move?
+        Dim theDiff As Double = compareImages("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
+
+        'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png")
+        'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
+
+        Return theDiff
+    End Function
+
+
     Private Sub GoWood()
         Dim moveToCenter
         Dim objects As String
@@ -338,7 +375,7 @@ Public Class Form1
         Do
             objects = DetectObjects(narrowRec)
             'get rec
-            moveToCenter = GetObjectsVerticleLinePosition(objects)
+            moveToCenter = GetObjectsVerticleLinePosition(objects, "tree")
 
             'hit inventory tab
             'ShowInventory()
@@ -367,37 +404,8 @@ Public Class Form1
                     'wait for mouse move
                     ResponsiveSleep(500)
 
-                    'bring up map
-                    ShowMap()
-
-                    'take screen right before run                                       
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
-
-                    'hide map
-                    HideMap()
-
-                    'run
-                    Run(Keys.W, False, 1500, False)
-                    'wait for run to complete
-                    ResponsiveSleep(1800)
-
-                    'show map
-                    ShowMap()
-
-                    'take screenshot after run                    
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
-
-                    'hide map
-                    HideMap()
-
-                    'compare images, did we move?
-                    Dim theDiff As Double = compareImages("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
-
-                    'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png")
-                    'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
-
                     'are we stuck? 
-                    If theDiff = 0 Then
+                    If AreWeStuck() = 0 Then
                         'we are stuck
                         Debug.Print("good rec, stuck, performing action")
                         HitTree()
@@ -417,37 +425,7 @@ Public Class Form1
                     'no rec                
                     Debug.Print("bad rec")
 
-                    'show map
-                    ShowMap()
-
-                    'take screenshot after run                    
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
-
-                    'hide map
-                    HideMap()
-
-                    'run
-                    Run(Keys.W, False, 750, False)
-                    'wait for run to complete
-                    ResponsiveSleep(1000)
-
-                    'show map
-                    ShowMap()
-
-                    'take screenshot after run
-                    TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
-
-                    'hide map
-                    HideMap()
-
-                    'compare images, did we move?
-                    Dim theDiff As Double = compareImages("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
-
-                    'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png")
-                    'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
-
-                    'are we stuck?
-                    If theDiff = 0 Then
+                    If AreWeStuck() = 0 Then
                         'we are stuck
                         Debug.Print("bad rec, we are stuck, performing action")
                         HitTree()
@@ -456,7 +434,7 @@ Public Class Form1
                         Debug.Print("bad rec, we are not stuck, searching elsewhere!")
 
                         'bumping                                                
-                        MoveMouseMainThreadX(GetRandom(-1500, 1500))
+                        MoveMouseMainThreadX(GetRandom(-3500, 3500))
 
                         'run to a better area
                         RunMainThread(Keys.W, True, 2000, False)
@@ -516,7 +494,9 @@ Public Class Form1
         'Loop
 
         'GoHarass()
-        GoWood()
+        'GoWood()
+        GoHome()
+
     End Sub
 
     Public Function KillandRespawn(kill As Boolean)
@@ -537,7 +517,6 @@ Public Class Form1
 
             'bring up console
             KeyDownUp(Keys.F1, False, 1, False)
-
             ResponsiveSleep(500)
 
             ShiftUP()
@@ -586,9 +565,292 @@ trydeadagain:
         goingHome = False
     End Function
 
-    Public HowFarToRun As Integer = 5000
+    Private Function fourCornerRadarRec() As String
+        'for dead detect
+        Dim dead As New Collection
+        dead.Add("someinventory", "someinventory")
+        dead.Add("woodinventory", "woodinventory")
+        dead.Add("respawn", "respawn")
+        dead.Add("sleepingbag", "sleepingbag")
+        dead.Add("dead", "dead")
+
+        Dim moveToCenter As Integer = 0
+        Dim objects As String
+
+        'turn once, look
+        For i = 1 To 4
+            'general object detect
+            objects = DetectObjects(False)
+
+            'get rec
+            moveToCenter = GetObjectsVerticleLinePosition(objects, "door")
+
+            'hit inventory tab
+            'ShowInventory()
+
+            'are we dead?
+            If DetectSpecificObjects(dead, objects) = False Then
+                'good rec?
+                If moveToCenter <> 0 Then
+                    'good rec   
+                    Return moveToCenter
+                Else
+                    'bad rec, keep looking
+
+                End If
+            End If
+
+            'move each dir
+            MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
+            ResponsiveSleep(500)
+        Next
+
+        'no rec
+        Return 0
+    End Function
+
+    Private Sub WalkIntoDoor()
+        'open door
+        KeyDownUp(Keys.E, False, 10, False)
+        ResponsiveSleep(1000)
+
+        'walk into door
+        KeyDownUp(Keys.W, True, 450, False)
+        ResponsiveSleep(1000)
+
+        'turn to close door
+        MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
+        ResponsiveSleep(1000)
+
+        'close it
+        KeyDownUp(Keys.E, True, 250, False)
+        ResponsiveSleep(1000)
+
+        'turn back straight
+        MoveMouseMainThreadX(-Constants.eachMoveInFullTurn)
+        ResponsiveSleep(1000)
+    End Sub
+
+    Private Sub CheckBox()
+        'run to box
+        RunMainThread(Keys.W, True, 1000, False)
+        ResponsiveSleep(1000)
+
+        'open box
+        KeyDownUp(Keys.E, False, 10, False)
+    End Sub
+
+    Private Sub EmptyMyInventory()
+        ResponsiveSleep(1000)
+
+        Win32.SetCursorPos(1400, 1236)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1590, 1236)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1792, 1236)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1991, 1236)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2185, 1236)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2185, 1236)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2368, 1236)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1407, 1420)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1611, 1420)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1611, 1420)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1800, 1420)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1980, 1420)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1980, 1420)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2190, 1420)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2374, 1420)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1409, 1610)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1610, 1610)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1809, 1610)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1986, 1610)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2185, 1610)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2375, 1610)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1409, 1610)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1400, 1800)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1602, 1800)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1800, 1800)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2000, 1800)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2200, 1800)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2400, 1800)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1789, 2012)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(1986, 2012)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2179, 2012)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        Win32.SetCursorPos(2367, 2012)
+        ResponsiveSleep(20)
+        RightMouseClick()
+        ResponsiveSleep(300)
+
+        CloseInventory()
+    End Sub
+
+    Private Sub CloseInventory()
+        'close inventory
+        KeyDownUp(Keys.Tab, False, 50, False)
+        ResponsiveSleep(500)
+    End Sub
+
+    Private Sub TurnAroundAndLeave()
+        'move each dir
+        MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
+        ResponsiveSleep(500)
+
+        'pointed at door
+        MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
+        ResponsiveSleep(500)
+
+        'open door
+        KeyDownUp(Keys.E, False, 10, False)
+        ResponsiveSleep(1000)
+
+        'run out door!
+        RunMainThread(Keys.W, False, 800, False)
+        ResponsiveSleep(800)
+
+        'move each dir
+        MoveMouseMainThreadX(-3800)
+        ResponsiveSleep(500)
+
+        'close door
+        KeyDownUp(Keys.E, False, 10, False)
+        ResponsiveSleep(1000)
+
+        'move each dir
+        MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
+        ResponsiveSleep(500)
+
+        'run away from base!
+        RunMainThread(Keys.W, True, 5000, True)
+        ResponsiveSleep(1000)
+    End Sub
+
 
     Public Sub GoHome()
+        'center to horizon
+        MovePlayerEyesToHorizon()
+
         goingHome = True
 
         Do
@@ -620,10 +882,10 @@ trydeadagain:
                 logLabel.Text = logLabel.Text & "stuck, bumping" & vbCrLf
 
                 'move right a few deg
-                MoveMouseMainThreadX(GetRandom(-1500, 1500))
+                MoveMouseMainThreadX(GetRandom(-3500, 3500))
+                ResponsiveSleep(500)
 
                 RunMainThread(Keys.W, True, 1000, True)
-
             Else
                 If distanceFromHomeMoved > 30 Or distanceFromHomeMoved.ToString.Contains("-") Then
                     'closer or farther?
@@ -635,37 +897,82 @@ trydeadagain:
 
                         HowFarToRun = 5000
                     Else
+                        'farther                        
+
                         logLabel.Text = logLabel.Text & "We are farther, changing direction" & vbCrLf
 
-                        'farther
-                        Application.DoEvents()
-                        ResponsiveSleep(250)
                         'move right a few deg                  
                         MoveMouseMainThreadX(1500)
-                        Application.DoEvents()
-                        ResponsiveSleep(250)
+                        ResponsiveSleep(500)
 
                         HowFarToRun = 1000
                     End If
                 Else
                     'home
+                    HowFarToRun = 500
+
+                    'starting looking each direction for a door
+                    MoveMouseMainThreadX(2500)
+                    ResponsiveSleep(500)
 
                     'stop running                
-                    logLabel.Text = logLabel.Text & "We are home!" & vbCrLf
+                    logLabel.Text = logLabel.Text & "we are home!" & vbCrLf
                     KeyUpOnly(Keys.W, True, 100, False)
 
-                    Debug.Print("We are home, killing and starting over")
+                    Debug.Print("entering close base mode")
 
-                    'kill myself start over
-                    KillandRespawn(True)
+                    Do
+                        'is our base here?
+                        Dim moveToCenter As Integer = fourCornerRadarRec()
 
-                    'not going home already there!
-                    goingHome = False
+                        'have an object to point to?
+                        If moveToCenter = 0 Then
+                            'nope
+                            Debug.Print("didn't find a base")
+                        Else
+                            Debug.Print("found a base, turning and running to = " & moveToCenter)
 
+                            'yup                
+                            MoveMouseMainThreadX(moveToCenter)
+                            ResponsiveSleep(500)
+
+                            'run to it        
+                            'Run(Keys.W, True, 2500, False)
+
+                            'stuck?
+                            If AreWeStuck() = 0 Then
+                                'yes, perform action
+                                Debug.Print("stuck, performing action")
+                                WalkIntoDoor()
+                                CheckBox()
+                                EmptyMyInventory()
+                                TurnAroundAndLeave()
+                            Else
+                                'not stuck, just keep going
+                                Debug.Print("not stuck")
+                            End If
+                        End If
+
+                        'wait
+                        ResponsiveSleep(1000)
+                    Loop
+
+                    'Debug.Print("We are home, killing and starting over")
+
+                    ''kill myself start over
+                    'KillandRespawn(True)
+
+                    ''not going home already there!
+                    'goingHome = False
                 End If
             End If
         Loop
     End Sub
+
+    Private Sub GoHomeFindDoors()
+
+    End Sub
+
     Public Class Win32
         Public Declare Function SetCursorPos Lib "User32.Dll" (ByVal x As Integer, ByVal y As Integer) As Long
         Public Declare Function ClientToScreen Lib "User32.Dll" (ByVal hWnd As IntPtr, ByRef point As POINT) As Boolean
@@ -725,7 +1032,7 @@ trydeadagain:
         dead.Add("respawn", "respawn")
         dead.Add("sleepingbag", "sleepingbag")
         dead.Add("dead", "dead")
-        dead.Add("map", "map")
+
 
         Do
             objects = DetectObjects(False)
