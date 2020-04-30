@@ -12,18 +12,16 @@ Imports SimWinInput
 Imports IronOcr
 
 Public Class Form1
+
     <DllImport("user32.dll")>
     Private Shared Sub mouse_event(ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal dwData As Integer, ByVal dwExtraInfo As Integer)
     End Sub
 
     Public moveMouseEventX As Boolean
     Public moveMouseHowFarX As Integer
-
     Public moveMouseEventY As Boolean
     Public moveMouseHowFarY As Integer
-
     Public leftClickEvent As Boolean
-
     Dim keyDownEvent As Boolean
     Dim keyLocal As Byte
     Dim shiftLocal As Boolean
@@ -31,22 +29,15 @@ Public Class Form1
     Dim jumpingLocal As Boolean
     Public HowFarToRun As Integer = 5000
     Public runEvent As Boolean
-
     Public Shared previewImageEvent As Boolean
-
-    Public goingHome As Boolean
-
     Public keyDownUpEvent As Boolean
-
     Public HaveGatheredWood As Boolean = False
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Show()
         Me.Refresh()
         Me.BringToFront()
-        goingHome = False
-
-        Application.DoEvents()
+        ResponsiveSleep(1000)
 
         ShiftUP()
 
@@ -94,7 +85,7 @@ Public Class Form1
             'load img
             If previewImageEvent Then
                 previewImageEvent = False
-                PreviewImg(pic, "C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
+                PreviewImg(pic, "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
             End If
 
             ResponsiveSleep(10)
@@ -104,10 +95,10 @@ Public Class Form1
 
     'Public Sub OcrTakeScreenshot()
     '    'take screen
-    '    'TakeScreenShotWhole("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\ocr.png")
+    '    'TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\ocr.png")
 
     '    Dim Ocr = New AutoOcr()
-    '    Dim Result = Ocr.Read("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\ocr.png")
+    '    Dim Result = Ocr.Read("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\ocr.png")
     '    Debug.Print(Result.Text)
     'End Sub
 
@@ -334,7 +325,7 @@ Public Class Form1
         ShowMap()
 
         'take screen right before run                                       
-        TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+        TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
 
         'hide map
         HideMap()
@@ -348,20 +339,19 @@ Public Class Form1
         ShowMap()
 
         'take screenshot after run                    
-        TakeScreenShotAreaStuck("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
+        TakeScreenShotAreaStuck("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png", Constants.compareWidthNarrow, Constants.compareHeightNarrow, Constants.compareSourceXNarrow, Constants.compareSourceyNarrow, 0, 0)
 
         'hide map
         HideMap()
 
         'compare images, did we move?
-        Dim theDiff As Double = compareImages("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
+        Dim theDiff As Double = compareImages("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
 
-        'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\1.png")
-        'If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\ocr\2.png")
+        'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\1.png")
+        'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\2.png")
 
         Return theDiff
     End Function
-
 
     Private Sub GoWood()
         Dim moveToCenter
@@ -421,6 +411,7 @@ Public Class Form1
                             Debug.Print("we've got wood, dropping off")
                             HaveGatheredWood = False
                             GoHome()
+                            Debug.Print("dropped off, going out to get more wood")
                         End If
                     Else
                         'no
@@ -478,12 +469,12 @@ Public Class Form1
 
 
         'kill old
-        If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processme.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Images\processme.png")
-        If File.Exists("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png") Then Kill("C:\Users\bob\Documents\Rust\rust-ml-backend\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
+        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
+        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
 
         'startup
-        lastAction.Text = "Warming up"
-        ResponsiveSleep(5000)
+        lastAction.Text = "warming up"
+        ResponsiveSleep(10000)
 
         Dim objectsToFind As New Collection
         objectsToFind.Add("someinventory", "someinventory")
@@ -514,7 +505,8 @@ Public Class Form1
         'Loop
 
         'GoHarass()
-        GoWood()
+        'GoWood()
+        GoHome()
 
     End Sub
 
@@ -580,8 +572,6 @@ trydeadagain:
             'yes
             GoTo trydeadagain
         End If
-
-        goingHome = False
     End Function
 
     Private Function fourCornerRadarRec() As String
@@ -598,7 +588,7 @@ trydeadagain:
 
         'turn once, look
         For i = 1 To 4
-            'general object detect
+            'general object detectint
             objects = DetectObjects(False)
 
             'get rec
@@ -865,30 +855,62 @@ trydeadagain:
         ResponsiveSleep(1000)
     End Sub
 
+    Private Sub HowFarToRunTime(distanceFromHome As String)
+        If distanceFromHome > 100 Then
+            RunMainThread(Keys.W, True, 12000, True)
+            ResponsiveSleep(12000)
+            Exit Sub
+        End If
+
+        If distanceFromHome > 75 Then
+            RunMainThread(Keys.W, True, 8000, True)
+            ResponsiveSleep(8000)
+            Exit Sub
+        End If
+
+        If distanceFromHome > 50 Then
+            RunMainThread(Keys.W, True, 2500, True)
+            ResponsiveSleep(2500)
+            Exit Sub
+        End If
+
+        If distanceFromHome > 40 Then
+            RunMainThread(Keys.W, False, 1500, False)
+            ResponsiveSleep(1500)
+            Exit Sub
+        End If
+
+        If distanceFromHome <= 40 Then
+            RunMainThread(Keys.W, False, 1500, False)
+            ResponsiveSleep(1500)
+            Exit Sub
+        End If
+    End Sub
 
     Public Sub GoHome()
         'center to horizon
         MovePlayerEyesToHorizon()
-
-        goingHome = True
 
         Do
             'get our current position
             Dim currentPosition = GetCurrentPosition()
             Dim distanceFromHome = currentPosition(3)
 
-            logLabel.Text = logLabel.Text & "Distance from home: " & distanceFromHome & " Running " & HowFarToRun & vbCrLf
-            RunMainThread(Keys.W, True, HowFarToRun, True)
-            ResponsiveSleep(HowFarToRun)
+            logLabel.Text = logLabel.Text & "distance from home: " & distanceFromHome & " Running" & vbCrLf
+            Debug.Print("distance from home: " & distanceFromHome & " running")
+
+            HowFarToRunTime(distanceFromHome)
 
             Dim currentPositionMoved = GetCurrentPosition()
             Dim distanceFromHomeMoved = currentPositionMoved(3)
 
             logLabel.Text = logLabel.Text & "new distance from home: " & distanceFromHome & vbCrLf
+            Debug.Print("new distance from home: " & distanceFromHome)
 
             Dim changeInDistance = distanceFromHomeMoved - distanceFromHome
 
             logLabel.Text = logLabel.Text & "change in distance: " & changeInDistance & vbCrLf
+            Debug.Print("change in distance: " & changeInDistance)
 
             'move until water isn't in view
             'If DetectWater() Then
@@ -913,23 +935,15 @@ trydeadagain:
                         Debug.Print("")
 
                         logLabel.Text = logLabel.Text & "We are closer, running long" & vbCrLf
-
-                        HowFarToRun = 5000
                     Else
                         'farther                        
-
                         logLabel.Text = logLabel.Text & "We are farther, changing direction" & vbCrLf
 
                         'move right a few deg                  
                         MoveMouseMainThreadX(1500)
                         ResponsiveSleep(500)
-
-                        HowFarToRun = 1000
                     End If
                 Else
-                    'home
-                    HowFarToRun = 500
-
                     'starting looking each direction for a door
                     MoveMouseMainThreadX(2500)
                     ResponsiveSleep(500)
@@ -948,6 +962,9 @@ trydeadagain:
                         If moveToCenter = 0 Then
                             'nope
                             Debug.Print("didn't find a base")
+
+                            'get out of close to home, no base found
+                            Exit Do
                         Else
                             Debug.Print("found a base, turning and running to = " & moveToCenter)
 
@@ -971,9 +988,6 @@ trydeadagain:
                                 Debug.Print("not stuck")
                             End If
                         End If
-
-                        'wait
-                        ResponsiveSleep(1000)
                     Loop
 
                     'Debug.Print("We are home, killing and starting over")
@@ -981,15 +995,10 @@ trydeadagain:
                     ''kill myself start over
                     'KillandRespawn(True)
 
-                    ''not going home already there!
-                    'goingHome = False
+                    ''not going home already there!                    
                 End If
             End If
         Loop
-    End Sub
-
-    Private Sub GoHomeFindDoors()
-
     End Sub
 
     Public Class Win32
@@ -1102,6 +1111,7 @@ trydeadagain:
                         MoveMouseMainThreadX(GetRandom(-1500, 1500))
 
                         RunMainThread(Keys.W, True, 1000, True)
+                        ResponsiveSleep(1000)
                     Else
                         If distanceFromHomeMoved > 70 Or distanceFromHomeMoved.ToString.Contains("-") Then
                             'closer or farther?
