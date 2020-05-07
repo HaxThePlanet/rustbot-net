@@ -7,8 +7,17 @@ Imports System.Threading
 Imports System.Security.Cryptography
 Imports XnaFan.ImageComparison
 Imports Constants
+Imports System.Text
+Imports Microsoft
 
 Module Utilitys
+    <DllImport("user32.dll", EntryPoint:="VkKeyScanEx", CharSet:=CharSet.Unicode)>
+    Friend Function GetKeyCode(
+                           ByVal c As Char,
+                           Optional ByVal KeyboardLayout As UIntPtr = Nothing
+    ) As Short
+    End Function
+
     <DllImport("user32.dll")>
     Private Sub mouse_event(ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal dwData As Integer, ByVal dwExtraInfo As Integer)
     End Sub
@@ -39,43 +48,42 @@ Module Utilitys
     Dim highestProb As Integer = -1
     Dim lastObjectCenterline
 
-    Public Function GetObjectsVerticleLinePosition(objects As String, whatObject As String) As String
+    Public Function GetObjectsVerticleLinePosition(objects As Collection, whatObject As String) As String
         lastObjectCenterline = 0
         lastGlobalWidth = 0
         highestProb = 0
 
-        Dim theSplit = Split(objects, vbCrLf)
-        Dim Label As String
-        Dim LastObject As String
+        Dim hisLabel As String
+        Dim lastObject As String
 
-        Debug.Print("Found " & theSplit.Count - 2 & " objects")
+        WriteMessageToGlobalChat("Found " & objects.Count & " objects")
         Application.DoEvents()
 
-        For i = 1 To theSplit.Count - 2
-            Dim theSplitNext = Split(theSplit(i), ",")
+        For i = 1 To objects.Count
+            Dim theSplitNext = Split(objects(i), " ")
 
             'no rec
             If theSplitNext(0) = "" Then Exit For
 
-            Dim theProbNew As String = theSplitNext(7).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            xmin = theSplitNext(2).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            ymin = theSplitNext(3).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            xmax = theSplitNext(4).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            ymax = theSplitNext(5).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "").Replace("Time", "")
-            Label = LabelToObjectName(theSplitNext(6))
+            Dim theProbNew As String = theSplitNext(1)
+            xmin = theSplitNext(2).Replace("(", "")
+            ymin = theSplitNext(3).Replace(")", "")
+            xmax = theSplitNext(4).Replace("(", "")
+            ymax = theSplitNext(5).Replace(")", "")
+            hisLabel = theSplitNext(0)
 
-            Debug.Print("Processing object = " & theSplitNext(6) & " " & Label)
+            WriteMessageToGlobalChat("Processing object = " & theSplitNext(0) & " " & theProbNew)
 
-            Debug.Print("xmin = " & xmin)
-            'Debug.Print("ymin = " & ymin)
-            'Debug.Print("xmax = " & xmax)
-            'Debug.Print("ymax = " & ymax)
+            'WriteMessageToGlobalChat("xmin = " & xmin)
+            'WriteMessageToGlobalChat("ymin = " & ymin)
+            'WriteMessageToGlobalChat("xmax = " & xmax)
+            'WriteMessageToGlobalChat("ymax = " & ymax)
 
             'find his width
             Dim hisWidth As Integer = xmax - xmin
 
             'right type?
-            If Label.Contains(whatObject) Then
+            If hisLabel.Contains(whatObject) Then
                 'right criteria?
                 If hisWidth > lastGlobalWidth Then
                     'yes
@@ -91,7 +99,7 @@ Module Utilitys
                     lastObjectCenterline = objectCenterline
 
                     'last obj
-                    LastObject = theSplitNext(6)
+                    lastObject = hisLabel
                 End If
             End If
         Next
@@ -101,12 +109,38 @@ Module Utilitys
         If lastObjectCenterline = 0 Then
         Else
             lastObjectCenterline = lastObjectCenterline - Constants.myCenterIs
-            Debug.Print("Pointing at widest object = " & LastObject & " " & LabelToObjectName(LastObject) & " " & Label)
+            WriteMessageToGlobalChat("Pointing at widest object = " & lastObject & " prob = " & highestProb & " width = " & lastGlobalWidth & " offset = " & lastObjectCenterline)
         End If
 
         Return lastObjectCenterline
     End Function
 
+    Public Function WriteMessageToGlobalChat(msg As String)
+        Debug.Print(msg)
+
+        ''open chat
+        'KeyDownUp(Keys.T, False, 100, False)
+        'ResponsiveSleep(250)
+
+
+        'Dim charArray() As Char = msg.ToCharArray
+
+        'For i = 0 To charArray.Length - 1
+
+        '    Dim lowermsg = CChar(charArray(i).ToString)
+        '    Dim a = CStr(GetKeyCode(lowermsg))
+
+        '    KeyDownUp(a, False, 50, False)
+        '    ResponsiveSleep(25)
+        'Next
+
+        'KeyDownUp(Keys.Enter, False, 100, False)
+        'ResponsiveSleep(250)
+
+    End Function
+    Public Function GetLoByte(ByVal value As Short) As Byte
+        Return BitConverter.GetBytes(value).First
+    End Function
     Public Function GetGlobalMousePosition() As Point
         Dim pt As New Point
         GetCursorPos(pt)
@@ -114,15 +148,20 @@ Module Utilitys
         Return pt
     End Function
 
-    Public Function DetectObjects(narrowView As Boolean) As String
+    Public Function DetectObjects(narrowView As Boolean) As Collection
+        WriteMessageToGlobalChat("begin detecting objects")
+
+        WriteMessageToGlobalChat("clearing global objects")
+
+        'clear detected global
+        detectedBuffer.Clear()
+
         Dim Output As String
-        Debug.Print("begin detecting objects")
 
         'kill
         If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
-        If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
 
-        Debug.Print("taking screenshot")
+        WriteMessageToGlobalChat("taking screenshot")
 
         'narrow view to hone in on specific object
         If narrowView Then
@@ -134,176 +173,249 @@ Module Utilitys
             TakeScreenShotWhole("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png")
         End If
 
-        Debug.Print("done taking screenshot, waiting for rec results...")
+        WriteMessageToGlobalChat("done taking screenshot, waiting for rec results")
 
-        'wait for spreadsheet
-        Do Until File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
+        'wait for collection of rec objects to be done
+        Do Until File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png") = False
             Thread.Sleep(10)
         Loop
 
-        Debug.Print("done rec results")
+        WriteMessageToGlobalChat("done rec results")
 
         'show preview
         Form1.previewImageEvent = True
 
-        'read all text
-        Dim fs As FileStream = New FileStream("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
-        Dim sr As StreamReader = New StreamReader(fs)
-        Dim value As String = sr.ReadToEnd
+        'Try
+        '    If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
+        'Catch
+        '    WriteMessageToGlobalChat("Couldnt del process img")
+        'End Try
 
-        fs.Close()
-        sr.Close()
-
-        Try
-            If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
-            If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv") Then Kill("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\Detection_Results.csv")
-        Catch
-            Debug.Print("Couldnt del csv")
-        End Try
-
-        Debug.Print("done detect objects")
+        WriteMessageToGlobalChat("done detect objects")
 
         'return it
-        Return value
+        Return detectedBuffer
     End Function
 
-    Public Function LabelToObjectName(label As Integer) As String
-        'Dim labels As New Collection
-        'Dim readIn As String
-        'Dim ints As Integer = 3
+    'Waiting for game to start
+    Public Function walkIntoAChest() As Boolean
+        Dim objects As Collection
+        Dim storage As New Collection
+        storage.Add("storagechest", "storagechest")
 
-        'Using Reader As New StreamReader("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Model_Weights\data_classes.txt")
-        '    While Reader.EndOfStream = False
-        '        readIn = Reader.ReadLine()
-        '        labels.Add(readIn, ints)
+        'main loop
+        Do
+            WriteMessageToGlobalChat("checking for chests")
 
-        '        ints += 1
-        '    End While
+            'see any?
+            objects = DetectObjects(False)
+            If DetectSpecificObjects(storage, objects) = False Then
+                'yes
+                WriteMessageToGlobalChat("found chest")
 
-        '    Reader.Close()
-        '    Reader.Dispose()
-        'End Using
+                'turn on crouch
+                KeyDownOnly(Keys.ControlKey, False, 50, False)
+
+                'walk up to chest
+                WriteMessageToGlobalChat("walking up to chest")
+                Form1.CheckChest()
+                Form1.EmptyMyInventory()
+            Else
+                'no
+                WriteMessageToGlobalChat("no chests found bumping")
+
+                'bump
+                Form1.MoveMouseMainThreadX(Form1.GetRandom(-3500, 3500))
+                ResponsiveSleep(500)
 
 
-        'If labels.Contains(label) Then
-        '    Return labels.Item(label - 3)
-        'Else
-        '    Return "UNKNOWN LABEL"
-        'End If
+            End If
+        Loop
 
-        If label = 0 Then
-            Return "wooddoorfront"
-        End If
-        If label = 1 Then
-            Return "wooddoorback"
-        End If
-        If label = 2 Then
-            Return "metaldoor"
-        End If
-        If label = 3 Then
-            Return "treeforest"
-        End If
-        If label = 4 Then
-            Return "treedesert"
-        End If
-        If label = 5 Then
-            Return "cactus"
-        End If
-        If label = 6 Then
-            Return "sulfur"
-        End If
-        If label = 7 Then
-            Return "buildrock"
-        End If
-        If label = 9 Then
-            Return "player"
-        End If
-        If label = 13 Then
-            Return "woodinventory"
-        End If
-        If label = 10 Then
-            Return "woodinventory"
-        End If
-        If label = 12 Then
-            Return "mushrooms"
-        End If
-        If label = 13 Then
-            Return "dead"
-        End If
-        If label = 14 Then
-            Return "someinventory"
-        End If
-        If label = 15 Then
-            Return "water"
-        End If
-        If label = 16 Then
-            Return "refinery"
-        End If
-        If label = 17 Then
-            Return "largeoven"
-        End If
-        If label = 18 Then
-            Return "wood1000"
-        End If
-        If label = 19 Then
-            Return "truck"
-        End If
-        If label = 20 Then
-            Return "barrel"
-        End If
-        If label = 21 Then
-            Return "worthlessbarrel"
-        End If
-        If label = 22 Then
-            Return "sleepingbag"
-        End If
-        If label = 23 Then
-            Return "stump"
-        End If
-        If label = 24 Then
-            Return "stump"
-        End If
-        If label = 25 Then
-            Return "helicopter"
-        End If
-        If label = 26 Then
-            Return "sleeping"
-        End If
-        If label = 27 Then
-            Return "train"
-        End If
-        If label = 28 Then
-            Return "wounded"
-        End If
-        If label = 29 Then
-            Return "weed"
-        End If
-        If label = 30 Then
-            Return "buildingpriv"
-        End If
-        If label = 31 Then
-            Return "woodwallfront"
-        End If
-        If label = 32 Then
-            Return "starving"
-        End If
-        If label = 33 Then
-            Return "dehydrated"
-        End If
-        If label = 34 Then
-            Return "hemp"
-        End If
-        If label = 35 Then
-            Return "boat"
-        End If
-        If label = 36 Then
-            Return "noinventory"
-        End If
-        If label = 41 Then
-            Return "gatheringwood"
+    End Function
+
+    'Waiting for game to start
+    Public Function waitForaBagBlocking() As Boolean
+        Dim objects As Collection
+        Dim dead As New Collection
+        'dead.Add("respawn", "respawn")
+        dead.Add("sleepingbag", "sleepingbag")
+        'dead.Add("dead", "dead")
+
+        'main loop
+        Do
+            WriteMessageToGlobalChat("killing myself to check for bag")
+
+            'die
+            DoRespawn(True)
+
+            'wait
+            ResponsiveSleep(10000)
+
+            WriteMessageToGlobalChat("killing myself to check for bag")
+
+            'see any bags?
+            objects = DetectObjects(False)
+            If DetectSpecificObjects(dead, objects) = False Then
+                'yes
+                WriteMessageToGlobalChat("we're dead got bags, respawning")
+                ClickAllBagsAndRespawn()
+
+                'we're spawned into users location
+                Return True
+            Else
+                'no bags, wait to respawn
+                WriteMessageToGlobalChat("we're dead no bags, waiting")
+
+                'wait
+                ResponsiveSleep(30000)
+
+                'respawn
+                ClickAllBagsAndRespawn()
+            End If
+        Loop
+
+    End Function
+
+    Public Function DoRespawn(kill As Boolean)
+        'On Error Resume Next
+        WriteMessageToGlobalChat("KillandRespawn")
+
+        Dim dead As New Collection
+        dead.Add("someinventory", "someinventory")
+        dead.Add("woodinventory", "woodinventory")
+        dead.Add("respawn", "respawn")
+        dead.Add("sleepingbag", "sleepingbag")
+        dead.Add("dead", "dead")
+        dead.Add("map", "map")
+
+        'need kill?
+        If kill Then
+            WriteMessageToGlobalChat("Killing")
+
+            'bring up console
+            KeyDownUp(Keys.F1, False, 1, False)
+            ResponsiveSleep(500)
+
+            ShiftUP()
+
+            ''kill
+            KeyDownUp(Keys.K, False, 1, False)
+            KeyDownUp(Keys.I, False, 1, False)
+            KeyDownUp(Keys.L, False, 1, False)
+            KeyDownUp(Keys.L, False, 1, False)
+            KeyDownUp(Keys.Enter, False, 1, False)
+            ResponsiveSleep(250)
+            KeyDownUp(Keys.Escape, False, 1, False)
+            ResponsiveSleep(500)
         End If
 
-        Return ""
+        WriteMessageToGlobalChat("Waiting for respawn")
+
+        'wait for respawn
+        ResponsiveSleep(10000)
+
+trydeadagain:
+        'move to respawn
+        ClickAllBagsAndRespawn()
+
+        'click respawn
+        LeftMouseClick()
+        ResponsiveSleep(1000)
+
+        'wait to wake up
+        ResponsiveSleep(10000)
+
+        WriteMessageToGlobalChat("Coming back to life")
+
+        'click wakeup
+        LeftMouseClick()
+
+        'get rec
+        Dim objects As Collection = DetectObjects(False)
+
+        'are we dead?
+        If DetectSpecificObjects(dead, objects) Then
+            'yes
+            GoTo trydeadagain
+        End If
+    End Function
+
+    Private Sub ClickAllBagsAndRespawn()
+        Dim p As Form1.Win32.POINT = New Form1.Win32.POINT
+        Form1.Win32.ClientToScreen(Form1.Handle, p)
+
+        'bag locations
+        '428, 2037
+        '911, 2023
+        '1642, 2019        
+
+        'first bag
+        Form1.Win32.SetCursorPos(428, 2037)
+        LeftMouseClick()
+        Form1.leftClickEvent = True
+        ResponsiveSleep(1000)
+
+        'second bag
+        Form1.Win32.SetCursorPos(911, 2023)
+        LeftMouseClick()
+        Form1.leftClickEvent = True
+        ResponsiveSleep(1000)
+
+        'third bag
+        Form1.Win32.SetCursorPos(1642, 2019)
+        LeftMouseClick()
+        Form1.leftClickEvent = True
+        ResponsiveSleep(1000)
+
+    End Sub
+
+    Public Function DetectSpecificObjects(searchObjects As Collection, imageObjects As Collection) As Boolean
+        WriteMessageToGlobalChat("begin detect specific objects")
+
+        Dim hisLabel As String
+        Dim LastObject As String
+
+        WriteMessageToGlobalChat("Found " & imageObjects.Count & " objects")
+        Application.DoEvents()
+
+        For i = 1 To imageObjects.Count
+            Dim theSplitNext = Split(imageObjects(i), " ")
+
+            'no rec
+            If theSplitNext(0) = "" Then Exit For
+
+            Dim theProbNew As String = theSplitNext(1)
+            xmin = theSplitNext(2).Replace("(", "")
+            ymin = theSplitNext(3).Replace(")", "")
+            xmax = theSplitNext(4).Replace("(", "")
+            ymax = theSplitNext(5).Replace(")", "")
+            hisLabel = theSplitNext(0)
+
+            WriteMessageToGlobalChat("Processing object = " & theSplitNext(0) & " " & theProbNew)
+
+            'Dim theSplitNext = Split(imageObjects(i), " ")
+
+            ''no rec
+            'If theSplitNext(0) = "" Then Exit For
+
+            'Dim theProbNew As String = theSplitNext(7).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            'xmin = theSplitNext(2).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            'ymin = theSplitNext(3).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            'xmax = theSplitNext(4).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
+            'ymax = theSplitNext(5).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "").Replace("Time", "")
+            'Label = LabelToObjectName(theSplitNext(6))
+
+            'WriteMessageToGlobalChat("Processing object = " & theSplitNext(6) & " " & Label)
+
+            'right type?
+            If searchObjects.Contains(hisLabel) Then
+                'KeyDownUp(Keys.Tab, False, 10, False)
+                Return True
+            End If
+        Next
+
+        Return False
     End Function
 
     Public Sub downSampleImage(path As String)
@@ -349,7 +461,7 @@ Module Utilitys
             ShiftUP()
         End If
 
-        ResponsiveSleep(500)
+        'ResponsiveSleep(500)
     End Sub
 
     Public Sub KeyDownUp(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
@@ -451,7 +563,7 @@ Module Utilitys
     End Sub
 
     Public Sub TakeScreenShotAreaStuck(file As String, width As Integer, height As Integer, sourceX As Integer, sourceY As Integer, destinationX As Integer, destinationY As Integer)
-        Debug.Print("taking screenshot area")
+        WriteMessageToGlobalChat("taking screenshot area")
 
         Dim printscreen As Bitmap = New Bitmap(width, height)
         Dim graphics As Graphics = Graphics.FromImage(CType(printscreen, Image))
@@ -464,11 +576,11 @@ waitagain:
             GoTo waitagain
         End If
 
-        Debug.Print("done taking screenshot area")
+        WriteMessageToGlobalChat("done taking screenshot area")
     End Sub
 
     Public Sub TakeScreenShotAreaRec(file As String, width As Integer, height As Integer, sourceX As Integer, sourceY As Integer, destinationX As Integer, destinationY As Integer)
-        Debug.Print("taking screenshot area")
+        WriteMessageToGlobalChat("taking screenshot area")
 
         Dim printscreen As Bitmap = New Bitmap(width, height)
         Dim graphics As Graphics = Graphics.FromImage(CType(printscreen, Image))
@@ -484,7 +596,7 @@ waitagain:
         'move it
         System.IO.File.Move("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processme.png", "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png")
 
-        Debug.Print("done taking screenshot area")
+        WriteMessageToGlobalChat("done taking screenshot area")
     End Sub
 
     Public Sub TakeScreenShotWhole(file As String, Optional moveFile As Boolean = True)
@@ -500,7 +612,7 @@ waitagain:
         'wait for available file lock
 waitagain:
         If IsFileUnavailable(file) Then
-            ResponsiveSleep(10)
+            Thread.Sleep(10)
             GoTo waitagain
         End If
 
@@ -654,7 +766,7 @@ waitagain:
 
         Dim theDiff As Single = firstBmp.PercentageDifference(secondBmp, threshold) * 100
 
-        Debug.Print(String.Format("image difference {0:0.0} %", (theDiff)))
+        WriteMessageToGlobalChat(String.Format("image difference {0:0.0} %", (theDiff)))
 
         firstBmp.Dispose()
         secondBmp.Dispose()
@@ -663,11 +775,11 @@ waitagain:
     End Function
 
     'Public Function compareImages(path1 As String, path2 As String) As Double
-    '    Debug.Print("compareImages, starting downsample")
+    '    WriteMessageToGlobalChat("compareImages, starting downsample")
     '    'downSampleImage(path1)
     '    'downSampleImage(path2)
 
-    '    Debug.Print("compareImages, starting comparison")
+    '    WriteMessageToGlobalChat("compareImages, starting comparison")
 
     '    'compare the two
     '    Console.WriteLine(("Comparing: " + (bmp1 + (" and " _
@@ -680,30 +792,83 @@ waitagain:
     '    Console.WriteLine(String.Format("BhattacharyyaDifference: {0:0.0} %", (firstBmp.BhattacharyyaDifference(secondBmp) * 100)))
 
 
-    '    Debug.Print("compareImages, done")
+    '    WriteMessageToGlobalChat("compareImages, done")
 
     '    Return Math.Round((100 * ((diff / 255) / (img1.Width * (img1.Height * 3)))))
     'End Function
 
     Public Sub ShowMap()
         KeyDownOnly(Keys.G, False, 500, False)
-        ResponsiveSleep(500)
+        ResponsiveSleep(50)
     End Sub
 
     Public Sub HideMap()
         KeyUpOnly(Keys.G, False, 500, False)
-        ResponsiveSleep(500)
+        ResponsiveSleep(50)
     End Sub
 
     Public Sub ShowInventory()
         KeyDownUp(Keys.Tab, False, 500, False)
-        ResponsiveSleep(500)
+        ResponsiveSleep(50)
     End Sub
 
     Public Sub HideInventory()
         KeyDownUp(Keys.Tab, False, 500, False)
-        ResponsiveSleep(500)
+        ResponsiveSleep(50)
     End Sub
+
+    Private processOutput As StringBuilder = Nothing
+
+    Public detectedBuffer As New Collection
+
+    Public Sub StartPythonBackend()
+
+        WriteMessageToGlobalChat("killing python")
+        Shell("taskkill /f /im python.exe")
+
+        'wait for video mem to clear up
+        ResponsiveSleep(5000)
+
+        Dim processOptions As ProcessStartInfo = New ProcessStartInfo
+        processOptions.FileName = "python.exe"
+        processOptions.Arguments = "-u C:\Users\bob\Documents\TrainYourOwnYOLO\3_Inference\detector.py"
+        processOptions.WorkingDirectory = "C:\Users\bob\Documents\TrainYourOwnYOLO\3_Inference"
+        processOptions.UseShellExecute = False
+        processOptions.CreateNoWindow = True
+        processOptions.RedirectStandardOutput = True
+        processOptions.RedirectStandardError = False
+
+        Dim process As Process
+        process = Process.Start(processOptions)
+
+        Dim sr As StreamReader = process.StandardOutput
+
+        Dim strLine As String = String.Empty
+
+        Try
+            Do
+                'read a line
+                strLine = sr.ReadLine()
+
+                'empty?
+                If strLine <> Nothing Then
+                    'rec item?                    
+                    If strLine.Contains("(") Then
+                        'dont add this
+                        If strLine.Contains("(608, 608, 3)") = False Then
+                            WriteMessageToGlobalChat("adding rec result to global")
+                            'rec data only
+                            detectedBuffer.Add(strLine, strLine)
+                        End If
+                    End If
+                    WriteMessageToGlobalChat(strLine)
+                End If
+            Loop
+        Catch ex As Exception
+            WriteMessageToGlobalChat("Python crashed!")
+        End Try
+    End Sub
+
 
     'Public Function GetGenericTagging()
     '    Dim Output As String
@@ -820,14 +985,14 @@ waitagain:
             tempadd1 = tempadd1 + LTrim(RTrim(Double.Parse(postBefore.GetValue(I))))
         Next
 
-        Debug.Print("Starting `run")
+        WriteMessageToGlobalChat("Starting `run")
 
         'run see if we moved
         Run(Keys.W, False, 500, False)
 
         Dim tempadd2 As Double
 
-        Debug.Print("Done stuck run")
+        WriteMessageToGlobalChat("Done stuck run")
         'after
         Dim posAfter = GetCurrentPosition()
 
@@ -837,10 +1002,10 @@ waitagain:
 
         If tempadd2 <> tempadd1 Then
             'bump me                        
-            Debug.Print("We have moved")
+            WriteMessageToGlobalChat("We have moved")
             Return False
         Else
-            Debug.Print("We have NOT moved")
+            WriteMessageToGlobalChat("We have NOT moved")
             Return True
         End If
     End Function
@@ -848,7 +1013,7 @@ waitagain:
     Public Function GetCurrentPosition() As Array
         On Error Resume Next
 
-        Debug.Print("Getting Position")
+        WriteMessageToGlobalChat("Getting Position")
 
         'bring up console
         KeyDownUp(Keys.F1, False, 1, False)
@@ -899,60 +1064,60 @@ waitagain:
         Return TheSplit2
     End Function
 
-    Public Function GetCurrentEyePos() As Array
-        On Error Resume Next
+    'Public Function GetCurrentEyePos() As Array
+    '    On Error Resume Next
 
-        Debug.Print("Getting Position")
+    '    WriteMessageToGlobalChat("Getting Position")
 
-        'bring up console
-        KeyDownUp(Keys.F1, False, 1, False)
-        'min
-        ResponsiveSleep(500)
+    '    'bring up console
+    '    KeyDownUp(Keys.F1, False, 1, False)
+    '    'min
+    '    ResponsiveSleep(500)
 
-        ShiftUP()
+    '    ShiftUP()
 
-        'get position
-        KeyDownUp(Keys.C, False, 1, False)
-        KeyDownUp(Keys.L, False, 1, False)
-        KeyDownUp(Keys.I, False, 1, False)
-        KeyDownUp(Keys.E, False, 1, False)
-        KeyDownUp(Keys.N, False, 1, False)
-        KeyDownUp(Keys.T, False, 1, False)
-        KeyDownUp(Keys.OemPeriod, False, 1, False)
-        KeyDownUp(Keys.P, False, 1, False)
-        KeyDownUp(Keys.R, False, 1, False)
-        KeyDownUp(Keys.I, False, 1, False)
-        KeyDownUp(Keys.N, False, 1, False)
-        KeyDownUp(Keys.T, False, 1, False)
-        KeyDownUp(Keys.E, False, 1, False)
-        KeyDownUp(Keys.Y, False, 1, False)
-        KeyDownUp(Keys.E, False, 1, False)
-        KeyDownUp(Keys.S, False, 1, False)
-        KeyDownUp(Keys.Enter, False, 1, False)
-        ResponsiveSleep(250)
-        KeyDownUp(Keys.Escape, False, 1, False)
+    '    'get position
+    '    KeyDownUp(Keys.C, False, 1, False)
+    '    KeyDownUp(Keys.L, False, 1, False)
+    '    KeyDownUp(Keys.I, False, 1, False)
+    '    KeyDownUp(Keys.E, False, 1, False)
+    '    KeyDownUp(Keys.N, False, 1, False)
+    '    KeyDownUp(Keys.T, False, 1, False)
+    '    KeyDownUp(Keys.OemPeriod, False, 1, False)
+    '    KeyDownUp(Keys.P, False, 1, False)
+    '    KeyDownUp(Keys.R, False, 1, False)
+    '    KeyDownUp(Keys.I, False, 1, False)
+    '    KeyDownUp(Keys.N, False, 1, False)
+    '    KeyDownUp(Keys.T, False, 1, False)
+    '    KeyDownUp(Keys.E, False, 1, False)
+    '    KeyDownUp(Keys.Y, False, 1, False)
+    '    KeyDownUp(Keys.E, False, 1, False)
+    '    KeyDownUp(Keys.S, False, 1, False)
+    '    KeyDownUp(Keys.Enter, False, 1, False)
+    '    ResponsiveSleep(250)
+    '    KeyDownUp(Keys.Escape, False, 1, False)
 
-        ResponsiveSleep(500)
-        'min    
+    '    ResponsiveSleep(500)
+    '    'min    
 
-        'read log
-        Dim fs As FileStream = New FileStream("C:\Program Files (x86)\Steam\steamapps\common\Rust\output_log.txt", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
-        Dim sr As StreamReader = New StreamReader(fs)
-        Dim lines = Split(sr.ReadToEnd, vbCr)
-        Dim output As String = lines(lines.Count - 2).Replace(")", "")
-        Dim TheSplit = Split(output, "(")
-        Dim TheSplit2 = Split(TheSplit(1), ",")
+    '    'read log
+    '    Dim fs As FileStream = New FileStream("C:\Program Files (x86)\Steam\steamapps\common\Rust\output_log.txt", FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+    '    Dim sr As StreamReader = New StreamReader(fs)
+    '    Dim lines = Split(sr.ReadToEnd, vbCr)
+    '    Dim output As String = lines(lines.Count - 2).Replace(")", "")
+    '    Dim TheSplit = Split(output, "(")
+    '    Dim TheSplit2 = Split(TheSplit(1), ",")
 
-        Dim distance As Integer = Distance3D(TheSplit2(0), TheSplit2(1), TheSplit2(2), Constants.homex1, Constants.homey1, Constants.homez1)
+    '    Dim distance As Integer = Distance3D(TheSplit2(0), TheSplit2(1), TheSplit2(2), Constants.homex1, Constants.homey1, Constants.homez1)
 
-        TheSplit(1) = TheSplit(1) & "," & distance
-        TheSplit2 = Split(TheSplit(1), ",")
+    '    TheSplit(1) = TheSplit(1) & "," & distance
+    '    TheSplit2 = Split(TheSplit(1), ",")
 
-        fs.Close()
-        sr.Close()
+    '    fs.Close()
+    '    sr.Close()
 
-        Return TheSplit2
-    End Function
+    '    Return TheSplit2
+    'End Function
 
     ' Function to obtain the desired hash of a file
     Function hash_generator(ByVal hash_type As String, ByVal file_name As String)

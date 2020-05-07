@@ -12,10 +12,10 @@
     Public Const SPI_GETKEYBOARDSPEED = 10
     Public Const MOUSEEVENTF_MOVE As Integer = &H1
 
-    'home location
-    Public Const homex1 As Integer = 631
-    Public Const homey1 As Integer = 17
-    Public Const homez1 As Integer = 737
+    'home location, no decimal
+    Public Const homex1 As Integer = -567
+    Public Const homey1 As Integer = 2
+    Public Const homez1 As Integer = 746
 
     'this is for stuck detect, narrow view
     Public Const compareWidth As Integer = 50

@@ -37,7 +37,6 @@ Public Class Form1
         Me.Show()
         Me.Refresh()
         Me.BringToFront()
-        ResponsiveSleep(1000)
 
         ShiftUP()
 
@@ -85,10 +84,21 @@ Public Class Form1
             'load img
             If previewImageEvent Then
                 previewImageEvent = False
-                PreviewImg(pic, "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
+                'wait for available file lockggw
+                'waitagain:
+                'If File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png") Then
+                '    If IsFileUnavailable("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png") Then
+                '        ResponsiveSleep(100)
+                '        GoTo waitagain
+                '    End If
+                'Else
+                '    GoTo waitagain
+                'End If
+
+                'PreviewImg(pic, "C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png")
             End If
 
-            ResponsiveSleep(10)
+
             Application.DoEvents()
         Loop
     End Sub
@@ -99,7 +109,7 @@ Public Class Form1
 
     '    Dim Ocr = New AutoOcr()
     '    Dim Result = Ocr.Read("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\ocr\ocr.png")
-    '    Debug.Print(Result.Text)
+    '    WriteMessageToGlobalChat(Result.Text)
     'End Sub
 
     Public Sub PreviewImg(pic As PictureBox, path As String)
@@ -155,12 +165,16 @@ Public Class Form1
 
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         ShiftUP()
+
+        WriteMessageToGlobalChat("killing python")
+        Shell("taskkill /f /im python.exe")
+
         Application.Exit()
         End
     End Sub
 
     Private Sub HitTree()
-        Dim objects As String
+        Dim objects As Collection
 
         'what to look for
         Dim gathering As New Collection
@@ -188,7 +202,6 @@ Public Class Form1
                 LeftMouseClick(15000)
             End If
 
-
             'are we collecting?
             objects = DetectObjects(False)
 
@@ -204,10 +217,10 @@ Public Class Form1
                 MovePlayerEyesToHorizon()
 
                 'yes
-                Debug.Print("gathering, continuing to gather")
+                WriteMessageToGlobalChat("gathering, continuing to gather")
             Else
                 'no
-                Debug.Print("not gathering, finishing")
+                WriteMessageToGlobalChat("not gathering, finishing")
 
                 'center horizon
                 MovePlayerEyesToHorizon()
@@ -226,83 +239,48 @@ Public Class Form1
         ResponsiveSleep(500)
     End Sub
 
-    Private Function DetectSpecificObjectsScreenshot(searchObjects As Collection) As Boolean
-        KeyDownUp(Keys.Tab, False, 10, False)
-        ResponsiveSleep(500)
+    'Private Function DetectSpecificObjectsScreenshot(searchObjects As Collection) As Boolean
+    '    KeyDownUp(Keys.Tab, False, 10, False)
+    '    ResponsiveSleep(500)
 
-        Dim objects As String = DetectObjects(False)
+    '    Dim objects As Collection = DetectObjects(False)
+    '    Dim hisLabel As String
+    '    Dim LastObject As String
 
-        Dim theSplit = Split(objects, vbCrLf)
-        Dim Label As String
-        Dim LastObject As String
+    '    WriteMessageToGlobalChat("DetectSpecificObjectsScreenshot found " & searchObjects.Count - 1 & " objects")
+    '    Application.DoEvents()
 
-        Debug.Print("DetectSpecificObjectsScreenshot found " & theSplit.Count - 2 & " objects")
-        Application.DoEvents()
+    '    For i = 1 To searchObjects.Count - 1
+    '        Dim theSplitNext = Split(objects(i), " ")
 
-        For i = 1 To theSplit.Count - 2
-            Dim theSplitNext = Split(theSplit(i), ",")
+    '        'no rec
+    '        If theSplitNext(0) = "" Then Exit For
 
-            'no rec
-            If theSplitNext(0) = "" Then Exit For
+    '        Dim theProbNew As String = theSplitNext(1)
+    '        xmin = theSplitNext(2).Replace("(", "")
+    '        ymin = theSplitNext(3).Replace(")", "")
+    '        xmax = theSplitNext(4).Replace("(", "")
+    '        ymax = theSplitNext(5).Replace(")", "")
+    '        hisLabel = theSplitNext(0)
 
-            Dim theProbNew As String = theSplitNext(7).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            xmin = theSplitNext(2).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            ymin = theSplitNext(3).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            xmax = theSplitNext(4).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            ymax = theSplitNext(5).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "").Replace("Time", "")
-            Label = LabelToObjectName(theSplitNext(6))
+    '        WriteMessageToGlobalChat("Processing object = " & theSplitNext(0) & " " & theProbNew)
 
-            Debug.Print("Processing object = " & theSplitNext(6) & " " & Label)
+    '        'right type?
+    '        If searchObjects.Contains(hisLabel) Then
+    '            KeyDownUp(Keys.Tab, False, 10, False)
+    '            ResponsiveSleep(500)
+    '            Return True
+    '        End If
+    '    Next
 
-            'right type?
-            If searchObjects.Contains(Label) Then
-                KeyDownUp(Keys.Tab, False, 10, False)
-                ResponsiveSleep(500)
-                Return True
-            End If
-        Next
+    '    KeyDownUp(Keys.Tab, False, 10, False)
+    '    ResponsiveSleep(500)
+    '    Return False
 
-        KeyDownUp(Keys.Tab, False, 10, False)
-        ResponsiveSleep(500)
-        Return False
+    '    WriteMessageToGlobalChat("")
+    'End Function
 
-        Debug.Print("")
-    End Function
 
-    Private Function DetectSpecificObjects(searchObjects As Collection, imageObjects As String) As Boolean
-        Debug.Print("begin detect specific objects")
-
-        Dim theSplit = Split(imageObjects, vbCrLf)
-        Dim Label As String
-        Dim LastObject As String
-
-        Debug.Print("Found " & theSplit.Count - 2 & " objects")
-        Application.DoEvents()
-
-        For i = 1 To theSplit.Count - 2
-            Dim theSplitNext = Split(theSplit(i), ",")
-
-            'no rec
-            If theSplitNext(0) = "" Then Exit For
-
-            Dim theProbNew As String = theSplitNext(7).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            xmin = theSplitNext(2).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            ymin = theSplitNext(3).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            xmax = theSplitNext(4).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "")
-            ymax = theSplitNext(5).Replace(vbCrLf, "").Replace(Chr(34), "").Replace("(", "").Replace(")", "").Replace("&", "").Replace(",", "").Replace("vbCrLf", "").Replace("Time", "")
-            Label = LabelToObjectName(theSplitNext(6))
-
-            Debug.Print("Processing object = " & theSplitNext(6) & " " & Label)
-
-            'right type?
-            If searchObjects.Contains(Label) Then
-                'KeyDownUp(Keys.Tab, False, 10, False)
-                Return True
-            End If
-        Next
-
-        Return False
-    End Function
 
     Public Sub MovePlayerEyesToHorizon()
         'xmax = 271 (sky)
@@ -310,7 +288,7 @@ Public Class Form1
         'xlevel = 360
 
         'move player eyes to fully down, ground
-        MoveMouseMainThreadY(5000)
+        MoveMouseMainThreadY(2500)
         'wait for mouse move
         ResponsiveSleep(500)
 
@@ -333,7 +311,7 @@ Public Class Form1
         'run
         Run(Keys.W, False, 1500, False)
         'wait for run to complete
-        ResponsiveSleep(1800)
+        'ResponsiveSleep(1800)
 
         'show map
         ShowMap()
@@ -355,7 +333,7 @@ Public Class Form1
 
     Private Sub GoWood()
         Dim moveToCenter
-        Dim objects As String
+        Dim objects As Collection
         Dim myCenterIs As Integer = 1920
         Dim dead As New Collection
         Dim narrowRec As Boolean = False
@@ -370,6 +348,7 @@ Public Class Form1
         'main loop
         Do
             objects = DetectObjects(narrowRec)
+
             'get rec
             moveToCenter = GetObjectsVerticleLinePosition(objects, "tree")
 
@@ -393,29 +372,29 @@ Public Class Form1
                     narrowRec = True
 
                     'good rec                                    
-                    Debug.Print("good rec, moving to object centerline @" & moveToCenter)
+                    WriteMessageToGlobalChat("good rec, moving to object centerline = " & moveToCenter)
 
                     'point to objectos
                     MoveMouseMainThreadX(moveToCenter)
                     'wait for mouse move
-                    ResponsiveSleep(500)
+                    ResponsiveSleep(10)
 
-                    'are we stuck? 
+                    ''are we stuck? 
                     If AreWeStuck() = 0 Then
                         'we are stuck
-                        Debug.Print("good rec, stuck, performing action")
+                        WriteMessageToGlobalChat("good rec, stuck, performing action")
                         HitTree()
 
                         'go drop
                         If HaveGatheredWood = True Then
-                            Debug.Print("we've got wood, dropping off")
+                            WriteMessageToGlobalChat("we've got wood, dropping off")
                             HaveGatheredWood = False
                             GoHome()
-                            Debug.Print("dropped off, going out to get more wood")
+                            WriteMessageToGlobalChat("dropped off, going out to get more wood")
                         End If
                     Else
                         'no
-                        Debug.Print("good rec, we are not stuck")
+                        WriteMessageToGlobalChat("good rec, we are not stuck")
 
                         'bumping
                         'MoveMouseMainThread(50)                            
@@ -427,22 +406,22 @@ Public Class Form1
                     narrowRec = False
 
                     'no rec                
-                    Debug.Print("bad rec")
+                    WriteMessageToGlobalChat("bad rec")
 
                     If AreWeStuck() = 0 Then
                         'we are stuck
-                        Debug.Print("bad rec, we are stuck, performing action")
+                        WriteMessageToGlobalChat("bad rec, we are stuck, performing action")
                         HitTree()
 
                         'go drop
                         If HaveGatheredWood = True Then
-                            Debug.Print("we've got wood, dropping off")
+                            WriteMessageToGlobalChat("we've got wood, dropping off")
                             HaveGatheredWood = False
-                            GoHome()
+                            'GoHome()
                         End If
                     Else
                         'no
-                        Debug.Print("bad rec, we are not stuck, searching elsewhere!")
+                        WriteMessageToGlobalChat("bad rec, we are not stuck, searching elsewhere!")
 
                         'bumping                                                
                         MoveMouseMainThreadX(GetRandom(-3500, 3500))
@@ -457,14 +436,14 @@ Public Class Form1
                 'HideInventory()
 
                 'we are dead, respawn
-                KillandRespawn(False)
+                DoRespawn(False)
             End If
         Loop
     End Sub
 
     Private Sub MainBrain()
         CheckForIllegalCrossThreadCalls = False
-        Dim objects As String
+        Dim objects As Collection
         Dim objectCenterIs As String
 
 
@@ -474,7 +453,8 @@ Public Class Form1
 
         'startup
         lastAction.Text = "warming up"
-        ResponsiveSleep(10000)
+        ResponsiveSleep(5000)
+        WriteMessageToGlobalChat("warming up")
 
         Dim objectsToFind As New Collection
         objectsToFind.Add("someinventory", "someinventory")
@@ -482,22 +462,22 @@ Public Class Form1
 
         'Object detection only!
         'Do
-        '    Debug.Print("==================================== " & DateTime.Now)
-        '    Debug.Print("Starting object detection " & DateTime.Now)
+        '    WriteMessageToGlobalChat("==================================== " & DateTime.Now)
+        '    WriteMessageToGlobalChat("Starting object detection " & DateTime.Now)
         '    objects = DetectObjects()
-        '    Debug.Print("Done object detection " & DateTime.Now)
+        '    WriteMessageToGlobalChat("Done object detection " & DateTime.Now)
 
         '    'get rec
-        '    Debug.Print("Start centerline " & DateTime.Now)
+        '    WriteMessageToGlobalChat("Start centerline " & DateTime.Now)
         '    objectCenterIs = GetObjectsVerticleLinePosition(objects)
-        '    Debug.Print("Done centerline = " & objectCenterIs & " " & DateTime.Now)
-        '    Debug.Print("==================================== " & DateTime.Now)
+        '    WriteMessageToGlobalChat("Done centerline = " & objectCenterIs & " " & DateTime.Now)
+        '    WriteMessageToGlobalChat("==================================== " & DateTime.Now)
 
         '    If objectCenterIs <> 0 Then
         '        'good rec                
         '        Dim ourDifference = objectCenterIs - myCenterIs
 
-        '        Debug.Print("Moving, Our diff is" & ourDifference & " " & DateTime.Now)
+        '        WriteMessageToGlobalChat("Moving, Our diff is" & ourDifference & " " & DateTime.Now)
 
         '        'point to object
         '        MoveMouseMainThreadX(ourDifference)
@@ -505,74 +485,31 @@ Public Class Form1
         'Loop
 
         'GoHarass()
-        'GoWood()
-        GoHome()
 
+        'always start the cudes
+        StartCuda()
+
+        'always center our vision to horizon        
+        MovePlayerEyesToHorizon()
+
+        'waiting for a bag in
+        waitForaBagBlocking()
+        GoWood()
+
+
+        'GoHome()
+        'CheckChest()
+        'EmptyMyInventory()
+    End Sub
+    Private Sub StartCuda()
+        Dim backendThread As New Thread(AddressOf StartPythonBackend)
+        backendThread.Start()
+
+        WriteMessageToGlobalChat("waiting for cuda to come up")
+        ResponsiveSleep(30000)
+        WriteMessageToGlobalChat("cuda should be up")
     End Sub
 
-    Public Function KillandRespawn(kill As Boolean)
-        'On Error Resume Next
-        Debug.Print("KillandRespawn")
-
-        Dim dead As New Collection
-        dead.Add("someinventory", "someinventory")
-        dead.Add("woodinventory", "woodinventory")
-        dead.Add("respawn", "respawn")
-        dead.Add("sleepingbag", "sleepingbag")
-        dead.Add("dead", "dead")
-        dead.Add("map", "map")
-
-        'need kill?
-        If kill Then
-            Debug.Print("Killing")
-
-            'bring up console
-            KeyDownUp(Keys.F1, False, 1, False)
-            ResponsiveSleep(500)
-
-            ShiftUP()
-
-            ''kill
-            KeyDownUp(Keys.K, False, 1, False)
-            KeyDownUp(Keys.I, False, 1, False)
-            KeyDownUp(Keys.L, False, 1, False)
-            KeyDownUp(Keys.L, False, 1, False)
-            KeyDownUp(Keys.Enter, False, 1, False)
-            ResponsiveSleep(250)
-            KeyDownUp(Keys.Escape, False, 1, False)
-            ResponsiveSleep(500)
-        End If
-
-        Debug.Print("Waiting for respawn")
-
-        'wait for respawn
-        ResponsiveSleep(10000)
-
-trydeadagain:
-        'move to respawn
-        ClickAllThreeBags()
-
-        'click respawn
-        LeftMouseClick()
-        ResponsiveSleep(1000)
-
-        'wait to wake up
-        ResponsiveSleep(10000)
-
-        Debug.Print("Coming back to life")
-
-        'click wakeup
-        LeftMouseClick()
-
-        'get rec
-        Dim objects As String = DetectObjects(False)
-
-        'are we dead?
-        If DetectSpecificObjects(dead, objects) Then
-            'yes
-            GoTo trydeadagain
-        End If
-    End Function
 
     Private Function fourCornerRadarRec() As String
         'for dead detect
@@ -584,7 +521,7 @@ trydeadagain:
         dead.Add("dead", "dead")
 
         Dim moveToCenter As Integer = 0
-        Dim objects As String
+        Dim objects As Collection
 
         'turn once, look
         For i = 1 To 4
@@ -618,38 +555,88 @@ trydeadagain:
         Return 0
     End Function
 
-    Private Sub WalkIntoDoor()
+    Private Sub DumpResourcesAtBaseDoorNowAndDie()
+        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), opening door")
+
         'open door
-        KeyDownUp(Keys.E, False, 10, False)
+        KeyDownUp(Keys.E, False, 50, False)
         ResponsiveSleep(1000)
 
+        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), walk into door")
         'walk into door
-        KeyDownUp(Keys.W, True, 450, False)
+        KeyDownUp(Keys.W, False, 1500, False)
         ResponsiveSleep(1000)
 
+        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), turn to close")
         'turn to close door
-        MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
+        MoveMouseMainThreadX(2400)
         ResponsiveSleep(1000)
 
+        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), close door")
         'close it
-        KeyDownUp(Keys.E, True, 250, False)
+        KeyDownUp(Keys.E, False, 500, False)
         ResponsiveSleep(1000)
 
-        'turn back straight
-        MoveMouseMainThreadX(-Constants.eachMoveInFullTurn)
+        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), face the other door")
+        'turn back straight to face second door
+        MoveMouseMainThreadX(-1900)
         ResponsiveSleep(1000)
-    End Sub
+        MoveMouseMainThreadX(-1900)
+        ResponsiveSleep(1000)
+        MoveMouseMainThreadX(-450)
+        ResponsiveSleep(1000)
 
-    Private Sub CheckBox()
+        'walk into it a lil
+        KeyDownUp(Keys.W, False, 100, False)
+        ResponsiveSleep(1000)
+
+        'open that door
+        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), open it")
+        KeyDownUp(Keys.E, False, 50, False)
+        ResponsiveSleep(1000)
+
+        'walk through door
+        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), walk into it")
+        KeyDownUp(Keys.W, False, 650, False)
+        ResponsiveSleep(1000)
+
+        'turn around
+        MoveMouseMainThreadX(-2500)
+        ResponsiveSleep(500)
+
+        'close door
+        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), open it")
+        KeyDownUp(Keys.E, False, 50, False)
+        ResponsiveSleep(1000)
+
+        'face chests
+        MoveMouseMainThreadX(2600)
+        ResponsiveSleep(500)
+
         'run to box
-        RunMainThread(Keys.W, True, 1000, False)
-        ResponsiveSleep(1000)
+        RunMainThread(Keys.W, True, 2000, False)
+        ResponsiveSleep(2000)
 
-        'open box
-        KeyDownUp(Keys.E, False, 10, False)
+        'crouch
+        KeyDownOnly(Keys.ControlKey, False, 50, False)
+        ResponsiveSleep(2000)
+
+        'check her
+        CheckChest()
+
+        'dump me
+        EmptyMyInventory()
+
+        'we're done kill ourselves go back out get shit
+        waitForaBagBlocking()
     End Sub
 
-    Private Sub EmptyMyInventory()
+    Public Sub CheckChest()
+        'open box
+        KeyDownUp(Keys.E, False, 50, False)
+    End Sub
+
+    Public Sub EmptyMyInventory()
         ResponsiveSleep(1000)
 
         Win32.SetCursorPos(1400, 1236)
@@ -823,36 +810,53 @@ trydeadagain:
 
     Private Sub TurnAroundAndLeave()
         'move each dir
-        MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
-        ResponsiveSleep(500)
+        'MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
+        'ResponsiveSleep(500)
 
-        'pointed at door
-        MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
-        ResponsiveSleep(500)
+        ''pointed at door
+        'MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
+        'ResponsiveSleep(500)
 
-        'open door
-        KeyDownUp(Keys.E, False, 10, False)
-        ResponsiveSleep(1000)
+        ''run to door
+        'RunMainThread(Keys.W, False, 1200, False)
+        'ResponsiveSleep(1200)
 
-        'run out door!
-        RunMainThread(Keys.W, False, 800, False)
-        ResponsiveSleep(800)
+        ''open door
+        'KeyDownUp(Keys.E, False, 50, False)
+        'ResponsiveSleep(1000)
 
-        'move each dir
-        MoveMouseMainThreadX(-3800)
-        ResponsiveSleep(500)
+        ''run out door
+        'RunMainThread(Keys.W, False, 1000, False)
+        'ResponsiveSleep(1000)
 
-        'close door
-        KeyDownUp(Keys.E, False, 10, False)
-        ResponsiveSleep(1000)
+        ''turn towards door
+        'MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
+        'ResponsiveSleep(500)
 
-        'move each dir
-        MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
-        ResponsiveSleep(500)
+        ''close it
+        'KeyDownUp(Keys.E, False, 50, False)
+        'ResponsiveSleep(1000)
 
-        'run away from base!
-        RunMainThread(Keys.W, True, 5000, True)
-        ResponsiveSleep(1000)
+
+        ''run out door!
+        'RunMainThread(Keys.W, False, 800, False)
+        'ResponsiveSleep(800)
+
+        ''move each dir
+        'MoveMouseMainThreadX(-3800)
+        'ResponsiveSleep(500)
+
+        ''close door
+        'KeyDownUp(Keys.E, False, 10, False)
+        'ResponsiveSleep(1000)
+
+        ''move each dir
+        'MoveMouseMainThreadX(Constants.eachMoveInFullTurn)
+        'ResponsiveSleep(500)
+
+        ''run away from base!
+        'RunMainThread(Keys.W, True, 5000, True)
+        'ResponsiveSleep(1000)
     End Sub
 
     Private Sub HowFarToRunTime(distanceFromHome As String)
@@ -888,16 +892,13 @@ trydeadagain:
     End Sub
 
     Public Sub GoHome()
-        'center to horizon
-        MovePlayerEyesToHorizon()
-
         Do
             'get our current position
             Dim currentPosition = GetCurrentPosition()
             Dim distanceFromHome = currentPosition(3)
 
             logLabel.Text = logLabel.Text & "distance from home: " & distanceFromHome & " Running" & vbCrLf
-            Debug.Print("distance from home: " & distanceFromHome & " running")
+            WriteMessageToGlobalChat("distance from home: " & distanceFromHome & " running")
 
             HowFarToRunTime(distanceFromHome)
 
@@ -905,12 +906,12 @@ trydeadagain:
             Dim distanceFromHomeMoved = currentPositionMoved(3)
 
             logLabel.Text = logLabel.Text & "new distance from home: " & distanceFromHome & vbCrLf
-            Debug.Print("new distance from home: " & distanceFromHome)
+            WriteMessageToGlobalChat("new distance from home: " & distanceFromHome)
 
             Dim changeInDistance = distanceFromHomeMoved - distanceFromHome
 
             logLabel.Text = logLabel.Text & "change in distance: " & changeInDistance & vbCrLf
-            Debug.Print("change in distance: " & changeInDistance)
+            WriteMessageToGlobalChat("change in distance: " & changeInDistance)
 
             'move until water isn't in view
             'If DetectWater() Then
@@ -928,11 +929,11 @@ trydeadagain:
 
                 RunMainThread(Keys.W, True, 1000, True)
             Else
-                If distanceFromHomeMoved > 30 Or distanceFromHomeMoved.ToString.Contains("-") Then
+                If distanceFromHomeMoved > 50 Or distanceFromHomeMoved.ToString.Contains("-") Then
                     'closer or farther?
                     If changeInDistance.ToString.Contains("-") Then
                         'closer
-                        Debug.Print("")
+                        WriteMessageToGlobalChat("")
 
                         logLabel.Text = logLabel.Text & "We are closer, running long" & vbCrLf
                     Else
@@ -952,7 +953,7 @@ trydeadagain:
                     logLabel.Text = logLabel.Text & "we are home!" & vbCrLf
                     KeyUpOnly(Keys.W, True, 100, False)
 
-                    Debug.Print("entering close base mode")
+                    WriteMessageToGlobalChat("entering close base mode")
 
                     Do
                         'is our base here?
@@ -961,12 +962,12 @@ trydeadagain:
                         'have an object to point to?
                         If moveToCenter = 0 Then
                             'nope
-                            Debug.Print("didn't find a base")
+                            WriteMessageToGlobalChat("didn't find a base")
 
                             'get out of close to home, no base found
                             Exit Do
                         Else
-                            Debug.Print("found a base, turning and running to = " & moveToCenter)
+                            WriteMessageToGlobalChat("found a base, turning and running to = " & moveToCenter)
 
                             'yup                
                             MoveMouseMainThreadX(moveToCenter)
@@ -978,19 +979,22 @@ trydeadagain:
                             'stuck?
                             If AreWeStuck() = 0 Then
                                 'yes, perform action
-                                Debug.Print("stuck, performing action")
-                                WalkIntoDoor()
-                                CheckBox()
-                                EmptyMyInventory()
-                                TurnAroundAndLeave()
+                                WriteMessageToGlobalChat("stuck at door, dumping resources")
+
+                                'dumping resources
+                                DumpResourcesAtBaseDoorNowAndDie()
+
+                                WriteMessageToGlobalChat("resources dumped, killing")
+
+                                Exit Do
                             Else
                                 'not stuck, just keep going
-                                Debug.Print("not stuck")
+                                WriteMessageToGlobalChat("not stuck")
                             End If
                         End If
                     Loop
 
-                    'Debug.Print("We are home, killing and starting over")
+                    'WriteMessageToGlobalChat("We are home, killing and starting over")
 
                     ''kill myself start over
                     'KillandRespawn(True)
@@ -1019,41 +1023,14 @@ trydeadagain:
         Win32.SetCursorPos(W, H)
     End Sub
 
-    Private Sub ClickAllThreeBags()
-        Dim p As Win32.POINT = New Win32.POINT
-        Win32.ClientToScreen(Me.Handle, p)
 
-        'bag locations
-        '428, 2037
-        '911, 2023
-        '1642, 2019        
-
-        'first bag
-        Win32.SetCursorPos(428, 2037)
-        LeftMouseClick()
-        leftClickEvent = True
-        ResponsiveSleep(1000)
-
-        'second bag
-        Win32.SetCursorPos(911, 2023)
-        LeftMouseClick()
-        leftClickEvent = True
-        ResponsiveSleep(1000)
-
-        'third bag
-        Win32.SetCursorPos(1642, 2019)
-        LeftMouseClick()
-        leftClickEvent = True
-        ResponsiveSleep(1000)
-
-    End Sub
 
     Private Shared Function IsNullOrEmpty(ByVal myStringArray() As String) As Boolean
         Return ((myStringArray Is Nothing) OrElse (myStringArray.Length < 1))
     End Function
 
     Public Sub GoHarass()
-        Dim objects As String
+        Dim objects As Collection
         Dim dead As New Collection
         dead.Add("someinventory", "someinventory")
         dead.Add("woodinventory", "woodinventory")
@@ -1117,7 +1094,7 @@ trydeadagain:
                             'closer or farther?
                             If changeInDistance.ToString.Contains("-") Then
                                 'closer
-                                Debug.Print("")
+                                WriteMessageToGlobalChat("")
 
                                 logLabel.Text = logLabel.Text & "We are closer, running long" & vbCrLf
 
@@ -1144,7 +1121,7 @@ trydeadagain:
                             'closer or farther?
                             If changeInDistance.ToString.Contains("-") Then
                                 'closer
-                                Debug.Print("")
+                                WriteMessageToGlobalChat("")
 
                                 logLabel.Text = logLabel.Text & "We are closer, running long" & vbCrLf
 
@@ -1185,7 +1162,7 @@ trydeadagain:
                 logLabel.Text = logLabel.Text & "We are dead, respawning" & vbCrLf
 
                 'deadt
-                KillandRespawn(False)
+                DoRespawn(False)
             End If
         Loop
 
@@ -1196,10 +1173,6 @@ trydeadagain:
         Dim Generator As System.Random = New System.Random()
         Return Generator.Next(Min, Max)
     End Function
-
-    Public Sub SeekWood()
-
-    End Sub
 
     Private Sub logLabel_TextChanged(sender As Object, e As EventArgs) Handles logLabel.TextChanged
         logLabel.SelectionStart = logLabel.Text.Length
