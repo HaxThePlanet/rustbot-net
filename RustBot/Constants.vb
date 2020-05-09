@@ -13,9 +13,9 @@
     Public Const MOUSEEVENTF_MOVE As Integer = &H1
 
     'home location, no decimal
-    Public Const homex1 As Integer = -567
-    Public Const homey1 As Integer = 2
-    Public Const homez1 As Integer = 746
+    Public Const homex1 As Integer = -68
+    Public Const homey1 As Integer = 27
+    Public Const homez1 As Integer = 1131
 
     'this is for stuck detect, narrow view
     Public Const compareWidth As Integer = 50

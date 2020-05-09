@@ -154,7 +154,7 @@ Public Class Form1
         keyDownUpEvent = True
     End Sub
 
-    Public Sub RunMainThread(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
+    Public Sub RunMainThreadAsync(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
         keyLocal = key
         shiftLocal = shift
         durationInMilliLocal = durationInMilli
@@ -167,7 +167,7 @@ Public Class Form1
         ShiftUP()
 
         WriteMessageToGlobalChat("killing python")
-        Shell("taskkill /f /im python.exe")
+        Shell("taskkill /f /im python.exe", AppWinStyle.Hide)
 
         Application.Exit()
         End
@@ -310,8 +310,6 @@ Public Class Form1
 
         'run
         Run(Keys.W, False, 1500, False)
-        'wait for run to complete
-        'ResponsiveSleep(1800)
 
         'show map
         ShowMap()
@@ -347,20 +345,15 @@ Public Class Form1
 
         'main loop
         Do
+            'detect objects
             objects = DetectObjects(narrowRec)
 
-            'get rec
+            'get centerline
             moveToCenter = GetObjectsVerticleLinePosition(objects, "tree")
-
-            'hit inventory tab
-            'ShowInventory()
 
             'are we dead?
             If DetectSpecificObjects(dead, objects) = False Then
-                'turn off inventory tab
-                'HideInventory()
-
-                ''move until water isn't in view
+                'move until water isn't in view
                 'If DetectWater() Then
                 '    logLabel.Text = logLabel.Text & "Detected water, moving" & vbCrLf
                 '    MoveMouseMainThread(1500)
@@ -377,9 +370,9 @@ Public Class Form1
                     'point to objectos
                     MoveMouseMainThreadX(moveToCenter)
                     'wait for mouse move
-                    ResponsiveSleep(10)
+                    ResponsiveSleep(50)
 
-                    ''are we stuck? 
+                    'are we stuck? 
                     If AreWeStuck() = 0 Then
                         'we are stuck
                         WriteMessageToGlobalChat("good rec, stuck, performing action")
@@ -425,9 +418,10 @@ Public Class Form1
 
                         'bumping                                                
                         MoveMouseMainThreadX(GetRandom(-3500, 3500))
+                        ResponsiveSleep(100)
 
                         'run to a better area
-                        RunMainThread(Keys.W, True, 2000, False)
+                        RunMainThreadAsync(Keys.W, True, 2000, False)
                     End If
                 End If
                 'End If
@@ -439,6 +433,7 @@ Public Class Form1
                 DoRespawn(False)
             End If
         Loop
+
     End Sub
 
     Private Sub MainBrain()
@@ -490,14 +485,16 @@ Public Class Form1
         StartCuda()
 
         'always center our vision to horizon        
-        MovePlayerEyesToHorizon()
+        'MovePlayerEyesToHorizon()
 
         'waiting for a bag in
-        waitForaBagBlocking()
-        GoWood()
+        'waitForaBagBlocking()
+        'GoWood()
 
+        GoHome()
 
-        'GoHome()
+        'DoDoorScan()
+
         'CheckChest()
         'EmptyMyInventory()
     End Sub
@@ -511,7 +508,7 @@ Public Class Form1
     End Sub
 
 
-    Private Function fourCornerRadarRec() As String
+    Private Function fourCornerRadarRec(item As String) As String
         'for dead detect
         Dim dead As New Collection
         dead.Add("someinventory", "someinventory")
@@ -529,13 +526,14 @@ Public Class Form1
             objects = DetectObjects(False)
 
             'get rec
-            moveToCenter = GetObjectsVerticleLinePosition(objects, "door")
+            moveToCenter = GetObjectsVerticleLinePosition(objects, item)
 
             'hit inventory tab
             'ShowInventory()
 
             'are we dead?
             If DetectSpecificObjects(dead, objects) = False Then
+                'not dead
                 'good rec?
                 If moveToCenter <> 0 Then
                     'good rec   
@@ -614,7 +612,7 @@ Public Class Form1
         ResponsiveSleep(500)
 
         'run to box
-        RunMainThread(Keys.W, True, 2000, False)
+        RunMainThreadAsync(Keys.W, True, 2000, False)
         ResponsiveSleep(2000)
 
         'crouch
@@ -861,35 +859,133 @@ Public Class Form1
 
     Private Sub HowFarToRunTime(distanceFromHome As String)
         If distanceFromHome > 100 Then
-            RunMainThread(Keys.W, True, 12000, True)
-            ResponsiveSleep(12000)
+            RunMainThreadAsync(Keys.W, True, 7000, True)
+            ResponsiveSleep(7000)
             Exit Sub
         End If
 
         If distanceFromHome > 75 Then
-            RunMainThread(Keys.W, True, 8000, True)
-            ResponsiveSleep(8000)
+            RunMainThreadAsync(Keys.W, True, 5000, True)
+            ResponsiveSleep(5000)
             Exit Sub
         End If
 
         If distanceFromHome > 50 Then
-            RunMainThread(Keys.W, True, 2500, True)
-            ResponsiveSleep(2500)
+            Run(Keys.W, True, 3000, True)
+            ResponsiveSleep(3000)
             Exit Sub
         End If
 
         If distanceFromHome > 40 Then
-            RunMainThread(Keys.W, False, 1500, False)
-            ResponsiveSleep(1500)
+            Run(Keys.W, True, 2500, False)
+            ResponsiveSleep(2500)
             Exit Sub
         End If
 
         If distanceFromHome <= 40 Then
-            RunMainThread(Keys.W, False, 1500, False)
-            ResponsiveSleep(1500)
+            RunMainThreadAsync(Keys.W, False, 2500, False)
+            ResponsiveSleep(2500)
             Exit Sub
         End If
     End Sub
+
+    Public Function DoDoorScan() As Boolean
+        Debug.Print("doing door scan")
+
+        Debug.Print("backing up")
+
+        'backup a bit        
+        Run(Keys.S, True, 2500, False)
+
+        Debug.Print("detecting doors")
+
+        'check this wall for a door
+        Dim objects = DetectObjects(False)
+
+        'get rec for a door
+        Dim moveToCenter = GetObjectsVerticleLinePosition(objects, "door")
+
+        If moveToCenter <> 0 Then
+            'walk to that door
+            Debug.Print("found a door")
+
+            Return True
+        Else
+            'move and check the next side
+            Debug.Print("did not find a door 1, checking again")
+
+            'rotate to next side of building
+            Run(Keys.D, True, 3000, False)
+            Run(Keys.W, True, 1500, False)
+            MoveMouseMainThreadX(-Constants.eachMoveInFullTurn)
+            ResponsiveSleep(50)
+
+            'check this wall for a door
+            objects = DetectObjects(False)
+
+            'get rec for a door
+            moveToCenter = GetObjectsVerticleLinePosition(objects, "door")
+
+            If moveToCenter <> 0 Then
+                'walk to that door
+                Debug.Print("found a door")
+                Return True
+            Else
+                'move and check the next side
+                Debug.Print("did not find a door 2, checking again")
+
+                'rotate to next side of building
+                Run(Keys.D, True, 3000, False)
+                Run(Keys.W, True, 1500, False)
+                MoveMouseMainThreadX(-Constants.eachMoveInFullTurn)
+                ResponsiveSleep(50)
+
+                'check this wall for a door
+                objects = DetectObjects(False)
+
+                'get rec for a door
+                moveToCenter = GetObjectsVerticleLinePosition(objects, "door")
+
+                If moveToCenter <> 0 Then
+                    'walk to that door
+                    Debug.Print("found a door")
+                    Return True
+                Else
+                    'move and check the next side
+                    Debug.Print("did not find a door 3, checking again")
+
+                    'rotate to next side of building
+                    Run(Keys.D, True, 3000, False)
+                    Run(Keys.W, True, 1500, False)
+                    MoveMouseMainThreadX(-Constants.eachMoveInFullTurn)
+                    ResponsiveSleep(50)
+
+                    'check this wall for a door
+                    objects = DetectObjects(False)
+
+                    'get rec for a door
+                    moveToCenter = GetObjectsVerticleLinePosition(objects, "door")
+
+                    If moveToCenter <> 0 Then
+                        'walk to that door
+                        Debug.Print("found a door")
+                        Return True
+                    Else
+                        'move and check the next side
+                        Debug.Print("did not find a door 4, checking again")
+
+                        'rotate to next side of building
+                        Run(Keys.D, True, 3000, False)
+                        Run(Keys.W, True, 1500, False)
+                        MoveMouseMainThreadX(-Constants.eachMoveInFullTurn)
+                        ResponsiveSleep(50)
+                    End If
+                End If
+            End If
+        End If
+
+        Return False
+    End Function
 
     Public Sub GoHome()
         Do
@@ -927,7 +1023,7 @@ Public Class Form1
                 MoveMouseMainThreadX(GetRandom(-3500, 3500))
                 ResponsiveSleep(500)
 
-                RunMainThread(Keys.W, True, 1000, True)
+                RunMainThreadAsync(Keys.W, True, 1000, True)
             Else
                 If distanceFromHomeMoved > 50 Or distanceFromHomeMoved.ToString.Contains("-") Then
                     'closer or farther?
@@ -951,41 +1047,66 @@ Public Class Form1
 
                     'stop running                
                     logLabel.Text = logLabel.Text & "we are home!" & vbCrLf
-                    KeyUpOnly(Keys.W, True, 100, False)
+                    'KeyUpOnly(Keys.W, True, 100, False)
 
-                    WriteMessageToGlobalChat("entering close base mode")
+                    WriteMessageToGlobalChat("entering close base mode, looking for walls")
 
                     Do
                         'is our base here?
-                        Dim moveToCenter As Integer = fourCornerRadarRec()
+                        Dim moveToCenter As Integer = fourCornerRadarRec("stonewall")
 
                         'have an object to point to?
                         If moveToCenter = 0 Then
                             'nope
-                            WriteMessageToGlobalChat("didn't find a base")
+                            WriteMessageToGlobalChat("didn't find a base wall")
 
                             'get out of close to home, no base found
                             Exit Do
                         Else
-                            WriteMessageToGlobalChat("found a base, turning and running to = " & moveToCenter)
+                            WriteMessageToGlobalChat("found a base wall, turning and running to = " & moveToCenter)
 
                             'yup                
                             MoveMouseMainThreadX(moveToCenter)
                             ResponsiveSleep(500)
 
                             'run to it        
-                            'Run(Keys.W, True, 2500, False)
+                            Run(Keys.W, True, 2500, False)
 
                             'stuck?
                             If AreWeStuck() = 0 Then
                                 'yes, perform action
-                                WriteMessageToGlobalChat("stuck at door, dumping resources")
+                                WriteMessageToGlobalChat("stuck at wall, doing door scan")
+
+                                If DoDoorScan() Then
+                                    Debug.Print("we have a door, inching towards it")
+
+                                    'inching towards door
+                                    Do
+                                        Debug.Print("we have a door, inching towards it loop")
+
+                                        'detect objects
+                                        Dim objects = DetectObjects(False)
+
+                                        'get centerline
+                                        moveToCenter = GetObjectsVerticleLinePosition(objects, "door")
+
+                                        'run to it        
+                                        Run(Keys.W, False, 100, False)
+
+                                        If AreWeStuck() = 0 Then
+                                            Debug.Print("we are stuck against door")
+
+                                            End
+                                        End If
+                                    Loop
+                                Else
+                                                Debug.Print("no door found")
+                                End If
 
                                 'dumping resources
-                                DumpResourcesAtBaseDoorNowAndDie()
+                                'DumpResourcesAtBaseDoorNowAndDie()
 
-                                WriteMessageToGlobalChat("resources dumped, killing")
-
+                                'WriteMessageToGlobalChat("resources dumped, killing")                                
                                 Exit Do
                             Else
                                 'not stuck, just keep going
@@ -1051,7 +1172,7 @@ Public Class Form1
                 Dim distanceFromHome = currentPosition(3)
 
                 logLabel.Text = logLabel.Text & "Distance from home: " & distanceFromHome & " Running " & HowFarToRun & vbCrLf
-                RunMainThread(Keys.W, True, HowFarToRun, True)
+                RunMainThreadAsync(Keys.W, True, HowFarToRun, True)
                 ResponsiveSleep(HowFarToRun)
 
                 Dim currentPositionMoved As Array = GetCurrentPosition()
@@ -1087,7 +1208,7 @@ Public Class Form1
                         'move right a few deg
                         MoveMouseMainThreadX(GetRandom(-1500, 1500))
 
-                        RunMainThread(Keys.W, True, 1000, True)
+                        RunMainThreadAsync(Keys.W, True, 1000, True)
                         ResponsiveSleep(1000)
                     Else
                         If distanceFromHomeMoved > 70 Or distanceFromHomeMoved.ToString.Contains("-") Then

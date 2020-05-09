@@ -175,11 +175,24 @@ Module Utilitys
 
         WriteMessageToGlobalChat("done taking screenshot, waiting for rec results")
 
+        'wait for  file to exist
+        '        Do Until File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png") = True
+        'waitagain:
+        '            'file exists, wait for lock to come off
+        '            ResponsiveSleep(1000)
+
+        '            If IsFileUnavailable("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Image_Detection_Results\processmedone_rust.png") Then
+        '                ResponsiveSleep(1000)
+        '                GoTo waitagain
+        '            End If
+        '        Loop
+
         'wait for collection of rec objects to be done
         Do Until File.Exists("C:\Users\bob\Documents\TrainYourOwnYOLO\Data\Source_Images\Test_Images\processmedone.png") = False
-            Thread.Sleep(10)
+            ResponsiveSleep(100)
         Loop
 
+        'wait for available file lock
         WriteMessageToGlobalChat("done rec results")
 
         'show preview
@@ -445,6 +458,7 @@ trydeadagain:
         End If
 
         While targetTime.Subtract(DateTime.Now()).TotalMilliseconds > 0
+            Application.DoEvents()
             System.Threading.Thread.Sleep(kb_delay + kb_speed)
             If jumping Then
                 If targetTime.Subtract(DateTime.Now()).TotalMilliseconds.ToString.Contains("00") Then
@@ -572,7 +586,7 @@ trydeadagain:
 
 waitagain:
         If IsFileUnavailable(file) Then
-            ResponsiveSleep(10)
+            ResponsiveSleep(100)
             GoTo waitagain
         End If
 
@@ -589,7 +603,7 @@ waitagain:
 
 waitagain:
         If IsFileUnavailable(file) Then
-            ResponsiveSleep(10)
+            ResponsiveSleep(100)
             GoTo waitagain
         End If
 
@@ -612,7 +626,7 @@ waitagain:
         'wait for available file lock
 waitagain:
         If IsFileUnavailable(file) Then
-            Thread.Sleep(10)
+            Thread.Sleep(100)
             GoTo waitagain
         End If
 
@@ -670,9 +684,10 @@ waitagain:
     End Sub
 
     Public Sub ResponsiveSleep(ByRef iMilliSeconds As Integer)
-        Dim i As Integer, iHalfSeconds As Integer = iMilliSeconds / 500
+        Dim i As Integer, iHalfSeconds As Integer = iMilliSeconds / 50
         For i = 1 To iHalfSeconds
-            Threading.Thread.Sleep(500)
+            Application.DoEvents()
+            Threading.Thread.Sleep(50)
             Application.DoEvents()
         Next i
     End Sub
@@ -799,22 +814,22 @@ waitagain:
 
     Public Sub ShowMap()
         KeyDownOnly(Keys.G, False, 500, False)
-        ResponsiveSleep(50)
+        ResponsiveSleep(500)
     End Sub
 
     Public Sub HideMap()
         KeyUpOnly(Keys.G, False, 500, False)
-        ResponsiveSleep(50)
+        ResponsiveSleep(500)
     End Sub
 
     Public Sub ShowInventory()
         KeyDownUp(Keys.Tab, False, 500, False)
-        ResponsiveSleep(50)
+        ResponsiveSleep(500)
     End Sub
 
     Public Sub HideInventory()
         KeyDownUp(Keys.Tab, False, 500, False)
-        ResponsiveSleep(50)
+        ResponsiveSleep(500)
     End Sub
 
     Private processOutput As StringBuilder = Nothing
@@ -824,7 +839,7 @@ waitagain:
     Public Sub StartPythonBackend()
 
         WriteMessageToGlobalChat("killing python")
-        Shell("taskkill /f /im python.exe")
+        Shell("taskkill /f /im python.exe", AppWinStyle.Hide)
 
         'wait for video mem to clear up
         ResponsiveSleep(5000)
