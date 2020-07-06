@@ -166,8 +166,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="OrderControl.vb" />
     <Compile Include="ScreenCapture.vb" />
     <Compile Include="SendInputClass.vb" />
+    <Compile Include="SQL.vb" />
     <Compile Include="Utility.vb" />
   </ItemGroup>
   <ItemGroup>
