@@ -104,7 +104,7 @@ Partial Class Form1
         '
         Me.environmentLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.environmentLabel.Location = New System.Drawing.Point(13, 587)
-        Me.environmentLabel.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.environmentLabel.Margin = New System.Windows.Forms.Padding(2)
         Me.environmentLabel.Multiline = True
         Me.environmentLabel.Name = "environmentLabel"
         Me.environmentLabel.Size = New System.Drawing.Size(472, 266)
@@ -126,7 +126,7 @@ Partial Class Form1
         '
         Me.logLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.logLabel.Location = New System.Drawing.Point(500, 587)
-        Me.logLabel.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.logLabel.Margin = New System.Windows.Forms.Padding(2)
         Me.logLabel.Multiline = True
         Me.logLabel.Name = "logLabel"
         Me.logLabel.ScrollBars = System.Windows.Forms.ScrollBars.Both
@@ -157,10 +157,11 @@ Partial Class Form1
         Me.Controls.Add(Me.movingText)
         Me.Controls.Add(Me.inventoryLabel)
         Me.Controls.Add(Me.inventoryText)
-        Me.Margin = New System.Windows.Forms.Padding(1, 1, 1, 1)
+        Me.Margin = New System.Windows.Forms.Padding(1)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Form1"
+        Me.WindowState = System.Windows.Forms.FormWindowState.Minimized
         CType(Me.pic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

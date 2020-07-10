@@ -4,9 +4,25 @@
             If state.Equals("start") Then
                 'kill first
                 Shell(Constants.rustKillCommand)
-                'wait for clearout
                 ResponsiveSleep(1000)
-                Shell(Constants.rustStartCommand)
+
+                Shell("C:\Program Files (x86)\Steam\Steam.exe steam://rungameid/252490")
+
+                'center
+                'Form1.Win32.SetCursorPos(500, 500)
+                'ResponsiveSleep(250)
+                'LeftMouseClick()
+                'ResponsiveSleep(250)
+                'KeyDownUp(Keys.R, False, 1, False)
+                'ResponsiveSleep(250)
+                'KeyDownUp(Keys.R, False, 1, False)
+                'ResponsiveSleep(250)
+                'KeyDownUp(Keys.Enter, False, 1, False)
+                'ResponsiveSleep(250)
+
+                'wait for clearout
+                'ResponsiveSleep(1000)
+                'Shell(Constants.rustStartCommand)
             End If
             If state.Equals("stop") Then
                 Shell(Constants.rustKillCommand)
@@ -335,10 +351,7 @@
         If mode.Equals("harass") Then
             SQL.SqlUpdate("update [game-bots].[dbo].[rust-bot-state] Set [orderState] = 'running' where [orderNumber] = '" & orderNumber & "'", "game-bots", "rust-bot-state")
 
-            'harass
             Form1.GoHome(True)
         End If
-
-
     End Function
 End Module

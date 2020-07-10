@@ -17,26 +17,23 @@ Public Class Form1
     Private Shared Sub mouse_event(ByVal dwFlags As Integer, ByVal dx As Integer, ByVal dy As Integer, ByVal dwData As Integer, ByVal dwExtraInfo As Integer)
     End Sub
 
-    Public moveMouseEventX As Boolean
-    Public moveMouseHowFarX As Integer
-    Public moveMouseEventY As Boolean
-    Public moveMouseHowFarY As Integer
-    Public leftClickEvent As Boolean
-    Dim keyDownEvent As Boolean
-    Dim keyLocal As Byte
-    Dim shiftLocal As Boolean
-    Dim durationInMilliLocal As Integer
-    Dim jumpingLocal As Boolean
-    Public HowFarToRun As Integer = 5000
-    Public runEvent As Boolean
+    Public Shared goHomeBlastAudioVar As Boolean
+    Public Shared moveMouseEventX As Boolean
+    Public Shared moveMouseHowFarX As Integer
+    Public Shared moveMouseEventY As Boolean
+    Public Shared moveMouseHowFarY As Integer
+    Public Shared leftClickEvent As Boolean
+    Public Shared keyDownEvent As Boolean
+    Public Shared keyLocal As Byte
+    Public Shared shiftLocal As Boolean
+    Public Shared durationInMilliLocal As Integer
+    Public Shared jumpingLocal As Boolean
+    Public Shared HowFarToRun As Integer = 5000
+    Public Shared runEvent As Boolean
     Public Shared previewImageEvent As Boolean
-    Public keyDownUpEvent As Boolean
+    Public Shared keyDownUpEvent As Boolean
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.Show()
-        Me.Refresh()
-        Me.BringToFront()
-
         ResponsiveSleep(5000)
 
         ShiftUP()
@@ -46,6 +43,11 @@ Public Class Form1
         MainLoopThread.Start()
 
         Do
+            If goHomeBlastAudioVar Then
+                goHomeBlastAudioVar = False
+                GoHome(True)
+            End If
+
             'bump mouse x
             If moveMouseEventX Then
                 moveMouseEventX = False
@@ -126,7 +128,7 @@ Public Class Form1
         fs.Close()
     End Sub
 
-    Public Sub MoveMouseMainThreadX(howFarX As Integer)
+    Public Shared Sub MoveMouseMainThreadX(howFarX As Integer)
         moveMouseHowFarX = howFarX
         moveMouseEventX = True
     End Sub
@@ -136,7 +138,7 @@ Public Class Form1
         moveMouseEventY = True
     End Sub
 
-    Public Sub KeyDownMainThread(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
+    Public Shared Sub KeyDownMainThread(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
         keyLocal = key
         shiftLocal = shift
         durationInMilliLocal = durationInMilli
@@ -154,7 +156,7 @@ Public Class Form1
         keyDownUpEvent = True
     End Sub
 
-    Public Sub RunMainThreadAsync(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
+    Public Shared Sub RunMainThreadAsync(ByVal key As Byte, shift As Boolean, ByVal durationInMilli As Integer, jumping As Boolean)
         keyLocal = key
         shiftLocal = shift
         durationInMilliLocal = durationInMilli
@@ -403,7 +405,7 @@ Public Class Form1
         ResponsiveSleep(250)
     End Sub
 
-    Private Function AreWeStuck() As Boolean
+    Public Shared Function AreWeStuck() As Boolean
         'bring up map
         ShowMap()
 
@@ -627,15 +629,16 @@ getWoodAgain:
 
 
         'waiting for a bag in
-        'waitForaBagBlocking()
+        'waitForaBagBlocking()        
 
-        'GoHome(True)
+        'startChromeAudio("https://www.youtube.com/watch?v=3BS5uGSwKwA")
 
-        While True
-            'retrieve orders
+
+
+        'retrieve orders
+        Do
             Dim order As String
             order = tryPickupOrder()
-
             'have order?
             If order <> "" Then
                 Dim theSplit = Split(order, "|")
@@ -647,6 +650,12 @@ getWoodAgain:
                 Dim orderState As String = theSplit(5)
                 Dim orderNumber As String = theSplit(6)
 
+                'set map location
+                Dim eachSplit = Split(coords, ",")
+                Constants.homex1 = LTrim(RTrim(eachSplit(0)))
+                Constants.homey1 = LTrim(RTrim(eachSplit(1)))
+                Constants.homez1 = LTrim(RTrim(eachSplit(2)))
+
                 'already processed?
                 If orderState.Equals("processing") Then
                     'no, process
@@ -657,7 +666,7 @@ getWoodAgain:
             End If
 
             ResponsiveSleep(10000)
-        End While
+        Loop
 
 
         'DoDoorScan()
@@ -712,8 +721,7 @@ getWoodAgain:
         ResponsiveSleep(10000)
         WriteMessageToGlobalChat("cuda should be up")
     End Sub
-
-    Private Function fourCornerRadarRec(item As Collection) As String
+    Public Shared Function fourCornerRadarRec(item As Collection) As String
         Dim moveToCenter As Integer = 0
         Dim objects As Collection
 
@@ -745,7 +753,7 @@ getWoodAgain:
         Return 0
     End Function
 
-    Private Sub DumpResourcesAtBaseDoorNowAndDie()
+    Public Shared Sub DumpResourcesAtBaseDoorNowAndDie()
         WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), opening door")
 
         'open door
@@ -820,7 +828,7 @@ getWoodAgain:
         waitForaBagBlocking()
     End Sub
 
-    Public Sub CheckChest()
+    Public Shared Sub CheckChest()
         'open box
         KeyDownUp(Keys.E, False, 250, False)
         ResponsiveSleep(250)
@@ -830,7 +838,7 @@ getWoodAgain:
         ResponsiveSleep(250)
     End Sub
 
-    Public Sub EmptyMyInventory()
+    Public Shared Sub EmptyMyInventory()
         ResponsiveSleep(1000)
 
         Win32.SetCursorPos(701, 600)
@@ -1147,7 +1155,7 @@ getWoodAgain:
     '    CloseInventory()
     'End Sub
 
-    Private Sub CloseInventory()
+    Public Shared Sub CloseInventory()
         ShiftUP()
 
         'close inventory
@@ -1206,7 +1214,7 @@ getWoodAgain:
         'ResponsiveSleep(1000)
     End Sub
 
-    Private Sub HowFarToRunTime(distanceFromHome As String)
+    Public Shared Sub HowFarToRunTime(distanceFromHome As String)
         If distanceFromHome > 100 Then
             RunMainThreadAsync(Keys.W, True, 7000, True)
             ResponsiveSleep(7000)
@@ -1238,7 +1246,7 @@ getWoodAgain:
         End If
     End Sub
 
-    Public Function DoDoorScan() As Boolean
+    Public Shared Function DoDoorScan() As Boolean
         Dim backupDistance As Integer = 2000
         Dim moveForwardDistance As Integer = 2800
         Dim moveLeftDistance As Integer = 4500
@@ -1340,7 +1348,7 @@ getWoodAgain:
         Return False
     End Function
 
-    Public Sub GoHome(Optional audioHarass As Boolean = False)
+    Public Shared Sub GoHome(Optional audioHarass As Boolean = False)
         Dim foundHomeMessage As Boolean
 
         Dim objects As New Collection
@@ -1356,12 +1364,6 @@ getWoodAgain:
         dead.Add("respawn", "respawn")
         dead.Add("sleepingbag", "sleepingbag")
         dead.Add("dead", "dead")
-
-        'audio harassment?
-        If audioHarass Then
-            'enable audio blaster!
-            KeyDownMainThread(Keys.V, False, 10, False)
-        End If
 
         Do
             'make day
@@ -1398,17 +1400,23 @@ tryAgain:
 
             WriteMessageToGlobalChat("change in distance: " & changeInDistance)
 
+            If changeInDistance = 0 Then
+                DoRespawn(False)
+            End If
+
             'move until water isn't in view
             'If DetectWater() Then
             '    WriteMessageToGlobalChat("Detected water, moving" )
             '    MoveMouseMainThread(1500)
             'End If
 
-            'are we dead?
+            'are we dead?           
+
+
             objects = DetectObjects(False)
             If DetectSpecificObjects(dead, objects) Then
                 DoRespawn(False)
-                Exit Sub
+                GoHome(audioHarass)
             End If
 
             'bad rec?
@@ -1469,7 +1477,7 @@ tryAgain:
                         objects = DetectObjects(False)
                         If DetectSpecificObjects(dead, objects) Then
                             DoRespawn(False)
-                            Exit Sub
+                            GoHome(audioHarass)
                         End If
 
                         'is our base here?
@@ -1494,6 +1502,12 @@ tryAgain:
 
                             'stuck?
                             If AreWeStuck() = 0 Then
+                                'audio harassment?
+                                If audioHarass Then
+                                    'enable audio blaster!
+                                    KeyDownMainThread(Keys.V, False, 10, False)
+                                End If
+
                                 'yes, perform action
                                 WriteMessageToGlobalChat("stuck at wall, doing door scan")
 
@@ -1506,7 +1520,13 @@ tryAgain:
                                         objects = DetectObjects(False)
                                         If DetectSpecificObjects(dead, objects) Then
                                             DoRespawn(False)
-                                            Exit Sub
+                                            GoHome(audioHarass)
+                                        End If
+
+                                        'audio harassment?
+                                        If audioHarass Then
+                                            'enable audio blaster!
+                                            KeyDownMainThread(Keys.V, False, 10, False)
                                         End If
 
                                         Debug.Print("we have a door, inching towards it loop")
@@ -1576,7 +1596,7 @@ tryAgain:
         Win32.SetCursorPos(W, H)
     End Sub
 
-    Public Function GetRandom(ByVal Min As Integer, ByVal Max As Integer) As Integer
+    Public Shared Function GetRandom(ByVal Min As Integer, ByVal Max As Integer) As Integer
         Dim Generator As System.Random = New System.Random()
         Return Generator.Next(Min, Max)
     End Function

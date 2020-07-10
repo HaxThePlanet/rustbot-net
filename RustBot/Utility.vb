@@ -498,7 +498,7 @@ tryAgain:
             sendMessage("i died, respawning")
         End If
 
-        WriteMessageToGlobalChat("tWaiting for respawn")
+        WriteMessageToGlobalChat("Waiting for respawn")
 
         'wait for respawn
         ResponsiveSleep(10000)
@@ -529,7 +529,7 @@ trydeadagain:
         End If
     End Function
 
-    Private Sub ClickAllBagsAndRespawn()
+    Public Sub ClickAllBagsAndRespawn()
         Dim p As Form1.Win32.POINT = New Form1.Win32.POINT
         Form1.Win32.ClientToScreen(Form1.Handle, p)
 
@@ -558,7 +558,7 @@ trydeadagain:
         'third bag
         Form1.Win32.SetCursorPos(682, 1014)
         LeftMouseClick()
-        Form1.leftClickEvent = true
+        Form1.leftClickEvent = True
         ResponsiveSleep(1000)
 
     End Sub
@@ -885,7 +885,6 @@ waitagain:
                 End Try
             End If
         Next
-
     End Function
 
     Public Sub ResizeImageOnDisk(path As String)
@@ -1023,7 +1022,8 @@ waitagain:
     Public detectedBuffer As New Collection
 
     Public Sub startChromeAudio(link As String)
-        Shell("C:\Program Files\internet explorer\iexplore.exe " & link, AppWinStyle.Hide)
+        'Shell("taskkill /f /im iexplore.exe")
+        Shell("C:\Program Files\internet explorer\iexplore.exe " & link)
     End Sub
 
     Public Sub StartPythonBackend()
