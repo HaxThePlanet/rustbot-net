@@ -36,6 +36,12 @@
 
     '104.207.149.205|28036|-597.3,18.0,1134.3|harass|https://www.youtube.com/watch?v=3BS5uGSwKwA
     Public Function executeOrder(order As String)
+        Dim dead As New Collection
+        dead.Add("respawn", "respawn")
+        dead.Add("sleepingbag", "sleepingbag")
+        dead.Add("dead", "dead")
+        dead.Add("wounded", "wounded")
+
         Debug.Print("executing order " & order)
 
         Dim theSplit = Split(order, "|")
@@ -62,7 +68,7 @@
         'bring up console
         KeyDownUp(Keys.F1, False, 1, False)
         'min
-        ResponsiveSleep(250)
+        ResponsiveSleep(500)
 
         'connect to server
         KeyDownUp(Keys.C, False, 1, False)
@@ -331,10 +337,10 @@
 
         'connect
         KeyDownUp(Keys.Enter, False, 1, False)
-        ResponsiveSleep(250)
+        ResponsiveSleep(500)
         'close console
         KeyDownUp(Keys.F1, False, 1, False)
-        ResponsiveSleep(250)
+        ResponsiveSleep(500)
 
         Debug.Print("waiting for map to load")
 
@@ -350,6 +356,16 @@
         'what command
         If mode.Equals("harass") Then
             SQL.SqlUpdate("update [game-bots].[dbo].[rust-bot-state] Set [orderState] = 'running' where [orderNumber] = '" & orderNumber & "'", "game-bots", "rust-bot-state")
+
+            WriteLog("checking if we're dead")
+
+            'are we dead?
+            Dim objects As Collection = DetectObjects(False)
+            If DetectSpecificObjects(dead, objects) Then
+                WriteLog("we are dead")
+
+                DoRespawn(False)
+            End If
 
             Form1.GoHome(True)
         End If

@@ -55,7 +55,7 @@ Module Utilitys
         Dim hisLabel As String
         Dim lastObject As String
 
-        WriteMessageToGlobalChat("minProbability = " & minProbability & " Found " & objects.Count & " objects")
+        WriteLog("minProbability = " & minProbability & " Found " & objects.Count & " objects")
         Application.DoEvents()
 
         For i = 1 To objects.Count
@@ -73,7 +73,7 @@ Module Utilitys
 
             'does he have enough sureity?
             If theProbNew >= minProbability Then
-                WriteMessageToGlobalChat("Processing Object = " & theSplitNext(0) & " " & theProbNew)
+                WriteLog("Processing Object = " & theSplitNext(0) & " " & theProbNew)
 
                 'WriteMessageToGlobalChat("xmin = " & xmin)
                 'WriteMessageToGlobalChat("ymin = " & ymin)
@@ -104,7 +104,7 @@ Module Utilitys
                     End If
                 End If
             Else
-                WriteMessageToGlobalChat("probability too low, skipping object")
+                WriteLog("probability too low, skipping object")
             End If
         Next
 
@@ -113,25 +113,36 @@ Module Utilitys
         If lastObjectCenterline = 0 Then
         Else
             lastObjectCenterline = lastObjectCenterline - Constants.myCenterIs
-            WriteMessageToGlobalChat("Pointing at widest object = " & lastObject & " prob = " & highestProb & " width = " & lastGlobalWidth & " offset = " & lastObjectCenterline)
+            WriteLog("Pointing at widest object = " & lastObject & " prob = " & highestProb & " width = " & lastGlobalWidth & " offset = " & lastObjectCenterline)
         End If
 
         Return lastObjectCenterline
     End Function
 
-    Public Function WriteMessageToGlobalChat(msg As String)
+    Private messageLock As New Object
+    Public Function WriteLog(msg As String)
         'Dim I As Integer
 
         'msg = msg.Replace(":  ", Nothing)
         'msg = msg.Replace(",", Nothing)
         'msg = msg.Replace("!", Nothing)
-        'msg = msg.Replace(".", Nothing)
 
         'msg = msg.ToLower()
 
-        Debug.Print(msg)
+        SyncLock messageLock
+            Debug.Print(msg)
+            'My.Computer.FileSystem.WriteAllText("log.txt", msg & " " & DateTime.Now, True)
 
-        ''open chat
+            Dim file As System.IO.StreamWriter
+
+            file = My.Computer.FileSystem.OpenTextFileWriter("log.txt", True)
+
+            file.WriteLine(msg)
+            file.Close()
+        End SyncLock
+
+
+        'open chat
         'KeyDownUp(Keys.T, False, 10, False)
         'ResponsiveSleep(500)
 
@@ -169,8 +180,8 @@ tryAgain:
             Return detectedBuffer
         End If
 
-        WriteMessageToGlobalChat("begin detecting objects")
-        WriteMessageToGlobalChat("clearing global objects")
+        WriteLog("begin detecting objects")
+        WriteLog("clearing global objects")
 
         'clear detected global
         detectedBuffer.Clear()
@@ -179,7 +190,7 @@ tryAgain:
 
         'kill
         If File.Exists("C:\Users\bob\yolov5\input\processmedone.png") Then Kill("C:\Users\bob\yolov5\input\processmedone.png")
-        WriteMessageToGlobalChat("taking screenshot")
+        WriteLog("taking screenshot")
 
         'narrow view to hone in on specific object
         If narrowView Then
@@ -190,7 +201,7 @@ tryAgain:
             TakeScreenShotWhole("C:\Users\bob\yolov5\input\processme.png")
         End If
 
-        WriteMessageToGlobalChat("done taking screenshot, waiting for rec results")
+        WriteLog("done taking screenshot, waiting for rec results")
 
         'wait for collection of rec objects to be done
         Do Until File.Exists("C:\Users\bob\yolov5\input\processmedone.png") = False
@@ -198,12 +209,12 @@ tryAgain:
         Loop
 
         'wait for available file lock
-        WriteMessageToGlobalChat("done rec results")
+        WriteLog("done rec results")
 
         'show preview
         Form1.previewImageEvent = True
 
-        WriteMessageToGlobalChat("done detect objects")
+        WriteLog("done detect objects")
 
         If shouldRetry Then
             'anything in buffer?
@@ -212,7 +223,7 @@ tryAgain:
                 mouse_event(Constants.MOUSEEVENTF_MOVE, Form1.GetRandom(-3500, 3500), 0, 0, 0)
                 ResponsiveSleep(500)
 
-                WriteMessageToGlobalChat("no objects, moving, retrying")
+                WriteLog("no objects, moving, retrying")
 
                 GoTo tryAgain
             End If
@@ -230,24 +241,24 @@ tryAgain:
 
         'main loop
         Do
-            WriteMessageToGlobalChat("checking for chests")
+            WriteLog("checking for chests")
 
             'see any?
             objects = DetectObjects(False)
             If DetectSpecificObjects(storage, objects) = False Then
                 'yes
-                WriteMessageToGlobalChat("found chest")
+                WriteLog("found chest")
 
                 'turn on crouch
                 KeyDownOnly(Keys.ControlKey, False, 50, False)
 
                 'walk up to chest
-                WriteMessageToGlobalChat("walking up to chest")
+                WriteLog("walking up to chest")
                 Form1.CheckChest()
                 Form1.EmptyMyInventory()
             Else
                 'no
-                WriteMessageToGlobalChat("no chests found bumping")
+                WriteLog("no chests found bumping")
 
                 'bump
                 Form1.MoveMouseMainThreadX(Form1.GetRandom(-3500, 3500))
@@ -269,7 +280,7 @@ tryAgain:
 
         'main loop
         Do
-            WriteMessageToGlobalChat("killing myself to check for bag")
+            WriteLog("killing myself to check for bag")
 
             'die
             DoRespawn(True)
@@ -277,20 +288,20 @@ tryAgain:
             'wait
             ResponsiveSleep(10000)
 
-            WriteMessageToGlobalChat("killing myself to check for bag")
+            WriteLog("killing myself to check for bag")
 
             'see any bags?
             objects = DetectObjects(False)
             If DetectSpecificObjects(dead, objects) = False Then
                 'yes
-                WriteMessageToGlobalChat("we're dead got bags, respawning")
+                WriteLog("we're dead got bags, respawning")
                 ClickAllBagsAndRespawn()
 
                 'we're spawned into users location
                 Return True
             Else
                 'no bags, wait to respawn
-                WriteMessageToGlobalChat("we're dead no bags, waiting")
+                WriteLog("we're dead no bags, waiting")
 
                 'wait
                 ResponsiveSleep(30000)
@@ -465,7 +476,7 @@ tryAgain:
 
     Public Function DoRespawn(kill As Boolean)
         'On Error Resume Next
-        WriteMessageToGlobalChat("KillandRespawn")
+        WriteLog("respawning")
 
         Dim dead As New Collection
         dead.Add("someinventory", "someinventory")
@@ -473,13 +484,14 @@ tryAgain:
         dead.Add("respawn", "respawn")
         dead.Add("sleepingbag", "sleepingbag")
         dead.Add("dead", "dead")
+        dead.Add("wounded", "wounded")
         dead.Add("map", "map")
 
         'need kill?
         If kill Then
             sendMessage("killing myself, going back out")
 
-            WriteMessageToGlobalChat("Killing")
+            WriteLog("Killing")
 
             'bring up console
             KeyDownUp(Keys.F1, False, 1, False)
@@ -498,7 +510,7 @@ tryAgain:
             sendMessage("i died, respawning")
         End If
 
-        WriteMessageToGlobalChat("Waiting for respawn")
+        WriteLog("Waiting for respawn")
 
         'wait for respawn
         ResponsiveSleep(10000)
@@ -514,7 +526,7 @@ trydeadagain:
         'wait to wake up
         ResponsiveSleep(10000)
 
-        WriteMessageToGlobalChat("Coming back to life")
+        WriteLog("Coming back to life")
 
         'click wakeup
         LeftMouseClick()
@@ -530,8 +542,10 @@ trydeadagain:
     End Function
 
     Public Sub ClickAllBagsAndRespawn()
-        Dim p As Form1.Win32.POINT = New Form1.Win32.POINT
-        Form1.Win32.ClientToScreen(Form1.Handle, p)
+        WriteLog("ClickAllBagsAndRespawn")
+
+        'Dim p As Form1.Win32.POINT = New Form1.Win32.POINT
+        'Form1.Win32.ClientToScreen(Form1.Handle, p)
 
         'bag locations 4k
         '428, 2037
@@ -544,32 +558,41 @@ trydeadagain:
         '682, 1014
 
         'first bag
-        Form1.Win32.SetCursorPos(218, 1014)
+        Form1.Win32.SetCursorPos(205, 1014)
+        ResponsiveSleep(500)
         LeftMouseClick()
         Form1.leftClickEvent = True
         ResponsiveSleep(1000)
 
         'second bag
         Form1.Win32.SetCursorPos(458, 1014)
+        ResponsiveSleep(500)
         LeftMouseClick()
         Form1.leftClickEvent = True
         ResponsiveSleep(1000)
 
         'third bag
         Form1.Win32.SetCursorPos(682, 1014)
+        ResponsiveSleep(500)
         LeftMouseClick()
         Form1.leftClickEvent = True
         ResponsiveSleep(1000)
 
+        'waekup
+        ResponsiveSleep(1000)
+        LeftMouseClick()
+        Form1.leftClickEvent = True
+
+        WriteLog("done ClickAllBagsAndRespawn")
     End Sub
 
     Public Function DetectSpecificObjects(searchObjects As Collection, imageObjects As Collection) As Boolean
-        WriteMessageToGlobalChat("begin detect specific objects")
+        WriteLog("begin detect specific objects")
 
         Dim hisLabel As String
         Dim LastObject As String
 
-        WriteMessageToGlobalChat("Found " & imageObjects.Count & " objects")
+        WriteLog("Found " & imageObjects.Count & " objects")
         Application.DoEvents()
 
         For i = 1 To imageObjects.Count
@@ -585,7 +608,7 @@ trydeadagain:
             ymax = theSplitNext(5)
             hisLabel = theSplitNext(0)
 
-            WriteMessageToGlobalChat("Processing object = " & theSplitNext(0) & " " & theProbNew)
+            WriteLog("Processing object = " & theSplitNext(0) & " " & theProbNew)
 
             'Dim theSplitNext = Split(imageObjects(i), " ")
 
@@ -757,7 +780,7 @@ trydeadagain:
     End Sub
 
     Public Sub TakeScreenShotAreaStuck(file As String, width As Integer, height As Integer, sourceX As Integer, sourceY As Integer, destinationX As Integer, destinationY As Integer)
-        WriteMessageToGlobalChat("taking screenshot area")
+        WriteLog("taking screenshot area")
 
         Dim printscreen As Bitmap = New Bitmap(width, height)
         Dim graphics As Graphics = Graphics.FromImage(CType(printscreen, Image))
@@ -770,11 +793,11 @@ waitagain:
             GoTo waitagain
         End If
 
-        WriteMessageToGlobalChat("done taking screenshot area")
+        WriteLog("done taking screenshot area")
     End Sub
 
     Public Sub TakeScreenShotAreaRec(file As String, width As Integer, height As Integer, sourceX As Integer, sourceY As Integer, destinationX As Integer, destinationY As Integer)
-        WriteMessageToGlobalChat("taking screenshot area")
+        WriteLog("taking screenshot area")
 
         Dim printscreen As Bitmap = New Bitmap(width, height)
         Dim graphics As Graphics = Graphics.FromImage(CType(printscreen, Image))
@@ -790,7 +813,7 @@ waitagain:
         'move it
         System.IO.File.Move("C:\Users\bob\yolov5\input\processme.png", "C:\Users\bob\yolov5\input\processmedone.png")
 
-        WriteMessageToGlobalChat("done taking screenshot area")
+        WriteLog("done taking screenshot area")
     End Sub
 
     Public Sub TakeScreenShotWhole(file As String, Optional moveFile As Boolean = True)
@@ -857,7 +880,6 @@ waitagain:
             windowHandle = p.MainWindowHandle
             Exit For
         Next
-
 
         Dim SC As New ScreenShot.ScreenCapture
         Dim img As Image = SC.CaptureScreen()
@@ -962,7 +984,7 @@ waitagain:
 
         Dim theDiff As Byte(,) = firstBmp.GetDifferences(secondBmp)
 
-        WriteMessageToGlobalChat(String.Format("image difference {0:0.0} %", (theDiff)))
+        WriteLog(String.Format("image difference {0:0.0} %", (theDiff)))
 
         firstBmp.Dispose()
         secondBmp.Dispose()
@@ -1028,7 +1050,7 @@ waitagain:
 
     Public Sub StartPythonBackend()
 
-        WriteMessageToGlobalChat("killing python")
+        WriteLog("killing python")
         Shell("taskkill /f /im python.exe", AppWinStyle.Hide)
 
         'wait for video mem to clear up
@@ -1036,7 +1058,7 @@ waitagain:
 
         Dim processOptions As ProcessStartInfo = New ProcessStartInfo
         processOptions.FileName = "python.exe"
-        processOptions.Arguments = "-u C:\Users\bob\yolov5\detect.py --conf-thres 0.40 --source test.png --weights weights\last.pt --output output --img-size 608"
+        processOptions.Arguments = "-u C:\Users\bob\yolov5\detect.py --conf-thres 0.40 --source test.png --weights weights\best.pt --output output --img-size 608"
         processOptions.WorkingDirectory = "C:\Users\bob\yolov5"
         processOptions.UseShellExecute = False
         processOptions.CreateNoWindow = True
@@ -1062,7 +1084,7 @@ waitagain:
                     'rec item?                                        
                     'dont add this
                     If strLineAdd.Contains("Done.") Then
-                        WriteMessageToGlobalChat("adding rec result to global")
+                        WriteLog("adding rec result to global")
                         'Image 1 / 1 test.png
                         'rustbotresult 23 1241 445 1404 731 
                         'rustbotresult 8 1245 598 1267 633 
@@ -1083,11 +1105,11 @@ waitagain:
                     End If
 
                     'add all log messages
-                    WriteMessageToGlobalChat(strLine)
+                    WriteLog(strLine)
                 End If
             Loop
         Catch ex As Exception
-            WriteMessageToGlobalChat("Python crashed!")
+            WriteLog("Python crashed!")
         End Try
     End Sub
 
@@ -1188,7 +1210,7 @@ tryAgain:
         Dim postBefore As Array = GetCurrentPosition()
 
         If IsNullOrEmpty(postBefore) Then
-            WriteMessageToGlobalChat("FAILED TO GET POSITION, TRYING AGAIN")
+            WriteLog("FAILED TO GET POSITION, TRYING AGAIN")
             GoTo tryAgain
         End If
 
@@ -1197,19 +1219,19 @@ tryAgain:
             tempadd1 = tempadd1 + LTrim(RTrim(Double.Parse(postBefore.GetValue(I))))
         Next
 
-        WriteMessageToGlobalChat("Starting `run")
+        WriteLog("Starting `run")
 
         'run see if we moved
         Run(Keys.W, False, 500, False)
 
         Dim tempadd2 As Double
 
-        WriteMessageToGlobalChat("Done stuck run")
+        WriteLog("Done stuck run")
         'after
         Dim posAfter As Array = GetCurrentPosition()
 
         If IsNullOrEmpty(posAfter) Then
-            WriteMessageToGlobalChat("FAILED TO GET POSITION, TRYING AGAIN")
+            WriteLog("FAILED TO GET POSITION, TRYING AGAIN")
             GoTo tryAgain
         End If
 
@@ -1219,17 +1241,17 @@ tryAgain:
 
         If tempadd2 <> tempadd1 Then
             'bump me                        
-            WriteMessageToGlobalChat("We have moved")
+            WriteLog("We have moved")
             Return False
         Else
-            WriteMessageToGlobalChat("We have NOT moved")
+            WriteLog("We have NOT moved")
             Return True
         End If
     End Function
 
     Public Function GetCurrentPosition() As Array
 
-        WriteMessageToGlobalChat("Getting Position")
+        WriteLog("Getting Position")
 
         ResponsiveSleep(250)
 

@@ -132,3 +132,4 @@ C:\Users\Paperspace\Documents\rustbot-net\RustBot\obj\x86\Debug\RustBot.vbproj.C
 C:\Users\Paperspace\Documents\rustbot-net\RustBot\obj\x86\Debug\RustBot.exe
 C:\Users\Paperspace\Documents\rustbot-net\RustBot\obj\x86\Debug\RustBot.xml
 C:\Users\Paperspace\Documents\rustbot-net\RustBot\obj\x86\Debug\RustBot.pdb
+C:\Users\Paperspace\Documents\rustbot-net\RustBot\obj\x86\Debug\RustBot.vbprojAssemblyReference.cache

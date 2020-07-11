@@ -168,7 +168,7 @@ Public Class Form1
     Private Sub Form1_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         ShiftUP()
 
-        WriteMessageToGlobalChat("killing python")
+        WriteLog("killing python")
         Shell("taskkill /f /im python.exe", AppWinStyle.Hide)
 
         'UNcrouch
@@ -238,7 +238,7 @@ Public Class Form1
             'start inference for wood gather
             If DetectSpecificObjects(gathering, DetectObjects(False)) Then
                 'yes
-                WriteMessageToGlobalChat("gathering wood")
+                WriteLog("gathering wood")
 
                 'good inference, reset fail count
                 woodFails = 0
@@ -246,7 +246,7 @@ Public Class Form1
                 MoveMouseMainThreadX(Constants.rightTreeHitBump)
             Else
                 'no
-                WriteMessageToGlobalChat("NOT gathering wood")
+                WriteLog("NOT gathering wood")
 
                 'how many fails?
                 If woodFails >= Constants.maxGatheringWoodFailures Then
@@ -472,6 +472,7 @@ getWoodAgain:
         dead.Add("respawn", "respawn")
         dead.Add("sleepingbag", "sleepingbag")
         dead.Add("dead", "dead")
+        dead.Add("wounded", "wounded")
 
         'center to horizon
         MovePlayerEyesToHorizon()
@@ -508,7 +509,7 @@ getWoodAgain:
                     narrowRec = True
 
                     'good rec                                    
-                    WriteMessageToGlobalChat("good rec, moving to object centerline = " & moveToCenter)
+                    WriteLog("good rec, moving to object centerline = " & moveToCenter)
 
                     'point to objectos
                     MoveMouseMainThreadX(moveToCenter)
@@ -518,12 +519,12 @@ getWoodAgain:
                     'are we stuck? 
                     If AreWeStuck() = 0 Then
                         'we are stuck
-                        WriteMessageToGlobalChat("good rec, stuck, performing action")
+                        WriteLog("good rec, stuck, performing action")
                         HitTree()
 
                         'go drop?
                         If detectWoodInventoryCount() > Constants.woodStacksHomeReturnCount Then
-                            WriteMessageToGlobalChat("we've got wood stacks, dropping off")
+                            WriteLog("we've got wood stacks, dropping off")
                             sendMessage("got wood dropping off")
                             GoHome()
 
@@ -531,22 +532,22 @@ getWoodAgain:
                         End If
                     Else
                         'no
-                        WriteMessageToGlobalChat("goodw rec, we are not stuck")
+                        WriteLog("goodw rec, we are not stuck")
                     End If
                 Else
                     narrowRec = False
 
                     'no rec                
-                    WriteMessageToGlobalChat("bad rec")
+                    WriteLog("bad rec")
 
                     If AreWeStuck() = 0 Then
                         'we are stuck
-                        WriteMessageToGlobalChat("bad rec, we are stuck, performing action")
+                        WriteLog("bad rec, we are stuck, performing action")
                         HitTree()
 
                         'go drop
                         If detectWoodInventoryCount() > Constants.woodStacksHomeReturnCount Then
-                            WriteMessageToGlobalChat("we've got wood, dropping off")
+                            WriteLog("we've got wood, dropping off")
                             sendMessage("got wood dropping off")
                             GoHome()
                         End If
@@ -555,7 +556,7 @@ getWoodAgain:
                         'HitTree()
 
                         'no
-                        WriteMessageToGlobalChat("bad rec, we are NOT STUCK, searching elsewhere!")
+                        WriteLog("bad rec, we are NOT STUCK, searching elsewhere!")
 
                         'bumping                                                
                         MoveMouseMainThreadX(GetRandom(-1500, 1500))
@@ -569,7 +570,7 @@ getWoodAgain:
                 'End If
             Else
                 'we are dead, respawn
-                DoRespawn(False)
+                ClickAllBagsAndRespawn()
             End If
         Loop
 
@@ -631,9 +632,9 @@ getWoodAgain:
         'waiting for a bag in
         'waitForaBagBlocking()        
 
-        'startChromeAudio("https://www.youtube.com/watch?v=3BS5uGSwKwA")
+        'startChromeAudio("https://www.youtube.com/watch?v=3BS5uGSwKwA")        
 
-
+        ClickAllBagsAndRespawn()
 
         'retrieve orders
         Do
@@ -656,7 +657,7 @@ getWoodAgain:
                 Constants.homey1 = LTrim(RTrim(eachSplit(1)))
                 Constants.homez1 = LTrim(RTrim(eachSplit(2)))
 
-                'already processed?
+                'already processed?\
                 If orderState.Equals("processing") Then
                     'no, process
 
@@ -717,9 +718,9 @@ getWoodAgain:
         Dim backendThread As New Thread(AddressOf StartPythonBackend)
         backendThread.Start()
 
-        WriteMessageToGlobalChat("waiting for cuda to come up")
+        WriteLog("waiting for cuda to come up")
         ResponsiveSleep(10000)
-        WriteMessageToGlobalChat("cuda should be up")
+        WriteLog("cuda should be up")
     End Sub
     Public Shared Function fourCornerRadarRec(item As Collection) As String
         Dim moveToCenter As Integer = 0
@@ -731,7 +732,7 @@ getWoodAgain:
             objects = DetectObjects(False)
 
             For a = 1 To item.Count
-                WriteMessageToGlobalChat("radar, looking for a " & item.Item(a))
+                WriteLog("radar, looking for a " & item.Item(a))
                 'get rec
                 moveToCenter = GetObjectsVerticleLinePosition(objects, item.Item(a))
 
@@ -754,28 +755,28 @@ getWoodAgain:
     End Function
 
     Public Shared Sub DumpResourcesAtBaseDoorNowAndDie()
-        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), opening door")
+        WriteLog("DumpResourcesAtBaseDoorNow(), opening door")
 
         'open door
         KeyDownUp(Keys.E, False, 50, False)
         ResponsiveSleep(500)
 
-        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), walk into door")
+        WriteLog("DumpResourcesAtBaseDoorNow(), walk into door")
         'LONG walk into door in case edge
         KeyDownUp(Keys.W, False, 2500, False)
         ResponsiveSleep(500)
 
-        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), turn to close")
+        WriteLog("DumpResourcesAtBaseDoorNow(), turn to close")
         'turn to close door
         MoveMouseMainThreadX(1500)
         ResponsiveSleep(500)
 
-        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), close door")
+        WriteLog("DumpResourcesAtBaseDoorNow(), close door")
         'close it
         KeyDownUp(Keys.E, False, 50, False)
         ResponsiveSleep(500)
 
-        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), face the other door")
+        WriteLog("DumpResourcesAtBaseDoorNow(), face the other door")
         'turn back straight to face second door
         MoveMouseMainThreadX(-2220)
         ResponsiveSleep(500)
@@ -785,12 +786,12 @@ getWoodAgain:
         ResponsiveSleep(500)
 
         'open that door
-        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), open it")
+        WriteLog("DumpResourcesAtBaseDoorNow(), open it")
         KeyDownUp(Keys.E, False, 50, False)
         ResponsiveSleep(500)
 
         'walk through door
-        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), walk into it")
+        WriteLog("DumpResourcesAtBaseDoorNow(), walk into it")
         KeyDownUp(Keys.W, False, 750, False)
         ResponsiveSleep(500)
 
@@ -799,7 +800,7 @@ getWoodAgain:
         ResponsiveSleep(500)
 
         'close door
-        WriteMessageToGlobalChat("DumpResourcesAtBaseDoorNow(), open it")
+        WriteLog("DumpResourcesAtBaseDoorNow(), open it")
         KeyDownUp(Keys.E, False, 50, False)
         ResponsiveSleep(500)
 
@@ -1349,6 +1350,8 @@ getWoodAgain:
     End Function
 
     Public Shared Sub GoHome(Optional audioHarass As Boolean = False)
+        WriteLog("gohome")
+
         Dim foundHomeMessage As Boolean
 
         Dim objects As New Collection
@@ -1364,11 +1367,11 @@ getWoodAgain:
         dead.Add("respawn", "respawn")
         dead.Add("sleepingbag", "sleepingbag")
         dead.Add("dead", "dead")
+        dead.Add("wounded", "wounded")
 
         Do
             'make day
             makeDayTime()
-
 tryAgain:
 
             'get our current position
@@ -1381,28 +1384,24 @@ tryAgain:
 
             Dim distanceFromHome = currentPosition(3)
 
-            WriteMessageToGlobalChat("distance from home: " & distanceFromHome & ", running")
+            WriteLog("distance from home: " & distanceFromHome & ", running")
 
             HowFarToRunTime(distanceFromHome)
 
             Dim currentPositionMoved As Array = GetCurrentPosition()
 
             If IsNullOrEmpty(currentPositionMoved) Then
-                WriteMessageToGlobalChat("FAILED TO GET POSITION, TRYING AGAIN")
+                WriteLog("FAILED TO GET POSITION, TRYING AGAIN")
                 GoTo tryAgain
             End If
 
             Dim distanceFromHomeMoved = currentPositionMoved(3)
 
-            WriteMessageToGlobalChat("new distance from home: " & distanceFromHomeMoved)
+            WriteLog("new distance from home: " & distanceFromHomeMoved)
 
             Dim changeInDistance = distanceFromHomeMoved - distanceFromHome
 
-            WriteMessageToGlobalChat("change in distance: " & changeInDistance)
-
-            If changeInDistance = 0 Then
-                DoRespawn(False)
-            End If
+            WriteLog("change in distance: " & changeInDistance)
 
             'move until water isn't in view
             'If DetectWater() Then
@@ -1411,17 +1410,15 @@ tryAgain:
             'End If
 
             'are we dead?           
-
-
             objects = DetectObjects(False)
             If DetectSpecificObjects(dead, objects) Then
-                DoRespawn(False)
+                ClickAllBagsAndRespawn()
                 GoHome(audioHarass)
             End If
 
             'bad rec?
             If changeInDistance = 0 Then
-                WriteMessageToGlobalChat("stuck, bumping")
+                WriteLog("stuck, bumping")
 
                 'move right a few deg
                 MoveMouseMainThreadX(GetRandom(-3500, 3500))
@@ -1434,10 +1431,10 @@ tryAgain:
                     If changeInDistance.ToString.Contains("-") Then
                         'closer
 
-                        WriteMessageToGlobalChat("We are closer, running long")
+                        WriteLog("We are closer, running long")
                     Else
                         'farther                        
-                        WriteMessageToGlobalChat("We are farther, changing direction")
+                        WriteLog("We are farther, changing direction")
 
                         'move right a few deg                  
                         MoveMouseMainThreadX(1500)
@@ -1451,7 +1448,7 @@ tryAgain:
                     ResponsiveSleep(500)
 
                     'stop running                
-                    WriteMessageToGlobalChat("we are home!")
+                    WriteLog("we are home!")
 
                     'audio harassment?
                     If audioHarass Then
@@ -1464,7 +1461,7 @@ tryAgain:
                         foundHomeMessage = True
                     End If
 
-                    WriteMessageToGlobalChat("entering close base mode, looking for walls")
+                    WriteLog("entering close base mode, looking for walls")
 
                     Do
                         'audio harassment?
@@ -1476,7 +1473,7 @@ tryAgain:
                         'are we dead?
                         objects = DetectObjects(False)
                         If DetectSpecificObjects(dead, objects) Then
-                            DoRespawn(False)
+                            ClickAllBagsAndRespawn()
                             GoHome(audioHarass)
                         End If
 
@@ -1486,12 +1483,12 @@ tryAgain:
                         'have an object to point to?
                         If moveToCenter = 0 Then
                             'nope
-                            WriteMessageToGlobalChat("didn't find a base wall")
+                            WriteLog("didn't find a base wall")
 
                             'get out of close to home, no base found
                             Exit Do
                         Else
-                            WriteMessageToGlobalChat("found a base wall, turning and running to = " & moveToCenter)
+                            WriteLog("found a base wall, turning and running to = " & moveToCenter)
 
                             'yup                
                             MoveMouseMainThreadX(moveToCenter)
@@ -1509,7 +1506,7 @@ tryAgain:
                                 End If
 
                                 'yes, perform action
-                                WriteMessageToGlobalChat("stuck at wall, doing door scan")
+                                WriteLog("stuck at wall, doing door scan")
 
                                 If DoDoorScan() Then
                                     Debug.Print("we have a door, inching towards it")
@@ -1519,7 +1516,7 @@ tryAgain:
                                         'are we dead?
                                         objects = DetectObjects(False)
                                         If DetectSpecificObjects(dead, objects) Then
-                                            DoRespawn(False)
+                                            ClickAllBagsAndRespawn()
                                             GoHome(audioHarass)
                                         End If
 
@@ -1550,7 +1547,7 @@ tryAgain:
                                             'dumping resources
                                             DumpResourcesAtBaseDoorNowAndDie()
 
-                                            WriteMessageToGlobalChat("resources dumped, going back out")
+                                            WriteLog("resources dumped, going back out")
 
                                             Exit Sub
                                         End If
@@ -1562,7 +1559,7 @@ tryAgain:
                                 Exit Do
                             Else
                                 'not stuck, just keep going
-                                WriteMessageToGlobalChat("not stuck")
+                                WriteLog("not stuck")
                             End If
                         End If
                     Loop

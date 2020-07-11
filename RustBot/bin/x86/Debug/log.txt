@@ -1,0 +1,1058 @@
+﻿waiting for cuda to come up
+killing python
+Namespace(agnostic_nms=False, augment=False, classes=None, conf_thres=0.4, device='', fourcc='mp4v', half=False, img_size=608, iou_thres=0.5, output='output', save_txt=False, source='test.png', view_img=False, weights='weights\\best.pt')
+Using CUDA device0 _CudaDeviceProperties(name='Quadro M4000', total_memory=8192MB)
+Ready to rock. 
+cuda should be up
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+checking if we're dead
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+we are dead
+respawning
+Waiting for respawn
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+done rec results
+
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+done rec results
+
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.4358 713 665 1333 792 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = wounded 0.4358
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+player 0.5329 1783 22 1916 1080 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 1 objects
+Processing object = player 0.5329
+gohome
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+killing python
