@@ -1,7 +1,7 @@
 ﻿waiting for cuda to come up
 killing python
 cuda should be up
-Namespace(agnostic_nms=False, augment=False, classes=None, conf_thres=0.4, device='', fourcc='mp4v', half=False, img_size=608, iou_thres=0.5, output='output', save_txt=False, source='test.png', view_img=False, weights='weights\\best.pt')
+Namespace(agnostic_nms=False, augment=False, classes=None, conf_thres=0.15, device='', fourcc='mp4v', half=False, img_size=608, iou_thres=0.5, output='output', save_txt=False, source='test.png', view_img=False, weights='weights\\best.pt')
 Using CUDA device0 _CudaDeviceProperties(name='Quadro M4000', total_memory=8192MB)
 Ready to rock. 
 checking if we're dead
@@ -17,293 +17,9 @@ begin detect specific objects
 Found 0 objects
 gohome
 Getting Position
-distance from home: 25, running
+distance from home: 712, running
 Getting Position
-new distance from home: 31
-change in distance: 6
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-We are farther, changing direction
-Getting Position
-distance from home: 31, running
-Getting Position
-new distance from home: 33
-change in distance: 2
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-We are farther, changing direction
-Getting Position
-distance from home: 33, running
-Getting Position
-new distance from home: 30
-change in distance: -3
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-We are closer, running long
-Getting Position
-distance from home: 30, running
-Getting Position
-new distance from home: 28
-change in distance: -2
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-We are closer, running long
-Getting Position
-distance from home: 28, running
-Getting Position
-new distance from home: 28
-change in distance: 0
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-done rec results
-
-done detect objects
-begin detect specific objects
-Found 0 objects
-stuck, bumping
-Getting Position
-distance from home: 27, running
-Getting Position
-new distance from home: 20
-change in distance: -7
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-we are home!
-entering close base mode, looking for walls
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-radar, looking for a door
-minProbability = 0.35 Found 0 objects
-radar, looking for a stonewall
-minProbability = 0.35 Found 0 objects
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-radar, looking for a door
-minProbability = 0.35 Found 0 objects
-radar, looking for a stonewall
-minProbability = 0.35 Found 0 objects
-begin detecting objects
-clearing global objects
-taking screenshot
-killing python
-waiting for cuda to come up
-killing python
-cuda should be up
-Namespace(agnostic_nms=False, augment=False, classes=None, conf_thres=0.4, device='', fourcc='mp4v', half=False, img_size=608, iou_thres=0.5, output='output', save_txt=False, source='test.png', view_img=False, weights='weights\\best.pt')
-Using CUDA device0 _CudaDeviceProperties(name='Quadro M4000', total_memory=8192MB)
-Ready to rock. 
-killing python
-waiting for cuda to come up
-killing python
-cuda should be up
-Namespace(agnostic_nms=False, augment=False, classes=None, conf_thres=0.4, device='', fourcc='mp4v', half=False, img_size=608, iou_thres=0.5, output='output', save_txt=False, source='test.png', view_img=False, weights='weights\\best.pt')
-Using CUDA device0 _CudaDeviceProperties(name='Quadro M4000', total_memory=8192MB)
-Ready to rock. 
-checking if we're dead
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-gohome
-Getting Position
-distance from home: 20, running
-Getting Position
-new distance from home: 25
-change in distance: 5
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-we are home!
-entering close base mode, looking for walls
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-radar, looking for a door
-minProbability = 0.35 Found 0 objects
-radar, looking for a stonewall
-minProbability = 0.35 Found 0 objects
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-done rec results
-
-done detect objects
-radar, looking for a door
-minProbability = 0.35 Found 0 objects
-radar, looking for a stonewall
-minProbability = 0.35 Found 0 objects
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-radar, looking for a door
-minProbability = 0.35 Found 0 objects
-radar, looking for a stonewall
-minProbability = 0.35 Found 0 objects
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-radar, looking for a door
-minProbability = 0.35 Found 0 objects
-radar, looking for a stonewall
-minProbability = 0.35 Found 0 objects
-didn't find a base wall
-Getting Position
-distance from home: 25, running
-Getting Position
-new distance from home: 27
-change in distance: 2
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-We are farther, changing direction
-Getting Position
-distance from home: 27, running
-Getting Position
-new distance from home: 33
-change in distance: 6
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-We are farther, changing direction
-Getting Position
-distance from home: 33, running
-Getting Position
-new distance from home: 38
-change in distance: 5
-begin detecting objects
-clearing global objects
-taking screenshot
-done taking screenshot, waiting for rec results
-adding rec result to global
-
-done rec results
-done detect objects
-begin detect specific objects
-Found 0 objects
-We are farther, changing direction
-Getting Position
-distance from home: 38, running
-Getting Position
-new distance from home: 38
+new distance from home: 712
 change in distance: 0
 begin detecting objects
 clearing global objects
@@ -317,10 +33,10 @@ begin detect specific objects
 Found 0 objects
 stuck, bumping
 Getting Position
-distance from home: 37, running
+distance from home: 712, running
 Getting Position
-new distance from home: 34
-change in distance: -3
+new distance from home: 712
+change in distance: 0
 begin detecting objects
 clearing global objects
 taking screenshot
@@ -331,12 +47,12 @@ done rec results
 done detect objects
 begin detect specific objects
 Found 0 objects
-We are closer, running long
+stuck, bumping
 Getting Position
-distance from home: 34, running
+distance from home: 712, running
 Getting Position
-new distance from home: 33
-change in distance: -1
+new distance from home: 712
+change in distance: 0
 begin detecting objects
 clearing global objects
 taking screenshot
@@ -347,12 +63,12 @@ done rec results
 done detect objects
 begin detect specific objects
 Found 0 objects
-We are closer, running long
+stuck, bumping
 Getting Position
-distance from home: 33, running
+distance from home: 712, running
 Getting Position
-new distance from home: 31
-change in distance: -2
+new distance from home: 712
+change in distance: 0
 begin detecting objects
 clearing global objects
 taking screenshot
@@ -363,12 +79,12 @@ done rec results
 done detect objects
 begin detect specific objects
 Found 0 objects
-We are closer, running long
+stuck, bumping
 Getting Position
-distance from home: 31, running
+distance from home: 712, running
 Getting Position
-new distance from home: 33
-change in distance: 2
+new distance from home: 712
+change in distance: 0
 begin detecting objects
 clearing global objects
 taking screenshot
@@ -379,11 +95,59 @@ done rec results
 done detect objects
 begin detect specific objects
 Found 0 objects
-We are farther, changing direction
+stuck, bumping
 Getting Position
-distance from home: 33, running
+distance from home: 712, running
 Getting Position
-new distance from home: 33
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
 change in distance: 0
 begin detecting objects
 clearing global objects
@@ -397,12 +161,1690 @@ begin detect specific objects
 Found 0 objects
 stuck, bumping
 Getting Position
-distance from home: 33, running
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+done rec results
+
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
+Getting Position
+new distance from home: 712
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 712, running
 Getting Position
 FAILED TO GET POSITION, TRYING AGAIN
 Getting Position
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+Getting Position
 killing python
 waiting for cuda to come up
 killing python
-killing python
 cuda should be up
+Namespace(agnostic_nms=False, augment=False, classes=None, conf_thres=0.15, device='', fourcc='mp4v', half=False, img_size=608, iou_thres=0.5, output='output', save_txt=False, source='test.png', view_img=False, weights='weights\\best.pt')
+Using CUDA device0 _CudaDeviceProperties(name='Quadro M4000', total_memory=8192MB)
+Ready to rock. 
+checking if we're dead
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+gohome
+Getting Position
+distance from home: 180, running
+Getting Position
+new distance from home: 180
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 180, running
+Getting Position
+new distance from home: 180
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 180, running
+Getting Position
+new distance from home: 180
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 180, running
+Getting Position
+new distance from home: 180
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 180, running
+killing python
+Getting Position
+waiting for cuda to come up
+killing python
+Namespace(agnostic_nms=False, augment=False, classes=None, conf_thres=0.15, device='', fourcc='mp4v', half=False, img_size=608, iou_thres=0.5, output='output', save_txt=False, source='test.png', view_img=False, weights='weights\\best.pt')
+Using CUDA device0 _CudaDeviceProperties(name='Quadro M4000', total_memory=8192MB)
+Ready to rock. 
+cuda should be up
+checking if we're dead
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+gohome
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+done rec results
+
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+done rec results
+
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+Getting Position
+new distance from home: 894
+change in distance: 0
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+stuck, bumping
+Getting Position
+distance from home: 894, running
+killing python

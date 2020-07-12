@@ -1372,6 +1372,8 @@ getWoodAgain:
         dead.Add("dead", "dead")
         dead.Add("wounded", "wounded")
 
+        Dim stuckCount As Integer = 0
+
         Do
             'make day
             makeDayTime()
@@ -1502,6 +1504,12 @@ tryAgain:
 
                             'stuck?
                             If AreWeStuck() = 0 Then
+                                stuckCount = stuckCount + 1
+                                If stuckCount >= Constants.stuckKillCount Then
+                                    stuckCount = 0
+                                    DoRespawn(True)
+                                End If
+
                                 'audio harassment?
                                 If audioHarass Then
                                     'enable audio blaster!
@@ -1510,7 +1518,6 @@ tryAgain:
 
                                 'yes, perform action
                                 WriteLog("stuck at wall, doing door scan")
-
                                 If DoDoorScan() Then
                                     Debug.Print("we have a door, inching towards it")
 
@@ -1545,6 +1552,13 @@ tryAgain:
                                         Run(Keys.W, False, 10, False)
 
                                         If AreWeStuck() = 0 Then
+                                            stuckCount = stuckCount + 1
+
+                                            If stuckCount >= Constants.stuckKillCount Then
+                                                stuckCount = 0
+                                                DoRespawn(True)
+                                            End If
+
                                             Debug.Print("we are stuck against door, going in dropoff")
 
                                             'dumping resources
@@ -1553,14 +1567,17 @@ tryAgain:
                                             WriteLog("resources dumped, going back out")
 
                                             Exit Sub
+                                        Else
+                                            stuckCount = 0
                                         End If
                                     Loop
                                 Else
                                     Debug.Print("no door found")
-                                End If
+                                    End If
 
-                                Exit Do
-                            Else
+                                    Exit Do
+                                Else
+                                    stuckCount = 0
                                 'not stuck, just keep going
                                 WriteLog("not stuck")
                             End If

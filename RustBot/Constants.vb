@@ -72,10 +72,12 @@
     Public Const maxGatheringWoodFailures As Integer = 5 '5 seems to work well
 
     'front yard radius
-    Public Const frontYardRadius As Integer = 50
+    Public Const frontYardRadius As Integer = 75
 
     'map focus button location
     Public Const xMapFocusButtonLocation As Integer = 112
     Public Const yMapFocusButtonLocation As Integer = 99
+
+    Public Const stuckKillCount As Integer = 5
 
 End Class

@@ -1058,7 +1058,7 @@ waitagain:
 
         Dim processOptions As ProcessStartInfo = New ProcessStartInfo
         processOptions.FileName = "python.exe"
-        processOptions.Arguments = "-u C:\Users\bob\yolov5\detect.py --conf-thres 0.40 --source test.png --weights weights\best.pt --output output --img-size 608"
+        processOptions.Arguments = "-u C:\Users\bob\yolov5\detect.py --conf-thres 0.15 --source test.png --weights weights\best.pt --output output --img-size 608"
         processOptions.WorkingDirectory = "C:\Users\bob\yolov5"
         processOptions.UseShellExecute = False
         processOptions.CreateNoWindow = True
