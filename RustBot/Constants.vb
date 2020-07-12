@@ -78,6 +78,6 @@
     Public Const xMapFocusButtonLocation As Integer = 112
     Public Const yMapFocusButtonLocation As Integer = 99
 
-    Public Const stuckKillCount As Integer = 5
+    Public Const noDistanceKillCount As Integer = 5
 
 End Class

@@ -1372,7 +1372,7 @@ getWoodAgain:
         dead.Add("dead", "dead")
         dead.Add("wounded", "wounded")
 
-        Dim stuckCount As Integer = 0
+        Dim distanceChangeCount As Integer = 0
 
         Do
             'make day
@@ -1425,12 +1425,21 @@ tryAgain:
             If changeInDistance = 0 Then
                 WriteLog("stuck, bumping")
 
+                distanceChangeCount = distanceChangeCount + 1
+
+                If distanceChangeCount >= Constants.noDistanceKillCount Then
+                    distanceChangeCount = 0
+                    DoRespawn(True)
+                End If
+
                 'move right a few deg
                 MoveMouseMainThreadX(GetRandom(-3500, 3500))
                 ResponsiveSleep(500)
 
                 RunMainThreadAsync(Keys.W, True, 1000, True)
             Else
+                distanceChangeCount = 0
+
                 If distanceFromHomeMoved > Constants.frontYardRadius Or distanceFromHomeMoved.ToString.Contains("-") Then
                     'closer or farther?
                     If changeInDistance.ToString.Contains("-") Then
@@ -1504,12 +1513,6 @@ tryAgain:
 
                             'stuck?
                             If AreWeStuck() = 0 Then
-                                stuckCount = stuckCount + 1
-                                If stuckCount >= Constants.stuckKillCount Then
-                                    stuckCount = 0
-                                    DoRespawn(True)
-                                End If
-
                                 'audio harassment?
                                 If audioHarass Then
                                     'enable audio blaster!
@@ -1552,13 +1555,6 @@ tryAgain:
                                         Run(Keys.W, False, 10, False)
 
                                         If AreWeStuck() = 0 Then
-                                            stuckCount = stuckCount + 1
-
-                                            If stuckCount >= Constants.stuckKillCount Then
-                                                stuckCount = 0
-                                                DoRespawn(True)
-                                            End If
-
                                             Debug.Print("we are stuck against door, going in dropoff")
 
                                             'dumping resources
@@ -1568,16 +1564,16 @@ tryAgain:
 
                                             Exit Sub
                                         Else
-                                            stuckCount = 0
+                                            distanceChangeCount = 0
                                         End If
                                     Loop
                                 Else
                                     Debug.Print("no door found")
-                                    End If
+                                End If
 
-                                    Exit Do
-                                Else
-                                    stuckCount = 0
+                                Exit Do
+                            Else
+                                distanceChangeCount = 0
                                 'not stuck, just keep going
                                 WriteLog("not stuck")
                             End If

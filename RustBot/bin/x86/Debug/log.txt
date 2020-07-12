@@ -1848,3 +1848,782 @@ stuck, bumping
 Getting Position
 distance from home: 894, running
 killing python
+waiting for cuda to come up
+killing python
+cuda should be up
+Namespace(agnostic_nms=False, augment=False, classes=None, conf_thres=0.15, device='', fourcc='mp4v', half=False, img_size=608, iou_thres=0.5, output='output', save_txt=False, source='test.png', view_img=False, weights='weights\\best.pt')
+Using CUDA device0 _CudaDeviceProperties(name='Quadro M4000', total_memory=8192MB)
+Ready to rock. 
+killing python
+waiting for cuda to come up
+killing python
+cuda should be up
+Namespace(agnostic_nms=False, augment=False, classes=None, conf_thres=0.15, device='', fourcc='mp4v', half=False, img_size=608, iou_thres=0.5, output='output', save_txt=False, source='test.png', view_img=False, weights='weights\\best.pt')
+Using CUDA device0 _CudaDeviceProperties(name='Quadro M4000', total_memory=8192MB)
+Ready to rock. 
+checking if we're dead
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+we are dead
+respawning
+Waiting for respawn
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+done rec results
+
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+done rec results
+
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+done rec results
+adding rec result to global
+done detect objects
+
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+done rec results
+
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+wounded 0.7059 1013 511 1295 603 |
+wounded 0.5159 970 481 1339 629 |
+wounded 0.2559 803 501 993 594 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 3 objects
+Processing object = wounded 0.7059
+ClickAllBagsAndRespawn
+done ClickAllBagsAndRespawn
+Coming back to life
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 0 objects
+gohome
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+Getting Position
+distance from home: 83, running
+Getting Position
+new distance from home: 68
+change in distance: -15
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 2 objects
+Processing object = treeforest 0.3846
+Processing object = rocktool 0.2834
+we are home!
+entering close base mode, looking for walls
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 2 objects
+Processing object = treeforest 0.3846
+Processing object = rocktool 0.2834
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+didn't find a base wall
+Getting Position
+distance from home: 68, running
+Getting Position
+new distance from home: 57
+change in distance: -11
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 2 objects
+Processing object = treeforest 0.3846
+Processing object = rocktool 0.2834
+we are home!
+entering close base mode, looking for walls
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 2 objects
+Processing object = treeforest 0.3846
+Processing object = rocktool 0.2834
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+didn't find a base wall
+Getting Position
+distance from home: 57, running
+Getting Position
+new distance from home: 46
+change in distance: -11
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+done rec results
+
+done detect objects
+begin detect specific objects
+Found 2 objects
+Processing object = treeforest 0.3846
+Processing object = rocktool 0.2834
+we are home!
+entering close base mode, looking for walls
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 2 objects
+Processing object = treeforest 0.3846
+Processing object = rocktool 0.2834
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+didn't find a base wall
+Getting Position
+distance from home: 46, running
+Getting Position
+new distance from home: 51
+change in distance: 5
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 2 objects
+Processing object = treeforest 0.3846
+Processing object = rocktool 0.2834
+we are home!
+entering close base mode, looking for walls
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+begin detect specific objects
+Found 2 objects
+Processing object = treeforest 0.3846
+Processing object = rocktool 0.2834
+begin detecting objects
+clearing global objects
+taking screenshot
+done taking screenshot, waiting for rec results
+image 1/1 C:\Users\bob\yolov5\input\processmedone.png: 
+treeforest 0.3846 179 0 455 764 |
+rocktool 0.2834 670 969 743 1037 |
+adding rec result to global
+
+done rec results
+done detect objects
+radar, looking for a door
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+radar, looking for a stonewall
+minProbability = 0.35 Found 2 objects
+Processing Object = treeforest 0.3846
+probability too low, skipping object
+begin detecting objects
+clearing global objects
+taking screenshot
+killing python
