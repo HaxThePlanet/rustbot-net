@@ -135,7 +135,7 @@ Module Utilitys
 
             Dim file As System.IO.StreamWriter
 
-            file = My.Computer.FileSystem.OpenTextFileWriter("log.txt", True)
+            file = My.Computer.FileSystem.OpenTextFileWriter("C:\Users\Paperspace\Documents\rustbot-net\RustBot\bin\x86\Debug\log.txt", True)
 
             file.WriteLine(msg)
             file.Close()

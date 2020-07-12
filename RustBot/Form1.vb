@@ -634,11 +634,14 @@ getWoodAgain:
 
         'startChromeAudio("https://www.youtube.com/watch?v=3BS5uGSwKwA")        
 
-        ClickAllBagsAndRespawn()
+        'GoHome(True)
 
-        'retrieve orders
+        'ClickAllBagsAndRespawn()
+
+        ''retrieve orderscliintpos
         Do
             Dim order As String
+
             order = tryPickupOrder()
             'have order?
             If order <> "" Then
